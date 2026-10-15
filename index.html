@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>سهم</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="سهم">
+<meta name="theme-color" content="#0f1412">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+/* Layout: one screen — accuracy bar on top, giant arrow in the middle, distance under it, target picker at the bottom */
+:root{
+  --bg:#0f1412; --panel:#18201d; --line:#26302c; --fg:#eef3ef; --dim:#8a9a93;
+  --arrow:#f2c14e; --good:#4cc38a; --ok:#f2c14e; --bad:#e5604f;
+  --ui:-apple-system,"SF Arabic","Geeza Pro",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--ui);
+  padding:env(safe-area-inset-top) max(16px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px,env(safe-area-inset-left));
+  display:flex;flex-direction:column;overflow:hidden;user-select:none}
+.gps{display:flex;align-items:center;gap:10px;padding:14px 0 8px}
+.bars{display:flex;gap:3px;align-items:flex-end;height:18px}
+.bars i{width:5px;border-radius:2px;background:var(--line)}
+.bars i:nth-child(1){height:6px}.bars i:nth-child(2){height:10px}.bars i:nth-child(3){height:14px}.bars i:nth-child(4){height:18px}
+.gps b{font-size:15px}
+.gps span{color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums;margin-inline-start:auto;direction:ltr}
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:0}
+.dial{position:relative;width:min(78vw,46vh);aspect-ratio:1}
+.ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--line)}
+#arrow{position:absolute;inset:8%;transition:transform .25s ease-out}
+#arrow svg{width:100%;height:100%}
+.arrived #arrow{opacity:.15}
+.flag{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--good)}
+.arrived .flag{display:flex}
+.dist{font-size:clamp(44px,13vw,68px);font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.dist small{font-size:.4em;font-weight:600;color:var(--dim);margin-inline-start:6px}
+.meta{color:var(--dim);font-size:14px;text-align:center;min-height:20px}
+.warn{color:var(--ok);font-size:13px;text-align:center;min-height:18px}
+.bottom{display:flex;flex-direction:column;gap:8px;padding-bottom:12px}
+.target{display:flex;gap:8px}
+button,select,input{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+select{flex:1;min-width:0;appearance:none}
+button{cursor:pointer}
+button.primary{background:var(--arrow);color:#1a1404;border-color:var(--arrow);font-weight:700}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--arrow);outline-offset:2px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:16px;width:min(92vw,420px);padding:18px}
+dialog::backdrop{background:#000a}
+dialog h3{margin:0 0 12px;font-size:17px}
+dialog label{display:block;font-size:13px;color:var(--dim);margin:10px 0 4px}
+dialog input{width:100%}
+dialog .row{margin-top:16px}
+.list{max-height:40vh;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.item{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px}
+.item div{flex:1;min-width:0}.item small{color:var(--dim);direction:ltr;display:block;font-size:12px}
+.item button{padding:6px 10px;font-size:13px}
+#start{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;z-index:5}
+#start p{color:var(--dim);max-width:30ch;line-height:1.6;margin:0}
+@media (prefers-reduced-motion:reduce){#arrow{transition:none}}
+</style>
+</head>
+<body>
+
+<div id="start">
+  <svg width="90" height="90" viewBox="0 0 100 100"><path d="M50 6 L82 88 L50 70 L18 88 Z" fill="#f2c14e"/></svg>
+  <h1 style="margin:0">سهم</h1>
+  <p>يوجهك لأي إحداثيات بسهم فقط. يعتمد على GPS والبوصلة، بدون خرائط وبدون إنترنت.</p>
+  <button class="primary" id="go">ابدأ</button>
+</div>
+
+<div class="gps" id="gpsRow">
+  <div class="bars" id="bars"><i></i><i></i><i></i><i></i></div>
+  <b id="gpsLabel">بانتظار GPS…</b>
+  <span id="acc"></span>
+</div>
+
+<div class="stage" id="stage">
+  <div class="dial">
+    <div class="ring"></div>
+    <div id="arrow"><svg viewBox="0 0 100 100"><path d="M50 4 L84 90 L50 71 L16 90 Z" fill="var(--arrow)"/></svg></div>
+    <div class="flag">وصلت 🎯</div>
+  </div>
+  <div class="dist" id="dist">--</div>
+  <div class="meta" id="meta">اختر هدفاً</div>
+  <div class="warn" id="warn"></div>
+</div>
+
+<div class="bottom">
+  <div class="target">
+    <select id="sel" aria-label="الهدف"></select>
+    <button id="manage" aria-label="إدارة الأماكن">☰</button>
+  </div>
+  <div class="row">
+    <button id="saveHere">احفظ موقعي</button>
+    <button id="addCoord">أضف إحداثيات</button>
+  </div>
+</div>
+
+<dialog id="dlgAdd">
+  <h3 id="addTitle">أضف مكاناً</h3>
+  <label for="fName">الاسم</label>
+  <input id="fName" placeholder="مثلاً: البيت">
+  <label for="fCoord">الإحداثيات أو رابط خرائط</label>
+  <input id="fCoord" dir="ltr" placeholder="24.8860, 46.6484" inputmode="text">
+  <div class="warn" id="fErr"></div>
+  <div class="row"><button class="primary" id="fOk">حفظ</button><button id="fCancel">إلغاء</button></div>
+</dialog>
+
+<dialog id="dlgList">
+  <h3>أماكني</h3>
+  <div class="list" id="list"></div>
+  <div class="row"><button id="lClose">تم</button></div>
+</dialog>
+
+<script>
+const $=id=>document.getElementById(id);
+const R=6371000, rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
+let pos=null, heading=null, compassOK=false, places=[], cur=null, wake=null, smooth=null;
+
+/* ---------- storage ---------- */
+function load(){try{places=JSON.parse(localStorage.getItem('sahm.places')||'[]');cur=localStorage.getItem('sahm.cur')}catch(e){places=[]}}
+function save(){try{localStorage.setItem('sahm.places',JSON.stringify(places));localStorage.setItem('sahm.cur',cur||'')}catch(e){}}
+
+/* ---------- geo math ---------- */
+function distance(a,b){const dLat=rad(b.lat-a.lat),dLon=rad(b.lon-a.lon);
+  const h=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+function bearing(a,b){const y=Math.sin(rad(b.lon-a.lon))*Math.cos(rad(b.lat));
+  const x=Math.cos(rad(a.lat))*Math.sin(rad(b.lat))-Math.sin(rad(a.lat))*Math.cos(rad(b.lat))*Math.cos(rad(b.lon-a.lon));
+  return (deg(Math.atan2(y,x))+360)%360}
+const DIRS=['شمال','شمال شرق','شرق','جنوب شرق','جنوب','جنوب غرب','غرب','شمال غرب'];
+const dirName=b=>DIRS[Math.round(b/45)%8];
+function fmtDist(m){return m<1000?{v:Math.round(m),u:'م'}:{v:(m/1000).toFixed(m<10000?2:1),u:'كم'}}
+
+/* parse "lat, lon", Google/Apple maps links, or DMS-free decimal pairs */
+function parseCoord(s){
+  s=s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/،/g,',');
+  const m=s.match(/(-?\d{1,2}\.\d+)\s*[, ]\s*(-?\d{1,3}\.\d+)/);
+  if(!m)return null;const lat=+m[1],lon=+m[2];
+  if(Math.abs(lat)>90||Math.abs(lon)>180)return null;return{lat,lon}}
+
+/* ---------- GPS ---------- */
+function gpsQuality(acc){
+  if(acc==null)return{n:0,t:'بانتظار GPS…',c:'var(--dim)'};
+  if(acc<=8)return{n:4,t:'GPS ممتاز',c:'var(--good)'};
+  if(acc<=20)return{n:3,t:'GPS جيد',c:'var(--good)'};
+  if(acc<=50)return{n:2,t:'GPS متوسط',c:'var(--ok)'};
+  return{n:1,t:'GPS ضعيف',c:'var(--bad)'}}
+function onPos(p){pos={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy,
+  speed:p.coords.speed,course:p.coords.heading,t:Date.now()};render()}
+function onErr(e){$('gpsLabel').textContent=e.code===1?'لا يوجد إذن للموقع':'لا توجد إشارة GPS';$('gpsLabel').style.color='var(--bad)'}
+
+/* ---------- compass ---------- */
+function onOrient(e){let h=null;
+  if(e.webkitCompassHeading!=null)h=e.webkitCompassHeading;
+  else if(e.absolute&&e.alpha!=null)h=(360-e.alpha)%360;
+  if(h==null)return;compassOK=true;
+  const so=(screen.orientation&&screen.orientation.angle)||window.orientation||0;h=(h+so+360)%360;
+  heading=h;render()}
+
+/* ---------- render ---------- */
+function render(){
+  const q=gpsQuality(pos&&pos.acc);
+  [...$('bars').children].forEach((b,i)=>b.style.background=i<q.n?q.c:'var(--line)');
+  $('gpsLabel').textContent=q.t;$('gpsLabel').style.color=q.c;
+  $('acc').textContent=pos?'±'+Math.round(pos.acc)+' m':'';
+  const t=places.find(p=>p.id===cur);
+  if(!t){$('dist').textContent='--';$('meta').textContent=places.length?'اختر هدفاً':'احفظ موقعك أو أضف إحداثيات';$('warn').textContent='';return}
+  if(!pos){$('dist').textContent='--';$('meta').textContent=t.name;return}
+  const d=distance(pos,t),b=bearing(pos,t),f=fmtDist(d);
+  $('dist').innerHTML=f.v+'<small>'+f.u+'</small>';
+  $('meta').textContent=t.name+' · '+dirName(b)+' '+Math.round(b)+'°';
+  // which way is the phone pointing? compass first, GPS course when moving as fallback
+  let h=heading,warn='';
+  if(!compassOK){if(pos.course!=null&&!isNaN(pos.course)&&pos.speed>1){h=pos.course;warn='بدون بوصلة: الاتجاه من حركتك'}
+    else{h=0;warn='البوصلة غير مفعلة — السهم بالنسبة للشمال'}}
+  if(pos.acc>50)warn='الإشارة ضعيفة، تحرك لمكان مكشوف';
+  $('warn').textContent=warn;
+  let target=(b-h+360)%360;
+  if(smooth==null)smooth=target;let diff=((target-smooth+540)%360)-180;smooth+=diff;
+  $('arrow').style.transform='rotate('+smooth+'deg)';
+  $('stage').classList.toggle('arrived',d<Math.max(10,pos.acc));
+}
+
+/* ---------- places UI ---------- */
+function fillSelect(){const s=$('sel');s.innerHTML='';
+  if(!places.length){s.innerHTML='<option>لا توجد أماكن محفوظة</option>';s.disabled=true;return}
+  s.disabled=false;places.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;s.appendChild(o)});
+  if(!places.some(p=>p.id===cur))cur=places[0].id;s.value=cur}
+function addPlace(name,c){const p={id:Date.now().toString(36),name:name||'مكان',lat:c.lat,lon:c.lon};places.push(p);cur=p.id;save();fillSelect();smooth=null;render()}
+function openAdd(prefill){$('fName').value='';$('fCoord').value=prefill||'';$('fErr').textContent='';$('dlgAdd').showModal()}
+$('addCoord').onclick=()=>openAdd('');
+$('saveHere').onclick=()=>{if(!pos){alert('بانتظار GPS');return}
+  openAdd(pos.lat.toFixed(6)+', '+pos.lon.toFixed(6));$('fName').focus()};
+$('fOk').onclick=()=>{const c=parseCoord($('fCoord').value);if(!c){$('fErr').textContent='ما قدرت أقرأ الإحداثيات. اكتبها مثل 24.8860, 46.6484';return}
+  addPlace($('fName').value.trim(),c);$('dlgAdd').close()};
+$('fCancel').onclick=()=>$('dlgAdd').close();
+$('sel').onchange=e=>{cur=e.target.value;smooth=null;save();render()};
+function fillList(){const L=$('list');L.innerHTML='';
+  if(!places.length){L.innerHTML='<div class="meta">لا شيء بعد</div>';return}
+  places.forEach(p=>{const it=document.createElement('div');it.className='item';
+    it.innerHTML='<div><b></b><small></small></div><button data-a="copy">نسخ</button><button data-a="del">حذف</button>';
+    it.querySelector('b').textContent=p.name;it.querySelector('small').textContent=p.lat.toFixed(6)+', '+p.lon.toFixed(6);
+    it.querySelector('[data-a=copy]').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(p.lat+', '+p.lon).catch(()=>{})};
+    it.querySelector('[data-a=del]').onclick=()=>{places=places.filter(x=>x.id!==p.id);if(cur===p.id)cur=null;save();fillSelect();fillList();render()};
+    L.appendChild(it)})}
+$('manage').onclick=()=>{fillList();$('dlgList').showModal()};
+$('lClose').onclick=()=>$('dlgList').close();
+
+/* ---------- start (iOS needs a tap to grant compass) ---------- */
+async function start(){
+  $('start').hidden=true;
+  if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){
+    try{const r=await DeviceOrientationEvent.requestPermission();if(r==='granted')addEventListener('deviceorientation',onOrient)}catch(e){}
+  }else{addEventListener('deviceorientationabsolute',onOrient);addEventListener('deviceorientation',onOrient)}
+  if('geolocation' in navigator)navigator.geolocation.watchPosition(onPos,onErr,{enableHighAccuracy:true,maximumAge:0,timeout:20000});
+  else onErr({code:2});
+  try{wake=await navigator.wakeLock.request('screen')}catch(e){}
+  document.addEventListener('visibilitychange',async()=>{if(document.visibilityState==='visible'){try{wake=await navigator.wakeLock.request('screen')}catch(e){}}});
+}
+$('go').onclick=start;
+
+/* open a shared link like  .../#24.8860,46.6484  directly as a target */
+load();
+const h=decodeURIComponent(location.hash.slice(1));const hc=h&&parseCoord(h);
+if(hc&&!places.some(p=>Math.abs(p.lat-hc.lat)<1e-6&&Math.abs(p.lon-hc.lon)<1e-6))addPlace('من رابط',hc);
+fillSelect();render();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
