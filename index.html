@@ -151,7 +151,16 @@ dialog .row{margin-top:16px}
 <dialog id="dlgList">
   <h3>أماكني</h3>
   <div class="list" id="list"></div>
-  <div class="row"><button id="lClose">تم</button></div>
+  <div class="row"><button id="backup">نسخة احتياطية</button><button id="restore">استرجاع</button></div>
+  <div class="row" style="margin-top:8px"><button id="lClose">تم</button></div>
+</dialog>
+
+<dialog id="dlgRestore">
+  <h3>استرجاع الأماكن</h3>
+  <div class="sub">الصق النسخة الاحتياطية هنا. كل سطر مكان، والأماكن الموجودة ما تتكرر.</div>
+  <textarea id="rText" dir="auto" rows="7" style="width:100%;margin-top:10px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px"></textarea>
+  <div class="warn" id="rErr"></div>
+  <div class="row"><button class="primary" id="rOk">استرجاع</button><button id="rCancel">إلغاء</button></div>
 </dialog>
 
 <dialog id="dlgAbout" class="about">
@@ -339,6 +348,31 @@ function fillList(){const L=$('list');L.innerHTML='';
     it.querySelector('[data-a=del]').onclick=()=>{places=places.filter(x=>x.id!==p.id);if(cur===p.id)cur=null;save();fillSelect();fillList();render()};
     L.appendChild(it)})}
 $('manage').onclick=()=>{fillList();$('dlgList').showModal()};
+
+/* ---------- backup / restore: plain text, one place per line ---------- */
+function backupText(){return 'سهم — أماكني\n'+places.map(p=>p.name+': '+p.lat.toFixed(6)+', '+p.lon.toFixed(6)).join('\n')}
+$('backup').onclick=async()=>{
+  if(!places.length){toast('ما فيه أماكن محفوظة');return}
+  const text=backupText();
+  if(navigator.share){try{await navigator.share({title:'سهم — أماكني',text});return}catch(e){if(e.name==='AbortError')return}}
+  copy(text);
+};
+$('restore').onclick=()=>{$('rText').value='';$('rErr').textContent='';$('dlgRestore').showModal()};
+$('rCancel').onclick=()=>$('dlgRestore').close();
+$('rOk').onclick=()=>{
+  let added=0,skipped=0;
+  $('rText').value.split(/\r?\n/).forEach((line,i)=>{
+    line=line.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/٫/g,'.').replace(/،/g,',').trim();
+    const m=line.match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);if(!m)return;
+    const c=okLL(m[1],m[2]);if(!c)return;
+    const name=line.slice(0,m.index).replace(/[\s:|\-–—]+$/,'').trim()||'مكان';
+    if(places.some(p=>Math.abs(p.lat-c.lat)<1e-6&&Math.abs(p.lon-c.lon)<1e-6)){skipped++;return}
+    places.push({id:Date.now().toString(36)+i,name,lat:c.lat,lon:c.lon});added++;
+  });
+  if(!added&&!skipped){$('rErr').textContent='ما لقيت أماكن في النص. تأكد إنك لصقت النسخة الاحتياطية كاملة.';return}
+  save();fillSelect();fillList();$('dlgRestore').close();
+  toast('تم استرجاع '+added+' مكان'+(skipped?' · '+skipped+' موجود مسبقاً':''));
+};
 $('lClose').onclick=()=>$('dlgList').close();
 $('aboutBtn').onclick=()=>$('dlgAbout').showModal();
 $('aClose').onclick=()=>$('dlgAbout').close();
