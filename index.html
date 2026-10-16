@@ -9,16 +9,26 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.6">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.7">
 <style>
 /* Layout: one screen. Status chip on top; a compass bezel (turns with north) holding the arrow (points at the target);
    distance under it; target picker and two actions in a bottom tray. */
 :root{
   --bg:#0d1210; --bg2:#111815; --panel:#161e1b; --panel2:#1c2622; --line:#25302b; --fg:#eef3ef; --dim:#859790;
-  --arrow:#f2c14e; --arrow2:#d99a1e; --good:#4cc38a; --ok:#f2c14e; --bad:#e5604f;
+  --arrow:#f2c14e; --arrow2:#d99a1e; --good:#4cc38a; --good2:#2f9a68; --ok:#f2c14e; --bad:#e5604f; --onArrow:#1a1404;
+  --glow:rgba(242,193,78,.25); --glowG:rgba(76,195,138,.35); --okBg:rgba(242,193,78,.08); --okLine:rgba(242,193,78,.25);
+  --badBg:rgba(229,96,79,.08); --badLine:rgba(229,96,79,.5); --shadow:rgba(0,0,0,.45); --scrim:rgba(0,0,0,.6);
   --ui:-apple-system,"SF Arabic","Geeza Pro",system-ui,sans-serif;
   --num:-apple-system,"SF Pro Rounded","SF Pro Display",system-ui,sans-serif;
   color-scheme:dark;
+}
+/* light: warm beige paper */
+:root[data-theme="light"]{
+  --bg:#efe6d6; --bg2:#f7f1e6; --panel:#fbf7ef; --panel2:#f1e8d8; --line:#ded1bb; --fg:#2b241a; --dim:#7b6f5d;
+  --arrow:#e2a326; --arrow2:#bf8216; --good:#2f9a68; --good2:#237a52; --ok:#a8730a; --bad:#c4473a; --onArrow:#2b1d04;
+  --glow:rgba(191,130,22,.28); --glowG:rgba(47,154,104,.3); --okBg:rgba(226,163,38,.12); --okLine:rgba(191,130,22,.35);
+  --badBg:rgba(196,71,58,.07); --badLine:rgba(196,71,58,.45); --shadow:rgba(80,60,30,.18); --scrim:rgba(60,45,25,.35);
+  color-scheme:light;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
@@ -50,11 +60,11 @@ svg{display:block}
 .card{fill:var(--dim);font:600 12px var(--ui)}
 .card.n{fill:var(--bad)}
 .face{fill:var(--panel);stroke:var(--line)}
-#arrow{position:absolute;inset:20%;transition:transform .25s ease-out;filter:drop-shadow(0 6px 14px rgba(242,193,78,.25))}
+#arrow{position:absolute;inset:20%;transition:transform .25s ease-out;filter:drop-shadow(0 6px 14px var(--glow))}
 #arrow svg{width:100%;height:100%}
 #arrow .a1{fill:var(--arrow)}#arrow .a2{fill:var(--arrow2)}
-.aligned #arrow .a1{fill:var(--good)}.aligned #arrow .a2{fill:#2f9a68}
-.aligned #arrow{filter:drop-shadow(0 6px 16px rgba(76,195,138,.35))}
+.aligned #arrow .a1{fill:var(--good)}.aligned #arrow .a2{fill:var(--good2)}
+.aligned #arrow{filter:drop-shadow(0 6px 16px var(--glowG))}
 .flag{position:absolute;inset:20%;border-radius:50%;display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--good);background:var(--panel);font-size:24px;font-weight:700}
 .flag svg{width:44%;height:auto}
 .arrived #arrow{opacity:0}
@@ -66,7 +76,7 @@ svg{display:block}
 .meta{color:var(--dim);font-size:14px;text-align:center;min-height:20px}
 .meta b{color:var(--fg);font-weight:600}
 .warn{font-size:13px;text-align:center;min-height:0}
-.warn:not(:empty){color:var(--ok);background:rgba(242,193,78,.08);border:1px solid rgba(242,193,78,.25);border-radius:12px;padding:8px 12px;max-width:420px;line-height:1.5}
+.warn:not(:empty){color:var(--ok);background:var(--okBg);border:1px solid var(--okLine);border-radius:12px;padding:8px 12px;max-width:420px;line-height:1.5}
 
 /* home */
 .here{width:100%;max-width:420px;display:flex;flex-direction:column;gap:12px;align-items:stretch}
@@ -89,8 +99,8 @@ button,select,input{font:inherit;color:var(--fg);background:var(--panel);border:
 select{width:100%;appearance:none;-webkit-appearance:none;padding-inline-start:40px;padding-inline-end:36px;font-weight:600}
 button{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
 button:active{transform:scale(.98)}
-button.primary{background:var(--arrow);color:#1a1404;border-color:var(--arrow);font-weight:700}
-button.danger{background:rgba(229,96,79,.08);border-color:rgba(229,96,79,.5);color:var(--bad);font-weight:700}
+button.primary{background:var(--arrow);color:var(--onArrow);border-color:var(--arrow);font-weight:700}
+button.danger{background:var(--badBg);border-color:var(--badLine);color:var(--bad);font-weight:700}
 .sq{width:50px;padding:0;flex:none}
 button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--arrow);outline-offset:2px}
 .row{display:flex;gap:8px}.row>*{flex:1}
@@ -98,7 +108,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-vis
 
 /* dialogs */
 dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:20px;width:min(92vw,440px);padding:20px;max-height:85vh;overflow:auto}
-dialog::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+dialog::backdrop{background:var(--scrim);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 dialog h3{margin:0 0 14px;font-size:18px}
 dialog label{display:block;font-size:13px;color:var(--dim);margin:12px 0 6px}
 dialog input,dialog textarea{width:100%;background:var(--bg)}
@@ -111,12 +121,15 @@ dialog .row{margin-top:16px}
 .item button.del{color:var(--bad)}
 .about{padding-top:24px}
 .about .hero{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;margin-bottom:16px}
-.about .hero img{border-radius:18px;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+.about .hero img{border-radius:18px;box-shadow:0 10px 28px var(--shadow),0 0 0 1px var(--line)}
 .about .name{font-size:24px;font-weight:700;margin-top:6px}
 .about .name span{font-size:15px;color:var(--dim);font-weight:500;margin-inline-start:4px}
 .about .tag{color:var(--dim);font-size:14px}
-.about .vpill{direction:ltr;font-size:11px;color:var(--arrow);border:1px solid rgba(242,193,78,.35);border-radius:999px;padding:2px 10px;margin-top:4px}
+.about .vpill{direction:ltr;font-size:11px;color:var(--arrow);border:1px solid var(--okLine);border-radius:999px;padding:2px 10px;margin-top:4px}
 .tabs{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;margin-bottom:6px}
+.auto{display:flex;justify-content:space-between;align-items:center;background:var(--bg);border:1px dashed var(--line);border-radius:14px;padding:12px 14px;color:var(--dim);font-family:var(--num);font-variant-numeric:tabular-nums}
+.auto::after{content:"تلقائي";font-family:var(--ui);font-size:12px;color:var(--dim);opacity:.8}
+.item .at{color:var(--dim);font-size:11.5px;margin-top:2px;font-family:var(--num);font-variant-numeric:tabular-nums}
 .set{display:flex;flex-direction:column;gap:6px;padding:12px 0;border-bottom:1px solid var(--line)}
 .set:last-of-type{border-bottom:0}
 .sl{font-size:14px;font-weight:600}
@@ -124,7 +137,7 @@ dialog .row{margin-top:16px}
 .sh a{color:var(--arrow)}
 .seg{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
 .seg button{flex:1;border:0;background:transparent;padding:9px 4px;font-size:14px;color:var(--dim);border-radius:9px;font-family:var(--num)}
-.seg button.on{background:var(--arrow);color:#1a1404;font-weight:700}
+.seg button.on{background:var(--arrow);color:var(--onArrow);font-weight:700}
 .seg button:focus-visible{outline:none}
 .tabs button{flex:1;border:0;background:transparent;padding:8px;font-size:14px;color:var(--dim);border-radius:9px}
 .tabs button:focus-visible{outline:none}
@@ -138,14 +151,14 @@ dialog .row{margin-top:16px}
 .about .credit .by{color:var(--dim);font-size:12px}
 .about .credit b{display:block;color:var(--arrow);font-size:18px;margin:2px 0}
 .about .credit .en{direction:ltr;color:var(--dim);font-size:13px}
-.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);padding:9px 16px;border-radius:999px;font-size:14px;z-index:9;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);padding:9px 16px;border-radius:999px;font-size:14px;z-index:9;box-shadow:0 8px 24px var(--shadow)}
 
 /* start */
 #start{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;z-index:5}
 #start h1{margin:0;font-size:34px}
 #start p{color:var(--dim);max-width:30ch;line-height:1.7;margin:0}
 #start button{min-width:160px}
-#start .mark{filter:drop-shadow(0 10px 24px rgba(242,193,78,.3))}
+#start .mark{filter:drop-shadow(0 10px 24px var(--glow))}
 @media (prefers-reduced-motion:reduce){#arrow,#bezel{transition:none}.arrived .flag{animation:none}}
 </style>
 </head>
@@ -215,7 +228,7 @@ dialog .row{margin-top:16px}
     <button id="saveHere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>احفظ موقعي</button>
     <button id="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>أضف إحداثيات</button>
   </div>
-  <div class="ver">Ver 1.6</div>
+  <div class="ver">Ver 1.7</div>
 </div>
 
 <dialog id="dlgAdd">
@@ -226,6 +239,8 @@ dialog .row{margin-top:16px}
   <input id="fCoord" dir="ltr" placeholder="24.8860, 46.6484" inputmode="text">
   <div class="sub" id="fPrev" style="direction:ltr;text-align:left;margin-top:6px;color:var(--good)"></div>
   <div class="sub">يقبل: عشري، N/E، درجات ودقائق وثواني، روابط قوقل وآبل ماب</div>
+  <label>التاريخ والوقت</label>
+  <div class="auto" id="fAt">--</div>
   <div class="warn" id="fErr" style="margin-top:8px"></div>
   <div class="row"><button class="primary" id="fOk">حفظ</button><button id="fCancel">إلغاء</button></div>
 </dialog>
@@ -250,7 +265,7 @@ dialog .row{margin-top:16px}
     <img src="icon.png" alt="" width="76" height="76">
     <div class="name">سهم <span>Sahm</span></div>
     <div class="tag">سهم واحد يوصلك. بدون خرائط، بدون إنترنت.</div>
-    <div class="vpill">Ver 1.6</div>
+    <div class="vpill">Ver 1.7</div>
   </div>
 
   <div class="tabs" role="tablist">
@@ -315,9 +330,8 @@ dialog .row{margin-top:16px}
     <div class="sh">للعرض والنسخ. النسخة الاحتياطية تبقى عشرية دائماً.</div>
   </div>
   <div class="set">
-    <div class="sl">صوت عند الوصول</div>
-    <div class="seg" data-k="sound"><button data-v="1">تشغيل</button><button data-v="0">إيقاف</button></div>
-    <div class="sh">ما يطلع صوت إذا الجوال على الصامت. <a href="#" id="testSnd">جرّب الصوت</a></div>
+    <div class="sl">المظهر</div>
+    <div class="seg" data-k="theme"><button data-v="light">فاتح</button><button data-v="dark">مظلم</button></div>
   </div>
   <div class="row"><button id="sClose">تم</button></div>
 </dialog>
@@ -339,9 +353,12 @@ let kf=null, arrived=false; // position filter state, arrival flag
   s.innerHTML=h})();
 
 /* ---------- settings store ---------- */
-const cfg={arrive:2,fmt:'dec',sound:true};
+const cfg={arrive:2,fmt:'dec',theme:'dark'};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('sahm.set')||'{}'))}catch(e){}
 function saveCfg(){try{localStorage.setItem('sahm.set',JSON.stringify(cfg))}catch(e){}}
+function applyTheme(){document.documentElement.dataset.theme=cfg.theme==='light'?'light':'dark';
+  document.querySelector('meta[name=theme-color]').content=cfg.theme==='light'?'#efe6d6':'#0d1210'}
+applyTheme();
 
 /* ---------- coordinate display ---------- */
 function dms(v,pos,neg){const h=v<0?neg:pos;v=Math.abs(v);let d=Math.floor(v),m=Math.floor((v-d)*60),s=((v-d)*60-m)*60;
@@ -350,15 +367,6 @@ function dms(v,pos,neg){const h=v<0?neg:pos;v=Math.abs(v);let d=Math.floor(v),m=
 const fmtLat=v=>cfg.fmt==='dms'?dms(v,'N','S'):v.toFixed(6);
 const fmtLon=v=>cfg.fmt==='dms'?dms(v,'E','W'):v.toFixed(6);
 const fmtLL=(a,b)=>cfg.fmt==='dms'?fmtLat(a)+' '+fmtLon(b):fmtLat(a)+', '+fmtLon(b);
-
-/* ---------- arrival sound (Web Audio, unlocked by the Start tap) ---------- */
-let actx=null;
-function audioUnlock(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
-  if(actx.state==='suspended')actx.resume();const b=actx.createBuffer(1,1,22050),s=actx.createBufferSource();s.buffer=b;s.connect(actx.destination);s.start(0)}catch(e){}}
-function chime(force){if(!cfg.sound&&!force)return;try{audioUnlock();if(!actx)return;const t=actx.currentTime;
-  [[880,0],[1318.5,.16]].forEach(([f,o])=>{const g=actx.createGain(),os=actx.createOscillator();os.type='sine';os.frequency.value=f;
-    g.gain.setValueAtTime(0,t+o);g.gain.linearRampToValueAtTime(.35,t+o+.02);g.gain.exponentialRampToValueAtTime(.001,t+o+.55);
-    os.connect(g);g.connect(actx.destination);os.start(t+o);os.stop(t+o+.6)})}catch(e){}}
 
 /* ---------- storage ---------- */
 function load(){try{places=JSON.parse(localStorage.getItem('sahm.places')||'[]');cur=localStorage.getItem('sahm.cur')||null}catch(e){places=[]}}
@@ -497,7 +505,7 @@ function render(){
   $('stage').classList.toggle('aligned',!bad&&(rel<12||rel>348));
   // arrive at 2 m or less; leave once you're more than 3 m away (the extra metre stops it flickering)
   const ar=cfg.arrive, leave=ar+Math.max(1,ar*0.3);
-  if(arrived?d>leave:d<=ar){arrived=!arrived;if(arrived)chime()}
+  if(arrived?d>leave:d<=ar)arrived=!arrived;
   $('stage').classList.toggle('arrived',arrived);
 }
 setInterval(render,1000);
@@ -510,17 +518,22 @@ function fillSelect(){const s=$('sel');s.innerHTML='';
   places.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;s.appendChild(o)});
   if(!places.some(p=>p.id===cur))cur=null;s.value=cur||'';s.disabled=!places.length}
 function setTarget(id){cur=id||null;smooth=null;smoothB=null;arrived=false;save();fillSelect();render()}
-function addPlace(name,c){const p={id:Date.now().toString(36),name:name||'مكان',lat:c.lat,lon:c.lon};places.push(p);save();setTarget(p.id)}
+/* date & time saved with each place, as local "YYYY-MM-DD HH:MM" (empty for places saved before 1.7) */
+const pad=n=>String(n).padStart(2,'0');
+function stamp(d=new Date()){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes())}
+function showAt(at){const m=at&&at.match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/);if(!m)return '';
+  let h=+m[4];const ap=h<12?'ص':'م';h=h%12||12;return m[3]+'/'+m[2]+'/'+m[1]+' · '+h+':'+m[5]+' '+ap}
+function addPlace(name,c,at){const p={id:Date.now().toString(36),name:name||'مكان',lat:c.lat,lon:c.lon,at:at===undefined?stamp():at};places.push(p);save();setTarget(p.id)}
 function preview(){const v=$('fCoord').value,c=parseCoord(v);$('fErr').textContent='';
   $('fPrev').textContent=c?'✓ '+c.lat.toFixed(6)+', '+c.lon.toFixed(6):'';}
 $('fCoord').oninput=preview;
-function openAdd(prefill){$('fName').value='';$('fCoord').value=prefill||'';preview();$('dlgAdd').showModal()}
+function openAdd(prefill){$('fName').value='';$('fCoord').value=prefill||'';preview();openAdd.at=stamp();$('fAt').textContent=showAt(openAdd.at);$('dlgAdd').showModal()}
 $('addCoord').onclick=()=>openAdd('');
 $('saveHere').onclick=()=>{if(!pos){toast('بانتظار GPS');return}openAdd(pos.lat.toFixed(6)+', '+pos.lon.toFixed(6))};
 $('fOk').onclick=()=>{const c=parseCoord($('fCoord').value);if(!c){const v=$('fCoord').value;$('fErr').textContent=/goo\.gl|maps\.app/i.test(v)
     ?'هذا رابط مختصر وما فيه إحداثيات. افتحه في سفاري وانسخ الرابط الكامل من شريط العنوان، أو اضغط على الدبوس في قوقل ماب وانسخ الإحداثيات.'
     :'ما قدرت أقرأ الإحداثيات. اكتبها مثل 24.8860, 46.6484';return}
-  addPlace($('fName').value.trim(),c);$('dlgAdd').close()};
+  addPlace($('fName').value.trim(),c,openAdd.at);$('dlgAdd').close()};
 $('fCancel').onclick=()=>$('dlgAdd').close();
 $('sel').onchange=e=>setTarget(e.target.value);
 $('cancel').onclick=()=>{setTarget(null);toast('تم إلغاء التوجيه')};
@@ -528,15 +541,15 @@ $('copyHere').onclick=()=>{if(pos)copy(fmtLL(pos.lat,pos.lon))};
 function fillList(){const L=$('list');L.innerHTML='';
   if(!places.length){L.innerHTML='<div class="meta">لا شيء بعد</div>';return}
   places.forEach(p=>{const it=document.createElement('div');it.className='item';
-    it.innerHTML='<div><b></b><small></small></div><button data-a="copy">نسخ</button><button class="del" data-a="del">حذف</button>';
-    it.querySelector('b').textContent=p.name;it.querySelector('small').textContent=fmtLL(p.lat,p.lon);
+    it.innerHTML='<div><b></b><small></small><div class="at"></div></div><button data-a="copy">نسخ</button><button class="del" data-a="del">حذف</button>';
+    it.querySelector('b').textContent=p.name;it.querySelector('small').textContent=fmtLL(p.lat,p.lon);it.querySelector('.at').textContent=showAt(p.at);
     it.querySelector('[data-a=copy]').onclick=()=>copy(fmtLL(p.lat,p.lon));
     it.querySelector('[data-a=del]').onclick=()=>{places=places.filter(x=>x.id!==p.id);if(cur===p.id)cur=null;save();fillSelect();fillList();render()};
     L.appendChild(it)})}
 $('manage').onclick=()=>{fillList();$('dlgList').showModal()};
 
 /* ---------- backup / restore: plain text, one place per line ---------- */
-function backupText(){return 'سهم — أماكني\n'+places.map(p=>p.name+': '+p.lat.toFixed(6)+', '+p.lon.toFixed(6)).join('\n')}
+function backupText(){return 'سهم — أماكني\n'+places.map(p=>p.name+': '+p.lat.toFixed(6)+', '+p.lon.toFixed(6)+(p.at?' | '+p.at:'')).join('\n')}
 $('backup').onclick=async()=>{
   if(!places.length){toast('ما فيه أماكن محفوظة');return}
   const text=backupText();
@@ -549,11 +562,14 @@ $('rOk').onclick=()=>{
   let added=0,skipped=0;
   $('rText').value.split(/\r?\n/).forEach((line,i)=>{
     line=line.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/٫/g,'.').replace(/،/g,',').trim();
+    // "name: lat, lon" (old backups) or "name: lat, lon | YYYY-MM-DD HH:MM" (1.7+)
+    let at='';const dm=line.match(/\s*\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*$/);
+    if(dm){at=dm[1];line=line.slice(0,dm.index)}
     const m=line.match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);if(!m)return;
     const c=okLL(m[1],m[2]);if(!c)return;
     const name=line.slice(0,m.index).replace(/[\s:|\-–—]+$/,'').trim()||'مكان';
     if(places.some(p=>Math.abs(p.lat-c.lat)<1e-6&&Math.abs(p.lon-c.lon)<1e-6)){skipped++;return}
-    places.push({id:Date.now().toString(36)+i,name,lat:c.lat,lon:c.lon});added++;
+    places.push({id:Date.now().toString(36)+i,name,lat:c.lat,lon:c.lon,at});added++;
   });
   if(!added&&!skipped){$('rErr').textContent='ما لقيت أماكن في النص. تأكد إنك لصقت النسخة الاحتياطية كاملة.';return}
   save();fillSelect();fillList();$('dlgRestore').close();
@@ -564,14 +580,12 @@ $('aboutBtn').onclick=()=>$('dlgAbout').showModal();
 
 /* ---------- settings ---------- */
 function paintSet(){document.querySelectorAll('.seg').forEach(s=>{const k=s.dataset.k;
-  s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',(k==='sound'?(cfg.sound?'1':'0'):String(cfg[k]))===b.dataset.v))})}
+  s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(cfg[k])===b.dataset.v))})}
 document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{
-  const k=b.parentNode.dataset.k,v=b.dataset.v;cfg[k]=k==='arrive'?+v:k==='sound'?v==='1':v;
-  if(k==='sound'&&cfg.sound)chime(true);
+  const k=b.parentNode.dataset.k,v=b.dataset.v;cfg[k]=k==='arrive'?+v:v;if(k==='theme')applyTheme();
   saveCfg();paintSet();arrived=false;render()});
 $('setBtn').onclick=()=>{paintSet();$('dlgSet').showModal()};
 $('sClose').onclick=()=>$('dlgSet').close();
-$('testSnd').onclick=e=>{e.preventDefault();chime(true)};
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
   $('about-ar').hidden=b.dataset.l!=='ar';$('about-en').hidden=b.dataset.l!=='en'});
@@ -580,7 +594,6 @@ $('aClose').onclick=()=>$('dlgAbout').close();
 /* ---------- start (iOS needs a tap to grant compass) ---------- */
 async function wakeOn(){try{await navigator.wakeLock.request('screen')}catch(e){}}
 async function start(){
-  audioUnlock();
   $('start').hidden=true;
   if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){
     try{const r=await DeviceOrientationEvent.requestPermission();if(r==='granted')addEventListener('deviceorientation',onOrient)}catch(e){}
