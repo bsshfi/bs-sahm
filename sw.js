@@ -1,6 +1,6 @@
 // Network first so updates arrive, but give up after 2.5 s and open the saved copy
 // (so a weak signal never leaves you waiting). No network at all → saved copy immediately.
-const C='sahm-v1.5';
+const C='sahm-v1.6';
 const FILES=['./','index.html','manifest.json','icon.png','icon-180.png'];
 const WAIT=2500;
 self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(FILES)));self.skipWaiting()});
