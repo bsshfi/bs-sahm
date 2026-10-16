@@ -7,107 +7,169 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="سهم">
-<meta name="theme-color" content="#0f1412">
+<meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon.png">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.4">
 <style>
-/* Layout: one screen — GPS bar on top, centre shows either your coordinates (no target) or the arrow (navigating), controls at the bottom */
+/* Layout: one screen. Status chip on top; a compass bezel (turns with north) holding the arrow (points at the target);
+   distance under it; target picker and two actions in a bottom tray. */
 :root{
-  --bg:#0f1412; --panel:#18201d; --line:#26302c; --fg:#eef3ef; --dim:#8a9a93;
-  --arrow:#f2c14e; --good:#4cc38a; --ok:#f2c14e; --bad:#e5604f;
+  --bg:#0d1210; --bg2:#111815; --panel:#161e1b; --panel2:#1c2622; --line:#25302b; --fg:#eef3ef; --dim:#859790;
+  --arrow:#f2c14e; --arrow2:#d99a1e; --good:#4cc38a; --ok:#f2c14e; --bad:#e5604f;
   --ui:-apple-system,"SF Arabic","Geeza Pro",system-ui,sans-serif;
+  --num:-apple-system,"SF Pro Rounded","SF Pro Display",system-ui,sans-serif;
   color-scheme:dark;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--ui);
+body{background:radial-gradient(120% 70% at 50% 38%,var(--bg2),var(--bg) 70%);background-color:var(--bg);color:var(--fg);font-family:var(--ui);
   padding:env(safe-area-inset-top) max(16px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px,env(safe-area-inset-left));
   display:flex;flex-direction:column;overflow:hidden;user-select:none;-webkit-user-select:none}
-.top{display:flex;align-items:center;gap:10px;padding:14px 0 4px}
-.bars{display:flex;gap:3px;align-items:flex-end;height:18px}
-.bars i{width:5px;border-radius:2px;background:var(--line)}
-.bars i:nth-child(1){height:6px}.bars i:nth-child(2){height:10px}.bars i:nth-child(3){height:14px}.bars i:nth-child(4){height:18px}
-.top b{font-size:15px}
-.top .acc{color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums;direction:ltr}
+svg{display:block}
+
+/* top status */
+.top{display:flex;align-items:center;gap:10px;padding:12px 0 6px}
+.chip{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px 7px 14px}
+.bars{display:flex;gap:2px;align-items:flex-end;height:14px}
+.bars i{width:4px;border-radius:2px;background:var(--line);transition:background .3s}
+.bars i:nth-child(1){height:5px}.bars i:nth-child(2){height:8px}.bars i:nth-child(3){height:11px}.bars i:nth-child(4){height:14px}
+.chip b{font-size:14px;font-weight:600}
+.chip .acc{color:var(--dim);font-size:13px;font-family:var(--num);font-variant-numeric:tabular-nums;direction:ltr}
 .top .sp{flex:1}
-.icon{width:36px;height:36px;padding:0;border-radius:50%;display:grid;place-items:center;font-size:16px;font-weight:700}
-.sub{color:var(--dim);font-size:12px;min-height:16px;font-variant-numeric:tabular-nums}
-.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:0}
-.dial{position:relative;width:min(78vw,44vh);aspect-ratio:1;max-width:100%}
-.ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--line)}
-#arrow{position:absolute;inset:8%;transition:transform .25s ease-out}
+.icon{width:38px;height:38px;padding:0;border-radius:50%;display:grid;place-items:center;color:var(--dim)}
+.sub{color:var(--dim);font-size:12px;min-height:16px;font-variant-numeric:tabular-nums;padding-inline-start:4px}
+.sub .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--good);margin-inline-end:5px;vertical-align:1px}
+
+/* stage */
+.stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:0}
+.dial{position:relative;width:min(80vw,42vh);aspect-ratio:1;max-width:100%;overflow:hidden;border-radius:50%}
+#bezel{position:absolute;inset:0;transition:transform .25s ease-out}
+#bezel svg{width:100%;height:100%}
+.tick{stroke:var(--line)}.tick.maj{stroke:var(--dim)}
+.card{fill:var(--dim);font:600 12px var(--ui)}
+.card.n{fill:var(--bad)}
+.face{fill:var(--panel);stroke:var(--line)}
+#arrow{position:absolute;inset:20%;transition:transform .25s ease-out;filter:drop-shadow(0 6px 14px rgba(242,193,78,.25))}
 #arrow svg{width:100%;height:100%}
-.arrived #arrow{opacity:.12}
-.flag{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--good)}
-.arrived .flag{display:flex}
-.dist{font-size:clamp(44px,13vw,68px);font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
-.dist small{font-size:.4em;font-weight:600;color:var(--dim);margin-inline-start:6px}
+#arrow .a1{fill:var(--arrow)}#arrow .a2{fill:var(--arrow2)}
+.aligned #arrow .a1{fill:var(--good)}.aligned #arrow .a2{fill:#2f9a68}
+.aligned #arrow{filter:drop-shadow(0 6px 16px rgba(76,195,138,.35))}
+.flag{position:absolute;inset:20%;border-radius:50%;display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--good);background:var(--panel);font-size:24px;font-weight:700}
+.flag svg{width:44%;height:auto}
+.arrived #arrow{opacity:0}
+.arrived .flag{display:flex;animation:pop .35s ease-out}
+.arrived .face{stroke:var(--good)}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.dist{font-family:var(--num);font-size:clamp(46px,14vw,72px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.02em}
+.dist small{font-family:var(--ui);font-size:.36em;font-weight:600;color:var(--dim);margin-inline-start:6px;letter-spacing:0}
 .meta{color:var(--dim);font-size:14px;text-align:center;min-height:20px}
-.warn{color:var(--ok);font-size:13px;text-align:center;min-height:18px}
-/* home: your coordinates */
-.here{width:100%;max-width:420px;display:flex;flex-direction:column;gap:14px;align-items:center}
-.here .lbl{color:var(--dim);font-size:13px;letter-spacing:.02em}
-.coords{direction:ltr;font-size:clamp(26px,8vw,38px);font-weight:700;font-variant-numeric:tabular-nums;text-align:center;line-height:1.25;user-select:text;-webkit-user-select:text}
-.grid{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.cell{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.meta b{color:var(--fg);font-weight:600}
+.warn{font-size:13px;text-align:center;min-height:0}
+.warn:not(:empty){color:var(--ok);background:rgba(242,193,78,.08);border:1px solid rgba(242,193,78,.25);border-radius:12px;padding:8px 12px;max-width:420px;line-height:1.5}
+
+/* home */
+.here{width:100%;max-width:420px;display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.loc{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px 18px 16px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.loc .lbl{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:6px}
+.coords{direction:ltr;font-family:var(--num);font-size:clamp(24px,7.5vw,34px);font-weight:600;font-variant-numeric:tabular-nums;text-align:center;line-height:1.3;user-select:text;-webkit-user-select:text}
+.copy{padding:8px 16px;font-size:14px;border-radius:999px;display:flex;align-items:center;gap:6px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.cell{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center}
 .cell div{color:var(--dim);font-size:12px}
-.cell b{display:block;font-size:17px;margin-top:4px;font-variant-numeric:tabular-nums;direction:ltr}
-.bottom{display:flex;flex-direction:column;gap:8px;padding-bottom:8px}
-.ver{text-align:center;color:var(--dim);font-size:11px;opacity:.7;direction:ltr}
+.cell b{display:block;font-family:var(--num);font-size:17px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums;direction:ltr}
+
+/* bottom tray */
+.bottom{display:flex;flex-direction:column;gap:8px;padding:10px 0 6px}
 .target{display:flex;gap:8px}
-button,select,input{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-select{flex:1;min-width:0;appearance:none;-webkit-appearance:none}
-button{cursor:pointer}
+.selwrap{position:relative;flex:1;min-width:0}
+.selwrap svg{position:absolute;top:50%;transform:translateY(-50%);inset-inline-start:14px;color:var(--arrow);pointer-events:none}
+.selwrap::after{content:"";position:absolute;top:50%;inset-inline-end:16px;width:7px;height:7px;border:solid var(--dim);border-width:0 2px 2px 0;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+button,select,input{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
+select{width:100%;appearance:none;-webkit-appearance:none;padding-inline-start:40px;padding-inline-end:36px;font-weight:600}
+button{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+button:active{transform:scale(.98)}
 button.primary{background:var(--arrow);color:#1a1404;border-color:var(--arrow);font-weight:700}
-button.danger{background:transparent;border-color:var(--bad);color:var(--bad);font-weight:700}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--arrow);outline-offset:2px}
+button.danger{background:rgba(229,96,79,.08);border-color:rgba(229,96,79,.5);color:var(--bad);font-weight:700}
+.sq{width:50px;padding:0;flex:none}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--arrow);outline-offset:2px}
 .row{display:flex;gap:8px}.row>*{flex:1}
-dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:16px;width:min(92vw,440px);padding:18px;max-height:85vh;overflow:auto}
-dialog::backdrop{background:#000a}
-dialog h3{margin:0 0 12px;font-size:17px}
-dialog label{display:block;font-size:13px;color:var(--dim);margin:10px 0 4px}
-dialog input{width:100%}
+.ver{text-align:center;color:var(--dim);font-size:11px;opacity:.6;direction:ltr;padding-top:2px}
+
+/* dialogs */
+dialog{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:20px;width:min(92vw,440px);padding:20px;max-height:85vh;overflow:auto}
+dialog::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+dialog h3{margin:0 0 14px;font-size:18px}
+dialog label{display:block;font-size:13px;color:var(--dim);margin:12px 0 6px}
+dialog input,dialog textarea{width:100%;background:var(--bg)}
 dialog .row{margin-top:16px}
-.list{max-height:40vh;overflow:auto;display:flex;flex-direction:column;gap:6px}
-.item{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid var(--line);border-radius:10px}
-.item div{flex:1;min-width:0}.item small{color:var(--dim);direction:ltr;display:block;font-size:12px}
-.item button{padding:6px 10px;font-size:13px}
-.about p{line-height:1.7;margin:0 0 10px;color:var(--fg)}
-.about .en{direction:ltr;text-align:left;color:var(--dim);font-size:14px;border-top:1px solid var(--line);padding-top:12px}
-.about .credit{text-align:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
-.about .credit b{color:var(--arrow)}
-.about .credit div{direction:ltr;color:var(--dim);font-size:13px;margin-top:2px}
-.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);padding:8px 14px;border-radius:20px;font-size:14px;z-index:9}
-#start{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;z-index:5}
-#start p{color:var(--dim);max-width:30ch;line-height:1.6;margin:0}
-@media (prefers-reduced-motion:reduce){#arrow{transition:none}}
+.list{max-height:42vh;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border:1px solid var(--line);border-radius:12px}
+.item div{flex:1;min-width:0}.item b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item small{color:var(--dim);direction:ltr;display:block;font-size:12px;font-family:var(--num);text-align:right}
+.item button{padding:7px 11px;font-size:13px;border-radius:10px}
+.item button.del{color:var(--bad)}
+.about{padding-top:24px}
+.about .hero{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;margin-bottom:16px}
+.about .hero img{border-radius:18px;box-shadow:0 10px 28px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+.about .name{font-size:24px;font-weight:700;margin-top:6px}
+.about .name span{font-size:15px;color:var(--dim);font-weight:500;margin-inline-start:4px}
+.about .tag{color:var(--dim);font-size:14px}
+.about .vpill{direction:ltr;font-size:11px;color:var(--arrow);border:1px solid rgba(242,193,78,.35);border-radius:999px;padding:2px 10px;margin-top:4px}
+.tabs{display:flex;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;margin-bottom:6px}
+.tabs button{flex:1;border:0;background:transparent;padding:8px;font-size:14px;color:var(--dim);border-radius:9px}
+.tabs button:focus-visible{outline:none}
+.tabs button.on{background:var(--panel2);color:var(--fg);font-weight:600}
+.about h4{margin:14px 0 6px;font-size:13px;color:var(--arrow);font-weight:600;letter-spacing:.02em}
+.about p,.about li{line-height:1.7;font-size:14.5px}
+.about p{margin:0}
+.about ol,.about ul{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:4px}
+.about li::marker{color:var(--dim)}
+.about .credit{text-align:center;margin-top:18px;padding:14px;background:var(--bg);border:1px solid var(--line);border-radius:14px}
+.about .credit .by{color:var(--dim);font-size:12px}
+.about .credit b{display:block;color:var(--arrow);font-size:18px;margin:2px 0}
+.about .credit .en{direction:ltr;color:var(--dim);font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);padding:9px 16px;border-radius:999px;font-size:14px;z-index:9;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+
+/* start */
+#start{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;z-index:5}
+#start h1{margin:0;font-size:34px}
+#start p{color:var(--dim);max-width:30ch;line-height:1.7;margin:0}
+#start button{min-width:160px}
+#start .mark{filter:drop-shadow(0 10px 24px rgba(242,193,78,.3))}
+@media (prefers-reduced-motion:reduce){#arrow,#bezel{transition:none}.arrived .flag{animation:none}}
 </style>
 </head>
 <body>
 
 <div id="start">
-  <svg width="90" height="90" viewBox="0 0 100 100"><path d="M50 6 L82 88 L50 70 L18 88 Z" fill="#f2c14e"/></svg>
-  <h1 style="margin:0">سهم</h1>
+  <img class="mark" src="icon.png" alt="" width="112" height="112" style="border-radius:26px;box-shadow:0 0 0 1px var(--line)">
+  <h1>سهم</h1>
   <p>يوجهك لأي إحداثيات بسهم فقط. يعتمد على GPS والبوصلة، بدون خرائط وبدون إنترنت.</p>
   <button class="primary" id="go">ابدأ</button>
 </div>
 
 <div class="top">
-  <div class="bars" id="bars"><i></i><i></i><i></i><i></i></div>
-  <b id="gpsLabel">بانتظار GPS…</b>
-  <span class="acc" id="acc"></span>
+  <div class="chip">
+    <div class="bars" id="bars"><i></i><i></i><i></i><i></i></div>
+    <b id="gpsLabel">بانتظار GPS…</b>
+    <span class="acc" id="acc"></span>
+  </div>
   <span class="sp"></span>
-  <button class="icon" id="aboutBtn" aria-label="حول التطبيق">i</button>
+  <button class="icon" id="aboutBtn" aria-label="حول التطبيق">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+  </button>
 </div>
 <div class="sub" id="fixInfo"></div>
 
 <div class="stage" id="stage">
   <!-- home: no target -->
   <div class="here" id="here">
-    <div class="lbl">موقعك الحالي</div>
-    <div class="coords" id="coords">--</div>
-    <button id="copyHere">نسخ الإحداثيات</button>
+    <div class="loc">
+      <div class="lbl"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>موقعك الحالي</div>
+      <div class="coords" id="coords">--</div>
+      <button class="copy" id="copyHere"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>نسخ الإحداثيات</button>
+    </div>
     <div class="grid">
       <div class="cell"><div>الدقة</div><b id="hAcc">--</b></div>
       <div class="cell"><div>الارتفاع</div><b id="hAlt">--</b></div>
@@ -116,9 +178,9 @@ dialog .row{margin-top:16px}
   </div>
   <!-- navigating -->
   <div class="dial" id="dial" hidden>
-    <div class="ring"></div>
-    <div id="arrow"><svg viewBox="0 0 100 100"><path d="M50 4 L84 90 L50 71 L16 90 Z" fill="var(--arrow)"/></svg></div>
-    <div class="flag">وصلت 🎯</div>
+    <div id="bezel"><svg viewBox="0 0 200 200" id="bezelSvg"></svg></div>
+    <div id="arrow"><svg viewBox="0 0 100 100"><path class="a2" d="M50 4 L86 92 L50 72 Z"/><path class="a1" d="M50 4 L14 92 L50 72 Z"/></svg></div>
+    <div class="flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>وصلت</div>
   </div>
   <div class="dist" id="dist" hidden>--</div>
   <div class="meta" id="meta" hidden></div>
@@ -126,16 +188,22 @@ dialog .row{margin-top:16px}
 </div>
 
 <div class="bottom">
-  <button class="danger" id="cancel" hidden>إلغاء التوجيه</button>
+  <button class="danger" id="cancel" hidden>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>إلغاء التوجيه</button>
   <div class="target">
-    <select id="sel" aria-label="الهدف"></select>
-    <button id="manage" aria-label="إدارة الأماكن">☰</button>
+    <div class="selwrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      <select id="sel" aria-label="الهدف"></select>
+    </div>
+    <button class="sq" id="manage" aria-label="أماكني">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+    </button>
   </div>
   <div class="row">
-    <button id="saveHere">احفظ موقعي</button>
-    <button id="addCoord">أضف إحداثيات</button>
+    <button id="saveHere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>احفظ موقعي</button>
+    <button id="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>أضف إحداثيات</button>
   </div>
-  <div class="ver">Ver 1.3</div>
+  <div class="ver">Ver 1.4</div>
 </div>
 
 <dialog id="dlgAdd">
@@ -144,9 +212,9 @@ dialog .row{margin-top:16px}
   <input id="fName" placeholder="مثلاً: البيت">
   <label for="fCoord">الإحداثيات أو رابط خرائط</label>
   <input id="fCoord" dir="ltr" placeholder="24.8860, 46.6484" inputmode="text">
-  <div class="sub" id="fPrev" style="direction:ltr;text-align:left;margin-top:6px"></div>
+  <div class="sub" id="fPrev" style="direction:ltr;text-align:left;margin-top:6px;color:var(--good)"></div>
   <div class="sub">يقبل: عشري، N/E، درجات ودقائق وثواني، روابط قوقل وآبل ماب</div>
-  <div class="warn" id="fErr"></div>
+  <div class="warn" id="fErr" style="margin-top:8px"></div>
   <div class="row"><button class="primary" id="fOk">حفظ</button><button id="fCancel">إلغاء</button></div>
 </dialog>
 
@@ -160,22 +228,64 @@ dialog .row{margin-top:16px}
 <dialog id="dlgRestore">
   <h3>استرجاع الأماكن</h3>
   <div class="sub">الصق النسخة الاحتياطية هنا. كل سطر مكان، والأماكن الموجودة ما تتكرر.</div>
-  <textarea id="rText" dir="auto" rows="7" style="width:100%;margin-top:10px;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px"></textarea>
-  <div class="warn" id="rErr"></div>
+  <textarea id="rText" dir="auto" rows="7" style="margin-top:10px;font:inherit;color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:10px"></textarea>
+  <div class="warn" id="rErr" style="margin-top:8px"></div>
   <div class="row"><button class="primary" id="rOk">استرجاع</button><button id="rCancel">إلغاء</button></div>
 </dialog>
 
 <dialog id="dlgAbout" class="about">
-  <h3>حول سهم</h3>
-  <p>سهم تطبيق بسيط يوجهك لأي مكان بسهم واحد فقط، بدون خرائط وبدون إنترنت. الفكرة مستوحاة من خاصية قديمة في جوالات نوكيا: تحفظ موقعاً أو تكتب إحداثياته، والسهم يؤشر لك على اتجاهه ويعرض المسافة المتبقية حتى تصل.</p>
-  <p>يعتمد على GPS الجوال والبوصلة فقط، ويعرض لك جودة إشارة GPS ودقتها بالمتر بشكل واضح. أماكنك المحفوظة تبقى في جهازك ولا ترسل لأي مكان.</p>
-  <div class="en">
-    <p style="color:inherit">Sahm (Arabic for "arrow") guides you to any place with a single arrow. No maps, no internet. Inspired by a feature from classic Nokia phones: save a spot or enter its coordinates, and the arrow points the way and shows the distance left until you arrive.</p>
-    <p style="color:inherit;margin:0">It uses only the phone's GPS and compass, and shows GPS quality and accuracy in metres at a glance. Saved places stay on your device and are never sent anywhere.</p>
+  <div class="hero">
+    <img src="icon.png" alt="" width="76" height="76">
+    <div class="name">سهم <span>Sahm</span></div>
+    <div class="tag">سهم واحد يوصلك. بدون خرائط، بدون إنترنت.</div>
+    <div class="vpill">Ver 1.4</div>
   </div>
+
+  <div class="tabs" role="tablist">
+    <button class="on" data-l="ar" role="tab">العربية</button>
+    <button data-l="en" role="tab">English</button>
+  </div>
+
+  <div class="lang" id="about-ar">
+    <h4>الفكرة</h4>
+    <p>مستوحاة من خاصية قديمة في جوالات نوكيا: تحفظ مكاناً أو تكتب إحداثياته، وسهم واحد يؤشر لك على اتجاهه مع المسافة المتبقية حتى تصل.</p>
+    <h4>كيف تستخدمه</h4>
+    <ol>
+      <li>احفظ موقعك الحالي، أو أضف إحداثيات أو رابط خرائط.</li>
+      <li>اختر المكان من القائمة، وامشِ باتجاه السهم.</li>
+      <li>السهم يصير أخضر إذا كنت متجهاً صح، و«وصلت» تظهر على بعد مترين.</li>
+    </ol>
+    <h4>نصائح للدقة</h4>
+    <ul>
+      <li>استخدمه في مكان مكشوف، فالسقف والجدران تضعف إشارة GPS.</li>
+      <li>ابتعد عن الحديد والأجهزة لأنها تشوش على البوصلة، وحرك الجوال على شكل 8 لمعايرتها.</li>
+    </ul>
+    <h4>خصوصيتك</h4>
+    <p>أماكنك محفوظة في جهازك فقط ولا تُرسل لأي مكان. خذ منها نسخة احتياطية من قائمة «أماكني».</p>
+  </div>
+
+  <div class="lang" id="about-en" dir="ltr" hidden>
+    <h4>The idea</h4>
+    <p>Inspired by a feature from classic Nokia phones: save a place or enter its coordinates, and a single arrow points the way, with the distance left until you arrive.</p>
+    <h4>How to use</h4>
+    <ol>
+      <li>Save where you are, or add coordinates or a maps link.</li>
+      <li>Pick the place from the list and walk where the arrow points.</li>
+      <li>The arrow turns green when you face the target. "Arrived" shows within 2 m.</li>
+    </ol>
+    <h4>Tips for accuracy</h4>
+    <ul>
+      <li>Use it in the open. Roofs and walls weaken the GPS signal.</li>
+      <li>Keep away from metal and electronics, which disturb the compass. Move the phone in a figure 8 to calibrate it.</li>
+    </ul>
+    <h4>Privacy</h4>
+    <p>Your places are stored only on your device and never sent anywhere. Back them up from "My places".</p>
+  </div>
+
   <div class="credit">
-    فكرة وتنفيذ: <b>باسل بن شافي</b>
-    <div>Idea &amp; development: Basil Bin Shafi</div>
+    <div class="by">فكرة وتنفيذ</div>
+    <b>باسل بن شافي</b>
+    <div class="en">Idea &amp; development by Basil Bin Shafi</div>
   </div>
   <div class="row"><button id="aClose">إغلاق</button></div>
 </dialog>
@@ -185,8 +295,16 @@ dialog .row{margin-top:16px}
 <script>
 const $=id=>document.getElementById(id);
 const R=6371000, rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
-let pos=null, raw=null, heading=null, compassOK=false, places=[], cur=null, smooth=null;
+let pos=null, raw=null, heading=null, compassOK=false, places=[], cur=null, smooth=null, smoothB=null;
 let kf=null, arrived=false; // position filter state, arrival flag
+
+/* ---------- compass bezel (drawn once) ---------- */
+(function(){const s=$('bezelSvg');let h='<circle class="face" cx="100" cy="100" r="96" stroke-width="1.5"/>';
+  for(let i=0;i<72;i++){const a=i*5,maj=a%30===0,r1=maj?82:86,r2=92,x=t=>100+t*Math.sin(rad(a)),y=t=>100-t*Math.cos(rad(a));
+    h+='<line class="tick'+(maj?' maj':'')+'" x1="'+x(r1)+'" y1="'+y(r1)+'" x2="'+x(r2)+'" y2="'+y(r2)+'" stroke-width="'+(maj?2:1)+'" stroke-linecap="round"/>'}
+  [['ش',0,'n'],['ق',90,''],['ج',180,''],['غ',270,'']].forEach(([t,a,c])=>{const x=100+70*Math.sin(rad(a)),y=100-70*Math.cos(rad(a))+4;
+    h+='<text class="card '+c+'" x="'+x+'" y="'+y+'" text-anchor="middle" transform="rotate('+a+' '+x+' '+(y-4)+')">'+t+'</text>'});
+  s.innerHTML=h})();
 
 /* ---------- storage ---------- */
 function load(){try{places=JSON.parse(localStorage.getItem('sahm.places')||'[]');cur=localStorage.getItem('sahm.cur')||null}catch(e){places=[]}}
@@ -277,6 +395,7 @@ function onOrient(e){let h=null;
   heading=(h+so+360)%360;render()}
 
 /* ---------- render ---------- */
+const turn=(cur,target)=>cur==null?target:cur+((target-cur+540)%360)-180; // shortest way round
 function render(){
   const age=pos?(Date.now()-pos.t)/1000:null, stale=age!=null&&age>10;
   const q=gpsQuality(pos&&pos.acc,stale);
@@ -286,16 +405,17 @@ function render(){
   // compass vs walking direction: if they disagree a lot while moving, something magnetic nearby is bending the compass
   if(compassOK&&pos&&pos.speed>1.5&&pos.course!=null&&!isNaN(pos.course)&&!stale){
     const g=Math.abs(((heading-pos.course+540)%360)-180);drift=drift==null?g:drift*.6+g*.4;driftT=Date.now()}
+  const bad=compassOK&&compassBad();
   let cTxt=!compassOK?'البوصلة غير مفعلة':compAcc==null?'البوصلة تعمل':compAcc<0?'البوصلة تحتاج معايرة':'البوصلة ±'+Math.round(compAcc)+'°';
-  $('fixInfo').innerHTML=(pos?(age<2?'تحديث مباشر':'آخر تحديث قبل '+Math.round(age)+' ث')+' · ':'')+
-    '<span style="color:'+(compassBad()?'var(--bad)':'inherit')+'">'+cTxt+'</span>';
+  $('fixInfo').innerHTML=(pos?'<span class="dot" style="background:'+(stale?'var(--bad)':'var(--good)')+'"></span>'+(age<2?'تحديث مباشر':'آخر تحديث قبل '+Math.round(age)+' ث')+' · ':'')+
+    '<span style="color:'+(bad||!compassOK?'var(--bad)':'inherit')+'">'+cTxt+'</span>';
 
   const t=places.find(p=>p.id===cur);
   const nav=!!t;
   $('here').hidden=nav;$('dial').hidden=!nav;$('dist').hidden=!nav;$('meta').hidden=!nav;$('cancel').hidden=!nav;
 
   if(!nav){
-    $('stage').classList.remove('arrived');$('warn').textContent=pos&&pos.acc>40?'الإشارة ضعيفة، تحرك لمكان مكشوف':'';
+    $('stage').classList.remove('arrived','aligned');$('warn').textContent=pos&&pos.acc>40?'الإشارة ضعيفة، تحرك لمكان مكشوف':'';
     if(!pos){$('coords').textContent='--';return}
     $('coords').innerHTML=pos.lat.toFixed(6)+',<br>'+pos.lon.toFixed(6);
     $('hAcc').textContent='±'+Math.round(pos.acc)+' m';
@@ -303,20 +423,24 @@ function render(){
     $('hSpd').textContent=pos.speed!=null&&pos.speed>=0?(pos.speed*3.6).toFixed(1)+' km/h':'--';
     return;
   }
-  if(!pos){$('dist').textContent='--';$('meta').textContent=t.name;return}
+  const name=document.createElement('b');name.textContent=t.name;
+  if(!pos){$('dist').textContent='--';$('meta').innerHTML='';$('meta').appendChild(name);return}
   const d=distance(pos,t),b=bearing(pos,t),f=fmtDist(d);
   $('dist').innerHTML=f.v+'<small>'+f.u+'</small>';
-  $('meta').textContent=t.name+' · '+dirName(b)+' '+Math.round(b)+'°';
+  $('meta').innerHTML='';$('meta').append(name,' · '+dirName(b)+' '+Math.round(b)+'°');
   let h=heading,warn='';
   if(!compassOK){if(pos.course!=null&&!isNaN(pos.course)&&pos.speed>1){h=pos.course;warn='بدون بوصلة: الاتجاه من حركتك'}
     else{h=0;warn='البوصلة غير مفعلة، السهم بالنسبة للشمال'}}
-  if(compassOK&&compassBad())warn='البوصلة غير دقيقة هنا: ابتعد عن الحديد والأجهزة وحرّك الجوال على شكل 8';
+  if(bad)warn='البوصلة غير دقيقة هنا: ابتعد عن الحديد والأجهزة وحرّك الجوال على شكل 8';
   if(pos.acc>40)warn='الإشارة ضعيفة، المسافة تقريبية';
   if(stale)warn='توقفت قراءات GPS';
   $('warn').textContent=warn;
-  const target=(b-h+360)%360;
-  if(smooth==null)smooth=target;smooth+=((target-smooth+540)%360)-180;
+  const rel=(b-h+360)%360;
+  smooth=turn(smooth,rel);smoothB=turn(smoothB,(360-h)%360);
   $('arrow').style.transform='rotate('+smooth+'deg)';
+  $('bezel').style.transform='rotate('+smoothB+'deg)';
+  // green arrow when you're facing the target (within 12°)
+  $('stage').classList.toggle('aligned',!bad&&(rel<12||rel>348));
   // arrive at 2 m or less; leave once you're more than 3 m away (the extra metre stops it flickering)
   if(arrived?d>3:d<=2)arrived=!arrived;
   $('stage').classList.toggle('arrived',arrived);
@@ -330,7 +454,7 @@ function fillSelect(){const s=$('sel');s.innerHTML='';
   const o0=document.createElement('option');o0.value='';o0.textContent=places.length?'اختر مكاناً للتوجيه…':'لا توجد أماكن محفوظة';s.appendChild(o0);
   places.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;s.appendChild(o)});
   if(!places.some(p=>p.id===cur))cur=null;s.value=cur||'';s.disabled=!places.length}
-function setTarget(id){cur=id||null;smooth=null;arrived=false;save();fillSelect();render()}
+function setTarget(id){cur=id||null;smooth=null;smoothB=null;arrived=false;save();fillSelect();render()}
 function addPlace(name,c){const p={id:Date.now().toString(36),name:name||'مكان',lat:c.lat,lon:c.lon};places.push(p);save();setTarget(p.id)}
 function preview(){const v=$('fCoord').value,c=parseCoord(v);$('fErr').textContent='';
   $('fPrev').textContent=c?'✓ '+c.lat.toFixed(6)+', '+c.lon.toFixed(6):'';}
@@ -349,7 +473,7 @@ $('copyHere').onclick=()=>{if(pos)copy(pos.lat.toFixed(6)+', '+pos.lon.toFixed(6
 function fillList(){const L=$('list');L.innerHTML='';
   if(!places.length){L.innerHTML='<div class="meta">لا شيء بعد</div>';return}
   places.forEach(p=>{const it=document.createElement('div');it.className='item';
-    it.innerHTML='<div><b></b><small></small></div><button data-a="copy">نسخ</button><button data-a="del">حذف</button>';
+    it.innerHTML='<div><b></b><small></small></div><button data-a="copy">نسخ</button><button class="del" data-a="del">حذف</button>';
     it.querySelector('b').textContent=p.name;it.querySelector('small').textContent=p.lat.toFixed(6)+', '+p.lon.toFixed(6);
     it.querySelector('[data-a=copy]').onclick=()=>copy(p.lat+', '+p.lon);
     it.querySelector('[data-a=del]').onclick=()=>{places=places.filter(x=>x.id!==p.id);if(cur===p.id)cur=null;save();fillSelect();fillList();render()};
@@ -382,6 +506,9 @@ $('rOk').onclick=()=>{
 };
 $('lClose').onclick=()=>$('dlgList').close();
 $('aboutBtn').onclick=()=>$('dlgAbout').showModal();
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  $('about-ar').hidden=b.dataset.l!=='ar';$('about-en').hidden=b.dataset.l!=='en'});
 $('aClose').onclick=()=>$('dlgAbout').close();
 
 /* ---------- start (iOS needs a tap to grant compass) ---------- */
