@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.8">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.9">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
@@ -33,6 +33,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%;margin:0}
+html{background:var(--panel)}
 body{background:radial-gradient(120% 70% at 50% 38%,var(--bg2),var(--bg) 70%);background-color:var(--bg);color:var(--fg);font-family:var(--ui);
   padding:env(safe-area-inset-top) max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));
   display:flex;flex-direction:column;overflow:hidden;user-select:none;-webkit-user-select:none}
@@ -54,7 +55,8 @@ svg{display:block}
 /* pages */
 main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 .page{flex:1;min-height:0}
-.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0 16px;display:flex;flex-direction:column;gap:12px}
+.scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:8px 0 24px;display:flex;flex-direction:column;gap:12px}
+.scroll>*{flex-shrink:0}
 .stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
 
 /* dial */
@@ -138,7 +140,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 [dir=ltr] .link .chev{transform:rotate(-45deg)}
 
 /* tab bar */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;background:var(--bar);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;background:var(--panel);border-top:1px solid var(--line);box-shadow:0 120px 0 var(--panel);
   padding:6px max(8px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
 .tabbar button{flex:1;flex-direction:column;gap:3px;border:0;background:transparent;padding:6px 2px;font-size:11px;color:var(--dim);border-radius:12px}
 .tabbar button svg{width:24px;height:24px}
@@ -262,7 +264,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 1.8</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 1.9</span></div>
     </div>
   </section>
 </main>
@@ -293,7 +295,7 @@ dialog .row{margin-top:16px}
   <div class="sub" data-t="restoreHint"></div>
   <textarea id="rText" dir="auto" rows="7" style="margin-top:10px"></textarea>
   <div class="warn" id="rErr" style="margin-top:8px"></div>
-  <div class="row"><button class="primary" id="rOk" data-t="restore"></button><button id="rCancel" data-t="cancel"></button></div>
+  <div class="row"><button class="primary" id="rOk" data-t="restoreBtn"></button><button id="rCancel" data-t="cancel"></button></div>
 </dialog>
 
 <dialog id="dlgAbout" class="about">
@@ -305,7 +307,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author"></b>
   </div>
-  <div class="vpill">Ver 1.8</div>
+  <div class="vpill">Ver 1.9</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -332,7 +334,7 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  dirs:['شمال','شمال شرق','شرق','جنوب شرق','جنوب','جنوب غرب','غرب','شمال غرب'],m:'م',km:'كم',
  navTo:'التوجه إلى',qiblaHead:'اتجاه القبلة',kaaba:'الكعبة المشرفة',
  empty:'ما عندك أماكن محفوظة.<br>احفظ موقعك أو أضف إحداثيات.',go:'توجّه',copy:'نسخ',del:'حذف',sure:'تأكيد؟',
- backupSect:'النسخ الاحتياطي',backup:'نسخة احتياطية',restore:'استرجاع',
+ backupSect:'النسخ الاحتياطي',backup:'📤 نسخة احتياطية',restore:'📥 استرجاع',restoreBtn:'استرجاع',
  addTitle:'أضف مكاناً',name:'الاسم',namePh:'مثلاً: البيت',coordsLbl:'الإحداثيات أو رابط خرائط',accepts:'يقبل: عشري، N/E، درجات ودقائق وثواني، روابط قوقل وآبل ماب',
  dateTime:'التاريخ والوقت',auto:'تلقائي',save:'حفظ',cancel:'إلغاء',
  errShort:'هذا رابط مختصر وما فيه إحداثيات. افتحه في سفاري وانسخ الرابط الكامل من شريط العنوان، أو اضغط على الدبوس في قوقل ماب وانسخ الإحداثيات.',
@@ -357,7 +359,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  dirs:['N','NE','E','SE','S','SW','W','NW'],m:'m',km:'km',
  navTo:'Guiding to',qiblaHead:'Qibla direction',kaaba:'The Kaaba',
  empty:'No saved places yet.<br>Save your location or add coordinates.',go:'Go',copy:'Copy',del:'Delete',sure:'Sure?',
- backupSect:'Backup',backup:'Back up',restore:'Restore',
+ backupSect:'Backup',backup:'📤 Back up',restore:'📥 Restore',restoreBtn:'Restore',
  addTitle:'Add a place',name:'Name',namePh:'e.g. Home',coordsLbl:'Coordinates or maps link',accepts:'Accepts decimal, N/E, degrees-minutes-seconds, Google and Apple Maps links',
  dateTime:'Date and time',auto:'Automatic',save:'Save',cancel:'Cancel',
  errShort:'This is a short link with no coordinates. Open it in Safari and copy the full link from the address bar, or tap the pin in Google Maps and copy the coordinates.',
