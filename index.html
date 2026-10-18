@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.9">
+<link rel="apple-touch-icon" href="icon-180.png?v=2.0">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
@@ -264,7 +264,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 1.9</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 2.0</span></div>
     </div>
   </section>
 </main>
@@ -282,6 +282,7 @@ dialog .row{margin-top:16px}
   <input id="fName">
   <label for="fCoord" data-t="coordsLbl"></label>
   <input id="fCoord" dir="ltr" placeholder="24.8860, 46.6484" inputmode="text">
+  <div class="sub" id="fAvg" hidden style="color:var(--arrow);margin-top:6px"></div>
   <div class="sub ltr" id="fPrev" style="text-align:left;margin-top:6px;color:var(--good)"></div>
   <div class="sub" data-t="accepts"></div>
   <label data-t="dateTime"></label>
@@ -307,7 +308,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author"></b>
   </div>
-  <div class="vpill">Ver 1.9</div>
+  <div class="vpill">Ver 2.0</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -319,7 +320,7 @@ const $$=s=>document.querySelectorAll(s);
 const R=6371000, rad=d=>d*Math.PI/180, deg=r=>r*180/Math.PI;
 const KAABA={lat:21.42252,lon:39.82621};
 let pos=null, heading=null, compassOK=false, places=[], cur=null, smooth=null, smoothB=null, tab='home';
-let kf=null, arrived=false; // position filter state, arrival flag
+let arrived=false; // arrival flag
 
 /* ---------- words (Arabic / English) ---------- */
 const L={
@@ -329,7 +330,7 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  live:'تحديث مباشر',ago:n=>'آخر تحديث قبل '+n+' ث',cOff:'البوصلة غير مفعلة',cOn:'البوصلة تعمل',cCal:'البوصلة تحتاج معايرة',cAcc:n=>'البوصلة ±'+n+'°',
  yourLoc:'موقعك الحالي',copyCoords:'نسخ الإحداثيات',accuracy:'الدقة',altitude:'الارتفاع',speed:'السرعة',
  saveHere:'احفظ موقعي',addCoord:'أضف إحداثيات',cancelNav:'إلغاء التوجيه',arrived:'وصلت',
- wWeakMove:'الإشارة ضعيفة، تحرك لمكان مكشوف',wApprox:'الإشارة ضعيفة، المسافة تقريبية',wStop:'توقفت قراءات GPS',
+ wWeakMove:'الإشارة ضعيفة، تحرك لمكان مكشوف',wApprox:'الإشارة ضعيفة، المسافة تقريبية',wStop:'توقفت قراءات GPS',avg:(n,a)=>'📍 يثبّت الموقع… متوسط '+n+' قراءة (±'+a+' م). انتظر ثواني قبل الحفظ للدقة أكثر.',
  wComp:'البوصلة غير دقيقة هنا: ابتعد عن الحديد والأجهزة وحرّك الجوال على شكل 8',wMove:'بدون بوصلة: الاتجاه من حركتك',wNorth:'البوصلة غير مفعلة، السهم بالنسبة للشمال',
  dirs:['شمال','شمال شرق','شرق','جنوب شرق','جنوب','جنوب غرب','غرب','شمال غرب'],m:'م',km:'كم',
  navTo:'التوجه إلى',qiblaHead:'اتجاه القبلة',kaaba:'الكعبة المشرفة',
@@ -354,7 +355,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  live:'Live',ago:n=>'Updated '+n+' s ago',cOff:'Compass off',cOn:'Compass on',cCal:'Compass needs calibration',cAcc:n=>'Compass ±'+n+'°',
  yourLoc:'Your location',copyCoords:'Copy coordinates',accuracy:'Accuracy',altitude:'Altitude',speed:'Speed',
  saveHere:'Save my location',addCoord:'Add coordinates',cancelNav:'Stop guiding',arrived:'Arrived',
- wWeakMove:'Weak signal. Move somewhere open.',wApprox:'Weak signal. Distance is approximate.',wStop:'GPS readings stopped',
+ wWeakMove:'Weak signal. Move somewhere open.',wApprox:'Weak signal. Distance is approximate.',wStop:'GPS readings stopped',avg:(n,a)=>'📍 Pinning your spot… average of '+n+' reading'+(n===1?'':'s')+' (±'+a+' m). Wait a few seconds before saving for better accuracy.',
  wComp:'Compass is off here. Move away from metal and electronics and wave the phone in a figure 8.',wMove:'No compass: direction comes from your movement',wNorth:'Compass off: arrow is relative to north',
  dirs:['N','NE','E','SE','S','SW','W','NW'],m:'m',km:'km',
  navTo:'Guiding to',qiblaHead:'Qibla direction',kaaba:'The Kaaba',
@@ -460,18 +461,20 @@ function gpsQuality(acc,stale){
   if(acc<=15)return{n:3,t:T('gGood'),c:'var(--good)'};
   if(acc<=40)return{n:2,t:T('gMid'),c:'var(--ok)'};
   return{n:1,t:T('gWeak'),c:'var(--bad)'}}
-/* Smooths jumpy readings: each new fix is blended with the previous estimate,
-   weighted by how accurate each one is. Bad outliers are skipped while a good fix is recent. */
+/* Use each GPS fix as it comes, no smoothing: smoothing made the position lag a few metres behind you.
+   While "Save my location" is open, fixes are collected and averaged (better ones count more). */
+let avgBuf=null;
 function onPos(p){
   const c=p.coords, now=p.timestamp||Date.now();gpsErr=null;
-  if(pos&&pos.acc<30&&c.accuracy>Math.max(60,pos.acc*3)&&now-pos.t<15000){render();return} // outlier
-  const q=Math.max(1.5,(c.speed>0?c.speed:0)); // expected movement m/s
-  if(!kf||now-kf.t>30000){kf={lat:c.latitude,lon:c.longitude,v:c.accuracy**2,t:now}}
-  else{const dt=Math.max(0,(now-kf.t)/1000);kf.v+=dt*q*q;const k=kf.v/(kf.v+c.accuracy**2);
-    kf.lat+=k*(c.latitude-kf.lat);kf.lon+=k*(c.longitude-kf.lon);kf.v=(1-k)*kf.v;kf.t=now}
-  pos={lat:kf.lat,lon:kf.lon,acc:Math.min(c.accuracy,Math.sqrt(kf.v)),alt:c.altitude,speed:c.speed,course:c.heading,t:now};
+  pos={lat:c.latitude,lon:c.longitude,acc:c.accuracy,alt:c.altitude,speed:c.speed,course:c.heading,t:now};
+  if(avgBuf&&c.accuracy<=40){avgBuf.push(pos);showAvg()}
   render();
 }
+function avgFix(b){let w=0,la=0,lo=0,best=Infinity;b.forEach(f=>{const k=1/(f.acc*f.acc);w+=k;la+=f.lat*k;lo+=f.lon*k;best=Math.min(best,f.acc)});
+  return{lat:la/w,lon:lo/w,n:b.length,acc:best}}
+function showAvg(){if(!avgBuf||!avgBuf.length||avgBuf.edited)return;const a=avgFix(avgBuf.slice(-30));
+  $('fCoord').value=a.lat.toFixed(6)+', '+a.lon.toFixed(6);preview();
+  $('fAvg').textContent=T('avg')(a.n,Math.round(a.acc));$('fAvg').hidden=false}
 function onErr(e){gpsErr=e.code===1?'gPerm':'gNone';render()}
 
 /* ---------- compass ---------- */
@@ -561,14 +564,16 @@ function navigateTo(id){cur=id||null;save();go('home')}
 function addPlace(name,c,at){const p={id:Date.now().toString(36),name:name||T('place'),lat:c.lat,lon:c.lon,at:at===undefined?stamp():at};places.push(p);save();return p}
 function preview(){const c=parseCoord($('fCoord').value);$('fErr').textContent='';$('fPrev').textContent=c?'✓ '+c.lat.toFixed(6)+', '+c.lon.toFixed(6):''}
 $('fCoord').oninput=preview;
-function openAdd(prefill){$('fName').value='';$('fCoord').value=prefill||'';preview();openAdd.at=stamp();$('fAt').textContent=showAt(openAdd.at);$('dlgAdd').showModal()}
+function openAdd(prefill,fix){avgBuf=fix?[fix]:null;$('fAvg').hidden=true;$('fName').value='';$('fCoord').value=prefill||'';preview();if(fix)showAvg();openAdd.at=stamp();$('fAt').textContent=showAt(openAdd.at);$('dlgAdd').showModal()}
 $$('.addCoord').forEach(b=>b.onclick=()=>openAdd(''));
-$$('.saveHere').forEach(b=>b.onclick=()=>{if(!pos){toast(T('waitGps'));return}openAdd(pos.lat.toFixed(6)+', '+pos.lon.toFixed(6))});
+$$('.saveHere').forEach(b=>b.onclick=()=>{if(!pos){toast(T('waitGps'));return}openAdd('',pos)});
 $('fOk').onclick=()=>{const v=$('fCoord').value,c=parseCoord(v);
   if(!c){$('fErr').textContent=/goo\.gl|maps\.app/i.test(v)?T('errShort'):T('errBad');return}
   addPlace($('fName').value.trim(),c,openAdd.at);$('dlgAdd').close();
   if(tab==='fav')fillList();else go('fav')};
 $('fCancel').onclick=()=>$('dlgAdd').close();
+$('dlgAdd').addEventListener('close',()=>{avgBuf=null});
+$('fCoord').addEventListener('input',()=>{if(avgBuf){avgBuf.edited=true;$('fAvg').hidden=true}});
 $('cancel').onclick=()=>{cur=null;save();arrived=false;smooth=null;render();toast(T('canceled'))};
 $('copyHere').onclick=()=>{if(pos)copy(fmtLL(pos.lat,pos.lon))};
 function fillList(){const Ls=$('list');Ls.innerHTML='';
