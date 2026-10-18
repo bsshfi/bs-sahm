@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=2.1">
+<link rel="apple-touch-icon" href="icon-180.png?v=2.4">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
@@ -177,6 +177,25 @@ dialog .row{margin-top:16px}
 #start p{color:var(--dim);max-width:30ch;line-height:1.7;margin:0}
 #start button{min-width:160px}
 #start img{border-radius:26px;box-shadow:0 0 0 1px var(--line);filter:drop-shadow(0 10px 24px var(--glow))}
+/* install wall: shown in the browser only, cannot be dismissed */
+#install{position:fixed;inset:0;z-index:8;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(24px + env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
+#install .wrap{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+#install .hd{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+#install .hd img{border-radius:22px;box-shadow:0 0 0 1px var(--line),0 10px 24px var(--shadow)}
+#install h2{margin:6px 0 0;font-size:24px;line-height:1.35}
+#install .why{color:var(--dim);font-size:14.5px;line-height:1.7}
+#install .card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+#install .step{display:flex;align-items:center;gap:12px;font-size:16px;line-height:1.5}
+#install .num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--arrow);color:var(--onArrow);font-weight:700;display:grid;place-items:center;font-family:var(--num)}
+#install .ico{flex:none;width:34px;height:34px;border-radius:9px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;color:#0a84ff}
+#install .step b{font-weight:700}
+#install .en{direction:ltr;text-align:left}
+#install .note{font-size:13px;line-height:1.6;color:var(--ok);background:var(--okBg);border:1px solid var(--okLine);border-radius:12px;padding:10px 12px}
+#install .lang{font-size:12px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+#install .point{text-align:center;font-size:30px;animation:bob 1.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(6px)}}
+@media (prefers-reduced-motion:reduce){#install .point{animation:none}}
 @media (prefers-reduced-motion:reduce){#arrow,#bezel{transition:none}.arrived .flag{animation:none}}
 </style>
 </head>
@@ -271,7 +290,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 2.1</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 2.4</span></div>
     </div>
   </section>
 </main>
@@ -315,10 +334,30 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author"></b>
   </div>
-  <div class="vpill">Ver 2.1</div>
+  <div class="vpill">Ver 2.4</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
+<div id="install" hidden>
+  <div class="wrap">
+    <div class="hd">
+      <img src="icon.png" alt="" width="84" height="84">
+      <h2>أضف سهم إلى الشاشة الرئيسية</h2>
+      <div class="why">سهم يشتغل كتطبيق من الشاشة الرئيسية: بدون إنترنت، بشاشة كاملة، وأماكنك تنحفظ فيه.</div>
+    </div>
+    <div class="card" id="stepsAr"></div>
+    <div class="card en">
+      <div class="lang">English</div>
+      <div style="font-weight:700;font-size:18px">Add Sahm to your Home Screen</div>
+      <div class="why" style="margin-top:-6px">Sahm runs as an app from your Home Screen: offline, full screen, and your places are kept there.</div>
+      <div id="stepsEn" style="display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+    <div class="note" id="instNote" hidden></div>
+    <button id="instBackup" hidden style="flex-direction:column;gap:2px">📤 نسخة احتياطية لأماكنك<span style="font-size:13px;color:var(--dim)" dir="ltr">Back up your places</span></button>
+    <button class="primary" id="instNow" hidden style="font-size:17px;padding:16px">⬇️ ثبّت سهم الآن · Install Sahm</button>
+    <div class="point" id="instPoint">⬇️</div>
+  </div>
+</div>
 <div class="toast" id="toast" hidden></div>
 
 <script>
@@ -337,7 +376,7 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  live:'تحديث مباشر',ago:n=>'آخر تحديث قبل '+n+' ث',cOff:'البوصلة مقفلة',cOn:'البوصلة تعمل',cCal:'بوصلة تحتاج معايرة',cEx:'بوصلة ممتازة',cGood:'بوصلة جيدة',cMid:'بوصلة متوسطة',cWeak:'بوصلة ضعيفة',
  yourLoc:'موقعك الحالي',copyCoords:'نسخ الإحداثيات',accuracy:'الدقة',altitude:'الارتفاع',speed:'السرعة',
  saveHere:'احفظ موقعي',addCoord:'أضف إحداثيات',cancelNav:'إلغاء التوجيه',arrived:'وصلت',
- wWeakMove:'الإشارة ضعيفة، تحرك لمكان مكشوف',wApprox:'الإشارة ضعيفة، المسافة تقريبية',wStop:'توقفت قراءات GPS',sRed:'انتظر قبل حفظ الموقع',sOrange:'قريب… انتظر ثواني',sGreen:'احفظ موقعك الآن',sInfo:(n,a)=>'متوسط '+n+' قراءة · دقة GPS <bdi dir="ltr">±'+a+'</bdi> م',
+ wWeakMove:'الإشارة ضعيفة، تحرك لمكان مكشوف',wApprox:'الإشارة ضعيفة، المسافة تقريبية',wStop:'توقفت قراءات GPS',sRed:'انتظر قبل حفظ الموقع',sOrange:'قريب… انتظر ثواني',sComp:'الـGPS جاهز، بس البوصلة ضعيفة',sGreen:'احفظ موقعك الآن',sInfo:(n,a)=>'متوسط '+n+' قراءة · دقة GPS <bdi dir="ltr">±'+a+'</bdi> م',
  wComp:'البوصلة غير دقيقة هنا: ابتعد عن الحديد والأجهزة وحرّك الجوال على شكل 8',wMove:'بدون بوصلة: الاتجاه من حركتك',wNorth:'البوصلة غير مفعلة، السهم بالنسبة للشمال',
  dirs:['شمال','شمال شرق','شرق','جنوب شرق','جنوب','جنوب غرب','غرب','شمال غرب'],m:'م',km:'كم',
  navTo:'التوجه إلى',qiblaHead:'اتجاه القبلة',kaaba:'الكعبة المشرفة',
@@ -362,7 +401,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  live:'Live',ago:n=>'Updated '+n+' s ago',cOff:'Compass off',cOn:'Compass on',cCal:'Calibrate compass',cEx:'Compass excellent',cGood:'Compass good',cMid:'Compass fair',cWeak:'Compass weak',
  yourLoc:'Your location',copyCoords:'Copy coordinates',accuracy:'Accuracy',altitude:'Altitude',speed:'Speed',
  saveHere:'Save my location',addCoord:'Add coordinates',cancelNav:'Stop guiding',arrived:'Arrived',
- wWeakMove:'Weak signal. Move somewhere open.',wApprox:'Weak signal. Distance is approximate.',wStop:'GPS readings stopped',sRed:'Wait before saving',sOrange:'Almost… wait a few seconds',sGreen:'Save your location now',sInfo:(n,a)=>'Average of '+n+' reading'+(n===1?'':'s')+' · GPS <bdi>±'+a+' m</bdi>',
+ wWeakMove:'Weak signal. Move somewhere open.',wApprox:'Weak signal. Distance is approximate.',wStop:'GPS readings stopped',sRed:'Wait before saving',sOrange:'Almost… wait a few seconds',sComp:'GPS is ready, but the compass is weak',sGreen:'Save your location now',sInfo:(n,a)=>'Average of '+n+' reading'+(n===1?'':'s')+' · GPS <bdi>±'+a+' m</bdi>',
  wComp:'Compass is off here. Move away from metal and electronics and wave the phone in a figure 8.',wMove:'No compass: direction comes from your movement',wNorth:'Compass off: arrow is relative to north',
  dirs:['N','NE','E','SE','S','SW','W','NW'],m:'m',km:'km',
  navTo:'Guiding to',qiblaHead:'Qibla direction',kaaba:'The Kaaba',
@@ -482,10 +521,13 @@ function avgFix(b){let w=0,la=0,lo=0,best=Infinity;b.forEach(f=>{const k=1/(f.ac
 function showAvg(){if(!avgBuf||!avgBuf.length||avgBuf.edited)return;const a=avgFix(avgBuf.slice(-30));
   $('fCoord').value=a.lat.toFixed(6)+', '+a.lon.toFixed(6);preview();
   // red: weak GPS or too few readings · orange: close · green: GPS and compass both good
-  const now=pos?pos.acc:99, cq=compassQ(), lvl=(a.n>=5&&now<=6&&cq.n>=3)?'g':(a.n>=2&&now<=15)?'o':'r';
-  const col={g:'var(--good)',o:'var(--ok)',r:'var(--bad)'}[lvl], ic={g:'🟢',o:'🟠',r:'🔴'}[lvl];
+  // GPS is ready when enough readings back up the accuracy: 5 at ±6 m, 10 at ±10 m, or 20 at ±15 m
+  const now=pos?pos.acc:99, cq=compassQ(), n=a.n;
+  const gpsOK=(n>=5&&now<=6)||(n>=10&&now<=10)||(n>=20&&now<=15);
+  const lvl=gpsOK&&cq.n>=3?'g':gpsOK?'c':(n>=2&&now<=20)?'o':'r';
+  const col={g:'var(--good)',c:'var(--ok)',o:'var(--ok)',r:'var(--bad)'}[lvl], ic={g:'🟢',c:'🟠',o:'🟠',r:'🔴'}[lvl];
   const box=$('fAvg');box.style.color=col;box.style.borderColor=col;box.style.background='color-mix(in srgb, '+col+' 10%, transparent)';
-  box.innerHTML='<b>'+ic+' '+T({g:'sGreen',o:'sOrange',r:'sRed'}[lvl])+'</b>'+T('sInfo')(a.n,Math.round(now));box.hidden=false}
+  box.innerHTML='<b>'+ic+' '+T({g:'sGreen',c:'sComp',o:'sOrange',r:'sRed'}[lvl])+'</b>'+T('sInfo')(a.n,Math.round(now));box.hidden=false}
 function onErr(e){gpsErr=e.code===1?'gPerm':'gNone';render()}
 
 /* ---------- compass ---------- */
@@ -665,7 +707,44 @@ async function start(){
   else onErr({code:2});
   wakeOn();document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')wakeOn()});
 }
-$('go').onclick=start;
+/* ---------- browser vs Home Screen app ---------- */
+const UA=navigator.userAgent;
+const isIOS=/iPhone|iPad|iPod/.test(UA)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const isApp=navigator.standalone===true||matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches;
+const inSafari=isIOS&&/Safari/.test(UA)&&!/CriOS|FxiOS|EdgiOS|OPiOS|GSA|FBAN|FBAV|Instagram|Line|WhatsApp|Snapchat/i.test(UA);
+const inChromeIOS=isIOS&&/CriOS|EdgiOS/.test(UA)&&/Safari/.test(UA); // Chrome and Edge on iPhone can add to the Home Screen (iOS 16.4+)
+let installEvt=null; // Android Chrome: lets us show a one-tap Install button
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;const b=$('instNow');if(b)b.hidden=false});
+const devBypass=/[?&]browser\b/.test(location.search); // open the link with ?browser to test in a normal browser
+function showInstall(){
+  const SH=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>`,PL=`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>`,DT=`<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>`;
+  const st=(n,ic,t)=>'<div class="step"><span class="num">'+n+'</span>'+(ic?'<span class="ico">'+ic+'</span>':'')+'<span>'+t+'</span></div>';
+  let ar,en;
+  if(inChromeIOS){
+    ar=st(1,SH,'اضغط زر <b>المشاركة</b> فوق جنب شريط العنوان')+st(2,PL,'اختر <b>إضافة إلى الشاشة الرئيسية</b> ثم <b>إضافة</b>')+st(3,'<img src="icon.png" width="22" height="22" style="border-radius:5px">','افتح <b>سهم</b> من الشاشة الرئيسية');
+    en=st(1,SH,'Tap <b>Share</b> at the top, next to the address bar')+st(2,PL,'Choose <b>Add to Home Screen</b>, then <b>Add</b>')+st(3,'<img src="icon.png" width="22" height="22" style="border-radius:5px">','Open <b>Sahm</b> from your Home Screen');
+  }else if(isIOS&&!inSafari){
+    ar=st(1,'','افتح هذا الرابط في <b>سفاري</b>. التطبيق اللي أنت فيه ما يسمح بالإضافة للشاشة الرئيسية.')+st(2,SH,'في سفاري اضغط زر <b>المشاركة</b>')+st(3,PL,'اختر <b>إضافة إلى الشاشة الرئيسية</b>');
+    en=st(1,'','Open this link in <b>Safari</b>. The app you’re in can’t add to the Home Screen.')+st(2,SH,'In Safari, tap <b>Share</b>')+st(3,PL,'Choose <b>Add to Home Screen</b>');
+  }else if(isIOS){
+    ar=st(1,SH,'اضغط زر <b>المشاركة</b> تحت في سفاري')+st(2,PL,'اختر <b>إضافة إلى الشاشة الرئيسية</b> ثم <b>إضافة</b>')+st(3,'<img src="icon.png" width="22" height="22" style="border-radius:5px">','افتح <b>سهم</b> من الشاشة الرئيسية');
+    en=st(1,SH,'Tap <b>Share</b> at the bottom of Safari')+st(2,PL,'Choose <b>Add to Home Screen</b>, then <b>Add</b>')+st(3,'<img src="icon.png" width="22" height="22" style="border-radius:5px">','Open <b>Sahm</b> from your Home Screen');
+  }else{
+    ar=st(1,DT,'افتح قائمة المتصفح <b>⋮</b>')+st(2,PL,'اختر <b>تثبيت التطبيق</b> أو <b>إضافة إلى الشاشة الرئيسية</b>')+st(3,'<img src="icon.png" width="22" height="22" style="border-radius:5px">','افتح <b>سهم</b> من الشاشة الرئيسية');
+    en=st(1,DT,'Open the browser menu <b>⋮</b>')+st(2,PL,'Choose <b>Install app</b> or <b>Add to Home Screen</b>')+st(3,'<img src="icon.png" width="22" height="22" style="border-radius:5px">','Open <b>Sahm</b> from your Home Screen');
+  }
+  $('stepsAr').innerHTML=ar;$('stepsEn').innerHTML=en;
+  $('instPoint').hidden=!(isIOS&&inSafari);
+  $('instNow').hidden=!installEvt;
+  if(places.length&&isIOS){
+    $('instNote').hidden=false;$('instBackup').hidden=false;
+    $('instNote').innerHTML='عندك '+places.length+' مكان محفوظ في المتصفح. التطبيق على الشاشة الرئيسية له تخزين منفصل، فخذ نسخة احتياطية الحين واسترجعها داخل التطبيق.<div class="en" style="margin-top:6px">You have '+places.length+' saved place'+(places.length===1?'':'s')+' in the browser. The Home Screen app has separate storage, so back them up now and restore them inside the app.</div>';
+    $('instBackup').onclick=()=>$('backup').click();
+  }
+  $('install').hidden=false;
+}
+$('instNow').onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$('instNow').hidden=true};
+$('go').onclick=()=>{if(!isApp&&!devBypass){showInstall();return}start()};
 
 load();applyTheme();applyLang();
 const hh=decodeURIComponent(location.hash.slice(1));const hc=hh&&parseCoord(hh);
