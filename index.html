@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=2.6">
+<link rel="apple-touch-icon" href="icon-180.png?v=3.0">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
@@ -30,6 +30,18 @@
   --badBg:rgba(196,71,58,.07); --badLine:rgba(196,71,58,.45); --shadow:rgba(80,60,30,.18); --scrim:rgba(60,45,25,.35); --bar:rgba(251,247,239,.94);
   color-scheme:light;
 }
+/* red: night mode, keeps your eyes used to the dark */
+:root[data-theme="red"]{
+  --bg:#0b0202; --bg2:#140404; --panel:#170505; --panel2:#200808; --line:#3a0f0c; --fg:#ff6a55; --dim:#a8392c;
+  --arrow:#ff3b2a; --arrow2:#b8231a; --good:#ff8c6b; --good2:#d9583f; --ok:#ff7a4a; --bad:#ff2b1c; --onArrow:#1a0000;
+  --glow:rgba(255,59,42,.25); --glowG:rgba(255,140,107,.3); --okBg:rgba(255,90,60,.08); --okLine:rgba(255,90,60,.3);
+  --badBg:rgba(255,43,28,.08); --badLine:rgba(255,43,28,.5); --shadow:rgba(0,0,0,.6); --scrim:rgba(0,0,0,.7); --bar:rgba(23,5,5,.95);
+  color-scheme:dark;
+}
+:root[data-theme="red"] img{filter:grayscale(1) sepia(1) hue-rotate(-50deg) saturate(5) brightness(.75)}
+/* battery saver: no motion, no glow */
+.eco *,.eco *::before,.eco *::after{transition:none!important;animation:none!important}
+.eco #arrow,.eco .tabbar button.on svg,.eco #start img{filter:none!important}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html,body{height:100%;margin:0}
@@ -60,7 +72,8 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .page{flex:1;min-height:0}
 .scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:8px 0 24px;display:flex;flex-direction:column;gap:12px}
 .scroll>*{flex-shrink:0}
-.stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.stage{display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:12px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+.stage>*{flex-shrink:0}
 
 /* dial */
 .dial{position:relative;width:min(78vw,40vh);aspect-ratio:1;max-width:100%;overflow:hidden;border-radius:50%}
@@ -85,6 +98,10 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
 .navhead{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:6px}
 .dist{font-family:var(--num);font-size:clamp(44px,13vw,68px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.02em}
+.dist{transition:font-size .3s}
+.dist.near{font-size:clamp(70px,22vw,110px);color:var(--arrow)}
+.altd{color:var(--dim);font-size:13.5px;text-align:center}
+.altd b{color:var(--fg);font-family:var(--num)}
 .dist small{font-family:var(--ui);font-size:.36em;font-weight:600;color:var(--dim);margin-inline-start:6px;letter-spacing:0}
 .meta{color:var(--dim);font-size:14px;text-align:center;min-height:20px}
 .meta b{color:var(--fg);font-weight:600}
@@ -92,6 +109,16 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .warn:not(:empty){color:var(--ok);background:var(--okBg);border:1px solid var(--okLine);border-radius:12px;padding:8px 12px;max-width:420px;line-height:1.5}
 
 /* home idle */
+.info{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;font-size:13.5px}
+.info .r{display:flex;align-items:center;gap:8px;min-width:0}
+.info .r span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.info .sun{display:flex;gap:14px;flex-wrap:wrap}
+.info .sun b,.info .wx b{font-family:var(--num);font-weight:600}
+.info .dimtxt{color:var(--dim);font-size:12px}
+.big{width:100%;padding:16px;font-size:16px;border-radius:16px}
+.startrow{display:flex;gap:8px}.startrow .big{flex:1}
+.startrow .sq{width:56px;flex:none;padding:0;border-radius:16px}
+#startDist{font-family:var(--num);font-weight:600;opacity:.85}
 .here{width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px}
 .loc{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px 18px 16px;display:flex;flex-direction:column;align-items:center;gap:10px}
 .loc .lbl{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:6px}
@@ -120,6 +147,14 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 .item small{color:var(--dim);display:block;font-size:12.5px;font-family:var(--num);direction:ltr;text-align:start;unicode-bidi:plaintext}
 .item .at{color:var(--dim);font-size:11.5px;margin-top:2px;font-family:var(--num);font-variant-numeric:tabular-nums}
 .item .acts{display:flex;gap:6px}
+.item .nd{color:var(--arrow);font-size:12.5px;margin-top:3px;font-family:var(--num);font-weight:600}
+.item .more{width:40px;padding:8px 0;font-weight:700;letter-spacing:1px}
+.pd .k{color:var(--dim);font-size:12px;margin-top:10px}
+.pd .v{font-family:var(--num);font-size:15px;direction:ltr;text-align:start;unicode-bidi:plaintext;user-select:text;-webkit-user-select:text}
+.pd .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.lblrow{display:flex;align-items:center;justify-content:space-between;margin:12px 0 6px}
+.lblrow label{margin:0!important}
+.lblrow button{padding:5px 12px;font-size:13px;border-radius:999px}
 .item button{padding:8px 11px;font-size:13px;border-radius:10px}
 .item button.del{color:var(--bad)}
 .item button.del.sure{background:var(--bad);color:#fff;border-color:var(--bad)}
@@ -226,6 +261,11 @@ dialog .row{margin-top:16px}
   <!-- Home + Qibla share this stage -->
   <section class="page stage" id="stage">
     <div class="here" id="here">
+      <div class="info">
+        <div class="r"><span>📍</span><span id="placeName" class="dimtxt">--</span></div>
+        <div class="r sun"><span>🌅 <span data-t="sunrise"></span> <b id="sunR">--</b></span><span>🌇 <span data-t="sunset"></span> <b id="sunS">--</b></span></div>
+        <div class="r wx" id="wxRow" hidden><span id="wxTxt"></span></div>
+      </div>
       <div class="loc">
         <div class="lbl"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span data-t="yourLoc"></span></div>
         <div class="coords" id="coords">--</div>
@@ -240,6 +280,11 @@ dialog .row{margin-top:16px}
         <button class="saveHere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span data-t="saveHere"></span></button>
         <button class="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-t="addCoord"></span></button>
       </div>
+      <button class="primary big" id="setStart" data-t="setStart"></button>
+      <div class="startrow" id="startBox" hidden>
+        <button class="primary big" id="goStart"><span data-t="goStart"></span> <span id="startDist"></span></button>
+        <button class="sq" id="resetStart" aria-label="reset"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg></button>
+      </div>
     </div>
 
     <div class="navhead" id="navhead" hidden></div>
@@ -250,6 +295,7 @@ dialog .row{margin-top:16px}
     </div>
     <div class="dist" id="dist" hidden>--</div>
     <div class="meta" id="meta" hidden></div>
+    <div class="altd" id="altd" hidden></div>
     <div class="warn" id="warn"></div>
     <button class="danger" id="cancel" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="cancelNav"></span></button>
   </section>
@@ -261,6 +307,7 @@ dialog .row{margin-top:16px}
       <button class="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-t="addCoord"></span></button>
     </div>
     <div class="row"><button id="backup" data-t="backup"></button><button id="restore" data-t="restore"></button></div>
+    <div class="seg" id="sortSeg"><button data-s="near" data-t="sortNear"></button><button data-s="new" data-t="sortNew"></button></div>
     <div class="list" id="list"></div>
   </section>
 
@@ -279,7 +326,13 @@ dialog .row{margin-top:16px}
       </div>
       <div class="set">
         <div class="sl" data-t="themeLbl"></div>
-        <div class="seg" data-k="theme"><button data-v="light" data-t="light"></button><button data-v="dark" data-t="dark"></button></div>
+        <div class="seg" data-k="theme"><button data-v="light" data-t="light"></button><button data-v="dark" data-t="dark"></button><button data-v="red" data-t="red"></button></div>
+        <div class="sh" data-t="redHint"></div>
+      </div>
+      <div class="set">
+        <div class="sl" data-t="ecoLbl"></div>
+        <div class="seg" data-k="eco"><button data-v="on" data-t="on"></button><button data-v="off" data-t="off"></button></div>
+        <div class="sh" data-t="ecoHint"></div>
       </div>
       <div class="set">
         <div class="sl" data-t="langLbl"></div>
@@ -289,7 +342,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 2.6</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.0</span></div>
     </div>
   </section>
 </main>
@@ -305,7 +358,7 @@ dialog .row{margin-top:16px}
   <h3 data-t="addTitle"></h3>
   <label for="fName" data-t="name"></label>
   <input id="fName">
-  <label for="fCoord" data-t="coordsLbl"></label>
+  <div class="lblrow"><label for="fCoord" data-t="coordsLbl"></label><button id="fPaste" data-t="paste"></button></div>
   <input id="fCoord" dir="ltr" placeholder="24.8860, 46.6484" inputmode="text">
   <div class="avgbox" id="fAvg" hidden></div>
   <div class="sub ltr" id="fPrev" style="text-align:left;margin-top:6px;color:var(--good)"></div>
@@ -314,6 +367,22 @@ dialog .row{margin-top:16px}
   <div class="auto"><b id="fAt" style="font-weight:500">--</b><span data-t="auto"></span></div>
   <div class="warn" id="fErr" style="margin-top:8px"></div>
   <div class="row"><button class="primary" id="fOk" data-t="save"></button><button id="fCancel" data-t="cancel"></button></div>
+</dialog>
+
+<dialog id="dlgPlace" class="pd">
+  <h3 data-t="details"></h3>
+  <label for="pName" data-t="name"></label>
+  <input id="pName">
+  <div class="k" data-t="coordsK"></div><div class="v" id="pCoords"></div>
+  <div class="k" data-t="dateTime"></div><div class="v" id="pAt"></div>
+  <div class="k" data-t="altitude"></div><div class="v" id="pAlt"></div>
+  <div class="grid2">
+    <button class="primary" id="pGo" data-t="go"></button>
+    <button id="pShare" data-t="sharePlace"></button>
+    <button id="pCopy" data-t="copy"></button>
+    <button class="danger" id="pDel" data-t="del"></button>
+  </div>
+  <div class="row"><button class="primary" id="pSave" data-t="save"></button><button id="pClose" data-t="close"></button></div>
 </dialog>
 
 <dialog id="dlgRestore">
@@ -333,7 +402,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author"></b>
   </div>
-  <div class="vpill">Ver 2.6</div>
+  <div class="vpill">Ver 3.0</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -393,7 +462,17 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  shareText:'سهم: يوجهك لأي مكان بسهم واحد، بدون خرائط وبدون إنترنت.',linkCopied:'تم نسخ رابط التطبيق',
  tagline:'سهم واحد يوصلك. بدون خرائط، بدون إنترنت.',
  blurb:'مستوحى من خاصية قديمة في جوالات نوكيا: تحفظ مكاناً أو تكتب إحداثياته، وسهم واحد يؤشر لك على اتجاهه مع المسافة المتبقية. يعتمد على GPS والبوصلة فقط، وأماكنك تبقى في جهازك.',
- by:'فكرة وتنفيذ',author:'باسل بن شافي',close:'إغلاق',am:'ص',pm:'م'},
+ by:'فكرة وتنفيذ',author:'باسل بن شافي',close:'إغلاق',am:'ص',pm:'م',
+ sunrise:'الشروق',sunset:'الغروب',near:(c,d,dir)=>'قرب '+c+' · '+d+' '+dir+'ها',inCity:c=>'في '+c+' (تقريبي)',approx:'تقريبي بدون إنترنت',
+ wx:{0:'☀️ صافي',1:'🌤️ صافي غالباً',2:'⛅ غائم جزئياً',3:'☁️ غائم',45:'🌫️ ضباب',48:'🌫️ ضباب',51:'🌦️ رذاذ',61:'🌧️ مطر',71:'❄️ ثلج',80:'🌧️ زخات',95:'⛈️ عاصفة رعدية'},
+ wind:'رياح',kmh:'كم/س',agoMin:n=>'قبل '+n+' د',
+ setStart:'📍 ثبّت نقطة الانطلاق',goStart:'↩️ رجّعني',startName:'نقطة الانطلاق',startSet:'تم تثبيت نقطة الانطلاق',startWeak:'الإشارة ضعيفة، انتظر شوي وثبّتها',startReset:'اضغط مرة ثانية لتثبيت نقطة جديدة',
+ altUp:n=>'⬆️ الهدف أعلى منك بـ <b>'+n+'</b> م',altDown:n=>'⬇️ الهدف أدنى منك بـ <b>'+n+'</b> م',altSame:'↔️ نفس ارتفاعك تقريباً',altNote:' (تقريبي)',
+ sortNear:'الأقرب مني',sortNew:'الأحدث',details:'تفاصيل المكان',coordsK:'الإحداثيات',sharePlace:'مشاركة',renamed:'تم حفظ الاسم',
+ shareMsg:(n,c)=>'📍 '+n+'\n'+c+'\nأُرسل من تطبيق سهم: انسخ الإحداثيات والصقها في «أضف إحداثيات»',
+ paste:'📋 لصق',pasteFail:'اضغط مطولاً على الخانة واختر لصق',
+ red:'أحمر',redHint:'الأحمر للّيل: ما يعمي عيونك في الظلام ويريّح البطارية.',ecoLbl:'توفير البطارية',on:'تشغيل',off:'إيقاف',
+ ecoHint:'يسمح للشاشة تنطفي، ويخفف تحديث البوصلة، ويوقف الحركات. الـGPS يبقى بدقته الكاملة.'},
 en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow. GPS and compass only, no maps, no internet.',start:'Start',
  tabSet:'Settings',tabQibla:'Qibla',tabFav:'Favorites',tabHome:'Home',
  gWait:'Waiting for GPS…',gStop:'GPS stopped',gEx:'GPS excellent',gGood:'GPS good',gMid:'GPS fair',gWeak:'GPS weak',gPerm:'No location permission',gNone:'No GPS signal',
@@ -418,16 +497,27 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  shareText:'Sahm: guides you anywhere with one arrow. No maps, no internet.',linkCopied:'App link copied',
  tagline:'One arrow gets you there. No maps, no internet.',
  blurb:'Inspired by a feature from classic Nokia phones: save a place or enter its coordinates, and one arrow points the way with the distance left. It uses only GPS and the compass, and your places stay on your device.',
- by:'Idea & development',author:'Basil Bin Shafi',close:'Close',am:'AM',pm:'PM'}};
+ by:'Idea & development',author:'Basil Bin Shafi',close:'Close',am:'AM',pm:'PM',
+ sunrise:'Sunrise',sunset:'Sunset',near:(c,d,dir)=>d+' '+dir+' of '+c,inCity:c=>'In '+c+' (approx.)',approx:'Approximate, offline',
+ wx:{0:'☀️ Clear',1:'🌤️ Mostly clear',2:'⛅ Partly cloudy',3:'☁️ Cloudy',45:'🌫️ Fog',48:'🌫️ Fog',51:'🌦️ Drizzle',61:'🌧️ Rain',71:'❄️ Snow',80:'🌧️ Showers',95:'⛈️ Thunderstorm'},
+ wind:'Wind',kmh:'km/h',agoMin:n=>n+' min ago',
+ setStart:'📍 Pin starting point',goStart:'↩️ Take me back',startName:'Starting point',startSet:'Starting point pinned',startWeak:'Weak signal. Wait a moment, then pin it.',startReset:'Tap again to pin a new point',
+ altUp:n=>'⬆️ Target is <b>'+n+'</b> m above you',altDown:n=>'⬇️ Target is <b>'+n+'</b> m below you',altSame:'↔️ About your altitude',altNote:' (approx.)',
+ sortNear:'Nearest',sortNew:'Newest',details:'Place details',coordsK:'Coordinates',sharePlace:'Share',renamed:'Name saved',
+ shareMsg:(n,c)=>'📍 '+n+'\n'+c+'\nSent from Sahm: copy the coordinates and paste them into “Add coordinates”',
+ paste:'📋 Paste',pasteFail:'Long-press the field and choose Paste',
+ red:'Red',redHint:'Red is for night: it keeps your eyes used to the dark and is easy on the battery.',ecoLbl:'Battery saver',on:'On',off:'Off',
+ ecoHint:'Lets the screen turn off, updates the compass less often and stops animations. GPS keeps its full accuracy.'}};
 
 /* ---------- settings store ---------- */
-const cfg={arrive:2,fmt:'dec',theme:'dark',lang:'ar'};
+const cfg={arrive:2,fmt:'dec',theme:'dark',lang:'ar',eco:'off',sort:'near'};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('sahm.set')||'{}'))}catch(e){}
 delete cfg.sound;
 function saveCfg(){try{localStorage.setItem('sahm.set',JSON.stringify(cfg))}catch(e){}}
 const T=k=>(L[cfg.lang]||L.ar)[k];
-function applyTheme(){document.documentElement.dataset.theme=cfg.theme==='light'?'light':'dark';
-  document.querySelector('meta[name=theme-color]').content=cfg.theme==='light'?'#efe6d6':'#0d1210'}
+function applyTheme(){const th=['light','dark','red'].includes(cfg.theme)?cfg.theme:'dark';document.documentElement.dataset.theme=th;
+  document.querySelector('meta[name=theme-color]').content={light:'#efe6d6',dark:'#0d1210',red:'#0b0202'}[th];
+  document.documentElement.classList.toggle('eco',cfg.eco==='on')}
 function applyLang(){const en=cfg.lang==='en';document.documentElement.lang=en?'en':'ar';document.documentElement.dir=en?'ltr':'rtl';
   $$('[data-t]').forEach(el=>{const v=T(el.dataset.t);if(typeof v==='string')el.innerHTML=v});
   $('fName').placeholder=T('namePh');
@@ -470,6 +560,8 @@ function parseCoord(s){
   if(!s)return null;
   s=s.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/٫/g,'.').replace(/،/g,',').trim();
   try{s=decodeURIComponent(s)}catch(e){}
+  const pin=s.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);if(pin)return okLL(pin[1],pin[2]);
+  const pair=s.match(/(-?\d{1,2}\.\d{3,})\s*,\s*\+?\s*(-?\d{1,3}\.\d{3,})/);if(pair){const c=okLL(pair[1],pair[2]);if(c)return c}
   if(/https?:|www\.|maps\.|goo\.gl/i.test(s)){
     let m=s.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);                       // Google place pin
     if(!m)m=s.match(/[?&](?:q|ll|sll|query|destination|daddr|center|coordinate)=\s*(-?\d+\.\d+)\s*,\s*\+?\s*(-?\d+\.\d+)/i);
@@ -508,15 +600,16 @@ function gpsQuality(acc,stale){
   return{n:1,t:T('gWeak'),c:'var(--bad)'}}
 /* Use each GPS fix as it comes, no smoothing: smoothing made the position lag a few metres behind you.
    While "Save my location" is open, fixes are collected and averaged (better ones count more). */
-let avgBuf=null;
+let avgBuf=null, recent=[];
 function onPos(p){
   const c=p.coords, now=p.timestamp||Date.now();gpsErr=null;
   pos={lat:c.latitude,lon:c.longitude,acc:c.accuracy,alt:c.altitude,speed:c.speed,course:c.heading,t:now};
+  recent.push(pos);while(recent.length&&now-recent[0].t>10000)recent.shift();
   if(avgBuf&&c.accuracy<=40){avgBuf.push(pos);showAvg()}
   render();
 }
-function avgFix(b){let w=0,la=0,lo=0,best=Infinity;b.forEach(f=>{const k=1/(f.acc*f.acc);w+=k;la+=f.lat*k;lo+=f.lon*k;best=Math.min(best,f.acc)});
-  return{lat:la/w,lon:lo/w,n:b.length,acc:best}}
+function avgFix(b){let w=0,la=0,lo=0,best=Infinity,al=0,an=0;b.forEach(f=>{const k=1/(f.acc*f.acc);w+=k;la+=f.lat*k;lo+=f.lon*k;best=Math.min(best,f.acc);if(f.alt!=null){al+=f.alt;an++}});
+  return{lat:la/w,lon:lo/w,n:b.length,acc:best,alt:an?Math.round(al/an):null}}
 function showAvg(){if(!avgBuf||!avgBuf.length||avgBuf.edited)return;const a=avgFix(avgBuf.slice(-30));
   $('fCoord').value=a.lat.toFixed(6)+', '+a.lon.toFixed(6);preview();
   // red: weak GPS or too few readings · orange: close · green: GPS and compass both good
@@ -553,12 +646,14 @@ function onOrient(e){let h=null;
   else if(e.absolute&&e.alpha!=null)h=(360-e.alpha)%360;
   if(h==null)return;compassOK=true;
   const so=(screen.orientation&&screen.orientation.angle)||window.orientation||0;
-  heading=(h+so+360)%360;render()}
+  heading=(h+so+360)%360;
+  if(cfg.eco==='on'){const n=Date.now();if(n-(onOrient.t||0)<250)return;onOrient.t=n}
+  render()}
 
 /* ---------- render ---------- */
 const turn=(c,t)=>c==null?t:c+((t-c+540)%360)-180; // shortest way round
 function target(){if(tab==='qibla')return{name:T('kaaba'),lat:KAABA.lat,lon:KAABA.lon,qibla:true};
-  if(tab==='home')return places.find(p=>p.id===cur)||null;return null}
+  if(tab==='home'){if(cur==='__start'&&startPt)return Object.assign({name:T('startName')},startPt);return places.find(p=>p.id===cur)||null}return null}
 function render(){
   const age=pos?(Date.now()-pos.t)/1000:null, stale=age!=null&&age>10;
   const q=gpsQuality(pos&&pos.acc,stale);
@@ -574,10 +669,11 @@ function render(){
   $('cacc').textContent=compassOK&&compAcc!=null&&compAcc>=0?'±'+Math.round(compAcc)+'°':'';
   $('fixInfo').innerHTML=pos?'<span class="dot" style="background:'+(stale?'var(--bad)':'var(--good)')+'"></span>'+(age<2?T('live'):T('ago')(Math.round(age))):'';
   showAvg();
+  if(tab==='fav'){favTick();return}
   if(tab!=='home'&&tab!=='qibla')return;
 
   const t=target(), nav=!!t;
-  $('here').hidden=nav;['dial','dist','meta','navhead'].forEach(id=>$(id).hidden=!nav);$('cancel').hidden=!(nav&&!t.qibla);
+  $('here').hidden=nav;['dial','dist','meta','navhead'].forEach(id=>$(id).hidden=!nav);if(!nav)$('altd').hidden=true;$('cancel').hidden=!(nav&&!t.qibla);
   $('stage').classList.toggle('qibla',!!(t&&t.qibla));
   if(!nav){
     $('stage').classList.remove('arrived','aligned');$('warn').textContent=pos&&pos.acc>40?T('wWeakMove'):'';
@@ -586,6 +682,8 @@ function render(){
     $('hAcc').textContent='±'+Math.round(pos.acc)+' m';
     $('hAlt').textContent=pos.alt!=null?Math.round(pos.alt)+' m':'--';
     $('hSpd').textContent=pos.speed!=null&&pos.speed>=0?(pos.speed*3.6).toFixed(1)+' km/h':'--';
+    if(startPt){const f=fmtDist(distance(pos,startPt));$('startDist').textContent='· '+f.v+' '+f.u}
+    infoTick();
     return;
   }
   $('navhead').textContent=t.qibla?T('qiblaHead'):T('navTo');
@@ -594,6 +692,10 @@ function render(){
   const d=distance(pos,t),b=bearing(pos,t),f=fmtDist(d);
   $('dist').innerHTML=f.v+'<small>'+f.u+'</small>';
   $('meta').replaceChildren(name,' · '+dirName(b)+' '+Math.round(b)+'°');
+  $('dist').classList.toggle('near',!t.qibla&&d<50);
+  if(!t.qibla&&t.alt!=null&&pos.alt!=null){const df=Math.round(t.alt-pos.alt);
+    $('altd').innerHTML=(Math.abs(df)<3?T('altSame'):df>0?T('altUp')(df):T('altDown')(-df))+'<span class="dimtxt">'+T('altNote')+'</span>';$('altd').hidden=false}
+  else $('altd').hidden=true;
   let h=heading,warn='';
   if(!compassOK){if(pos.course!=null&&!isNaN(pos.course)&&pos.speed>1){h=pos.course;warn=T('wMove')}else{h=0;warn=T('wNorth')}}
   if(bad)warn=T('wComp');
@@ -609,6 +711,61 @@ function render(){
   $('stage').classList.toggle('arrived',arrived);
 }
 setInterval(render,1000);
+
+/* ---------- sunrise / sunset (computed on the phone, no internet) ---------- */
+function sunTimes(date,lat,lon){ // NOAA formula; returns Date objects or null (polar day/night)
+  const J=Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/864e5+2440587.5, n=Math.round(J-2451545+0.0008-lon/360);
+  const Js=n-lon/360, M=(357.5291+0.98560028*Js)%360, C=1.9148*Math.sin(rad(M))+0.02*Math.sin(rad(2*M))+0.0003*Math.sin(rad(3*M));
+  const Lm=(M+C+180+102.9372)%360, Jt=2451545+Js+0.0053*Math.sin(rad(M))-0.0069*Math.sin(rad(2*Lm));
+  const dec=Math.asin(Math.sin(rad(Lm))*Math.sin(rad(23.44)));
+  const cw=(Math.sin(rad(-0.833))-Math.sin(rad(lat))*Math.sin(dec))/(Math.cos(rad(lat))*Math.cos(dec));if(cw<-1||cw>1)return null;
+  const w=deg(Math.acos(cw)), toD=j=>new Date((j-2440587.5)*864e5);return{rise:toD(Jt-w/360),set:toD(Jt+w/360)}}
+const hm=d=>{let h=d.getHours();const ap=h<12?T('am'):T('pm');h=h%12||12;return h+':'+pad(d.getMinutes())+' '+ap};
+
+/* ---------- where am I: nearest city offline, area name + weather when online ---------- */
+const CITIES=[['الرياض','Riyadh',24.7136,46.6753],['جدة','Jeddah',21.4858,39.1925],['مكة المكرمة','Makkah',21.3891,39.8579],['المدينة المنورة','Madinah',24.5247,39.5692],
+['الدمام','Dammam',26.4207,50.0888],['الخبر','Khobar',26.2172,50.1971],['الجبيل','Jubail',27.0046,49.646],['الأحساء','Al Ahsa',25.3833,49.586],['القطيف','Qatif',26.5196,50.0115],
+['رأس تنورة','Ras Tanura',26.6435,50.1593],['الطائف','Taif',21.2703,40.4158],['تبوك','Tabuk',28.3835,36.5662],['بريدة','Buraidah',26.326,43.975],['عنيزة','Unaizah',26.084,43.994],
+['حائل','Hail',27.5114,41.7208],['خميس مشيط','Khamis Mushait',18.306,42.729],['أبها','Abha',18.2164,42.5053],['نجران','Najran',17.493,44.1277],['جازان','Jazan',16.8892,42.5511],
+['الباحة','Al Baha',20.0129,41.4677],['سكاكا','Sakaka',29.9697,40.2064],['عرعر','Arar',30.9753,41.0381],['الخرج','Al Kharj',24.1556,47.3346],['ينبع','Yanbu',24.0895,38.0618],
+['حفر الباطن','Hafar Al Batin',28.4328,45.9708],['المجمعة','Al Majmaah',25.9039,45.3456],['القريات','Al Qurayyat',31.3318,37.3428],['وادي الدواسر','Wadi Ad-Dawasir',20.4607,44.7816],
+['بيشة','Bisha',20.0005,42.6052],['العلا','AlUla',26.6085,37.9232],['رفحاء','Rafha',29.6202,43.4948],['شقراء','Shaqra',25.2482,45.2528],['الزلفي','Az Zulfi',26.2994,44.8154],
+['الدوادمي','Ad Dawadimi',24.5077,44.3924],['عفيف','Afif',23.9065,42.9172],['الليث','Al Lith',20.15,40.2667],['رابغ','Rabigh',22.7986,39.0349],['حقل','Haql',29.289,34.937],
+['ضباء','Duba',27.351,35.69],['أملج','Umluj',25.0213,37.2685],['طريف','Turaif',31.6725,38.6637],['شرورة','Sharurah',17.4667,47.1167],['الوجه','Al Wajh',26.2455,36.4525],
+['حوطة بني تميم','Hotat Bani Tamim',23.492,46.761],['الأفلاج','Al Aflaj',22.2833,46.7333],['القويعية','Al Quwayiyah',24.0737,45.2806],['تيماء','Tayma',27.6297,38.5446],
+['الرس','Ar Rass',25.8694,43.4973],['المذنب','Al Mithnab',25.8601,44.2223],['الغاط','Al Ghat',26.0272,44.9628],['ثادق','Thadiq',25.2853,45.8689],['رماح','Rumah',25.5716,47.1609],
+['الكويت','Kuwait City',29.3759,47.9774],['المنامة','Manama',26.2285,50.586],['الدوحة','Doha',25.2854,51.531],['أبوظبي','Abu Dhabi',24.4539,54.3773],['دبي','Dubai',25.2048,55.2708],
+['مسقط','Muscat',23.588,58.3829],['عمّان','Amman',31.9454,35.9284],['صنعاء','Sanaa',15.3694,44.191]];
+function nearestCity(p){let best=null,bd=1e12;CITIES.forEach(c=>{const d=distance(p,{lat:c[2],lon:c[3]});if(d<bd){bd=d;best=c}});
+  const name=cfg.lang==='en'?best[1]:best[0];if(bd<8000)return T('inCity')(name);
+  const f=fmtDist(bd);return T('near')(name,f.v+' '+f.u,dirName(bearing({lat:best[2],lon:best[3]},p)))}
+let net={};try{net=JSON.parse(localStorage.getItem('sahm.net')||'{}')}catch(e){}
+function saveNet(){try{localStorage.setItem('sahm.net',JSON.stringify(net))}catch(e){}}
+async function getJSON(url){const ac=new AbortController(),to=setTimeout(()=>ac.abort(),6000);
+  try{const r=await fetch(url,{signal:ac.signal,cache:'no-store'});if(!r.ok)throw 0;return await r.json()}finally{clearTimeout(to)}}
+let netBusy=false;
+async function netFetch(){if(netBusy||!pos||!navigator.onLine)return;
+  const moved=k=>!net[k]||distance(pos,net[k])>1500, old=k=>!net[k]||Date.now()-net[k].t>30*60e3;
+  const lang=cfg.lang==='en'?'en':'ar', needPlace=moved('place')||old('place')||net.place.lang!==lang, needWx=moved('wx')||old('wx');
+  if(!needPlace&&!needWx)return;netBusy=true;
+  const la=pos.lat.toFixed(4),lo=pos.lon.toFixed(4);
+  try{if(needPlace){const j=await getJSON('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='+la+'&longitude='+lo+'&localityLanguage='+lang);
+      const parts=[j.locality,j.city,j.principalSubdivision].filter((x,i,a)=>x&&a.indexOf(x)===i).slice(0,2);
+      if(parts.length){net.place={txt:parts.join('، '.replace('، ',lang==='en'?', ':'، ')),lat:pos.lat,lon:pos.lon,t:Date.now(),lang};saveNet()}}}catch(e){}
+  try{if(needWx){const j=await getJSON('https://api.open-meteo.com/v1/forecast?latitude='+la+'&longitude='+lo+'&current=temperature_2m,wind_speed_10m,weather_code&wind_speed_unit=kmh&timezone=auto');
+      if(j.current){net.wx={temp:Math.round(j.current.temperature_2m),wind:Math.round(j.current.wind_speed_10m),code:j.current.weather_code,lat:pos.lat,lon:pos.lon,t:Date.now()};saveNet()}}}catch(e){}
+  netBusy=false;infoTick(true)}
+function wxName(c){const W=T('wx');const k=[95,80,71,61,51,48,45,3,2,1,0].find(x=>c>=x);return W[k]||''}
+function infoTick(force){if(!pos)return;const now=Date.now();if(!force&&now-(infoTick.t||0)<5000)return;infoTick.t=now;
+  const st=sunTimes(new Date(),pos.lat,pos.lon);$('sunR').textContent=st?hm(st.rise):'--';$('sunS').textContent=st?hm(st.set):'--';
+  const near=distance(pos,net.place||{lat:0,lon:0})<3000&&net.place&&net.place.lang===(cfg.lang==='en'?'en':'ar');
+  $('placeName').textContent=near?net.place.txt:nearestCity(pos)+(navigator.onLine?'':' · '+T('approx'));
+  const w=net.wx, fresh=w&&now-w.t<6*3600e3&&distance(pos,w)<20000;
+  if(fresh){const ago=Math.round((now-w.t)/60e3);
+    $('wxTxt').innerHTML=wxName(w.code)+' · 🌡️ <b>'+w.temp+'°</b> · 💨 '+T('wind')+' <b>'+w.wind+'</b> '+T('kmh')+(ago>=15?' <span class="dimtxt">('+T('agoMin')(ago)+')</span>':'');$('wxRow').hidden=false}
+  else $('wxRow').hidden=true;
+  if(cfg.eco!=='on'||!w)netFetch()}
+addEventListener('online',()=>infoTick(true));
 
 /* ---------- tabs ---------- */
 function setTitle(){$('ptitle').textContent=tab==='home'?'':T({set:'tabSet',qibla:'tabQibla',fav:'tabFav'}[tab])}
@@ -628,38 +785,71 @@ function stamp(d=new Date()){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+
 function showAt(at){const m=at&&at.match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/);if(!m)return '';
   let h=+m[4];const ap=h<12?T('am'):T('pm');h=h%12||12;return m[3]+'/'+m[2]+'/'+m[1]+' · '+h+':'+m[5]+' '+ap}
 function navigateTo(id){cur=id||null;save();go('home')}
-function addPlace(name,c,at){const p={id:Date.now().toString(36),name:name||T('place'),lat:c.lat,lon:c.lon,at:at===undefined?stamp():at};places.push(p);save();return p}
+function addPlace(name,c,at,alt){const p={id:Date.now().toString(36),name:name||T('place'),lat:c.lat,lon:c.lon,at:at===undefined?stamp():at};if(alt!=null)p.alt=alt;places.push(p);save();return p}
 function preview(){const c=parseCoord($('fCoord').value);$('fErr').textContent='';$('fPrev').textContent=c?'✓ '+c.lat.toFixed(6)+', '+c.lon.toFixed(6):''}
-$('fCoord').oninput=preview;
+$('fCoord').oninput=()=>{preview();nameFromMsg($('fCoord').value)};
+function nameFromMsg(v){const m=v&&v.match(/📍\s*(.+?)(?=\s*[\r\n]|\s*-?\d{1,3}\.\d{3}|$)/);if(m&&!$('fName').value.trim())$('fName').value=m[1].trim()}
+$('fPaste').onclick=async()=>{try{const v=await navigator.clipboard.readText();if(!v)throw 0;$('fCoord').value=v.trim();if(avgBuf){avgBuf.edited=true;$('fAvg').hidden=true}preview();nameFromMsg(v)}catch(e){toast(T('pasteFail'));$('fCoord').focus()}};
 function openAdd(prefill,fix){avgBuf=fix?[fix]:null;$('fAvg').hidden=true;$('fName').value='';$('fCoord').value=prefill||'';preview();if(fix)showAvg();openAdd.at=stamp();$('fAt').textContent=showAt(openAdd.at);$('dlgAdd').showModal()}
 $$('.addCoord').forEach(b=>b.onclick=()=>openAdd(''));
 $$('.saveHere').forEach(b=>b.onclick=()=>{if(!pos){toast(T('waitGps'));return}openAdd('',pos)});
 $('fOk').onclick=()=>{const v=$('fCoord').value,c=parseCoord(v);
   if(!c){$('fErr').textContent=/goo\.gl|maps\.app/i.test(v)?T('errShort'):T('errBad');return}
-  addPlace($('fName').value.trim(),c,openAdd.at);$('dlgAdd').close();
+  const alt=avgBuf&&!avgBuf.edited&&avgBuf.length?avgFix(avgBuf.slice(-30)).alt:null;
+  addPlace($('fName').value.trim(),c,openAdd.at,alt);$('dlgAdd').close();
   if(tab==='fav')fillList();else go('fav')};
 $('fCancel').onclick=()=>$('dlgAdd').close();
 $('dlgAdd').addEventListener('close',()=>{avgBuf=null});
 $('fCoord').addEventListener('input',()=>{if(avgBuf){avgBuf.edited=true;$('fAvg').hidden=true}});
 $('cancel').onclick=()=>{cur=null;save();arrived=false;smooth=null;render();toast(T('canceled'))};
 $('copyHere').onclick=()=>{if(pos)copy(fmtLL(pos.lat,pos.lon))};
-function fillList(){const Ls=$('list');Ls.innerHTML='';
+function sortedPlaces(){const a=places.slice();
+  if(cfg.sort==='near'&&pos)a.sort((x,y)=>distance(pos,x)-distance(pos,y));else a.reverse();return a}
+function ndText(p){if(!pos)return '';const f=fmtDist(distance(pos,p));return f.v+' '+f.u+' · '+dirName(bearing(pos,p))}
+function fillList(){const Ls=$('list');Ls.innerHTML='';fillList.t=Date.now();
+  $$('#sortSeg button').forEach(b=>b.classList.toggle('on',b.dataset.s===cfg.sort));
   if(!places.length){Ls.innerHTML='<div class="empty">'+T('empty')+'</div>';return}
-  places.slice().reverse().forEach(p=>{const it=document.createElement('div');it.className='item';
-    it.innerHTML='<div class="txt"><b></b><small></small><div class="at"></div></div><div class="acts"><button class="primary" data-a="go"></button><button data-a="copy"></button><button class="del" data-a="del"></button></div>';
+  sortedPlaces().forEach(p=>{const it=document.createElement('div');it.className='item';it.dataset.id=p.id;
+    it.innerHTML='<div class="txt"><b></b><small></small><div class="at"></div><div class="nd"></div></div><div class="acts"><button class="primary" data-a="go"></button><button class="more" data-a="more">⋯</button></div>';
     it.querySelector('b').textContent=p.name;it.querySelector('small').textContent=fmtLL(p.lat,p.lon);it.querySelector('.at').textContent=showAt(p.at);
-    const bGo=it.querySelector('[data-a=go]'),bC=it.querySelector('[data-a=copy]'),bD=it.querySelector('[data-a=del]');
-    bGo.textContent=T('go');bC.textContent=T('copy');bD.textContent=T('del');
-    bGo.onclick=()=>navigateTo(p.id);
-    bC.onclick=()=>copy(fmtLL(p.lat,p.lon));
-    // delete needs a second tap within 3 s
-    bD.onclick=()=>{if(!bD.classList.contains('sure')){bD.classList.add('sure');bD.textContent=T('sure');
-        setTimeout(()=>{bD.classList.remove('sure');bD.textContent=T('del')},3000);return}
-      places=places.filter(x=>x.id!==p.id);if(cur===p.id)cur=null;save();fillList()};
+    it.querySelector('.nd').textContent=ndText(p);
+    const bGo=it.querySelector('[data-a=go]');bGo.textContent=T('go');bGo.onclick=()=>navigateTo(p.id);
+    it.querySelector('[data-a=more]').onclick=()=>openPlace(p);
+    it.querySelector('.txt').onclick=()=>openPlace(p);
     Ls.appendChild(it)})}
+// live distances; re-sort every 15 s while nothing is open
+function favTick(){$$('#list .item').forEach(it=>{const p=places.find(x=>x.id===it.dataset.id);if(p)it.querySelector('.nd').textContent=ndText(p)});
+  if(cfg.sort==='near'&&Date.now()-(fillList.t||0)>15000&&!document.querySelector('dialog[open]'))fillList()}
+$$('#sortSeg button').forEach(b=>b.onclick=()=>{cfg.sort=b.dataset.s;saveCfg();fillList()});
+let curP=null;
+function openPlace(p){curP=p;$('pName').value=p.name;$('pCoords').textContent=fmtLL(p.lat,p.lon);$('pAt').textContent=showAt(p.at)||'--';
+  $('pAlt').textContent=p.alt!=null?p.alt+' m':'--';const d=$('pDel');d.classList.remove('sure');d.textContent=T('del');$('dlgPlace').showModal()}
+$('pClose').onclick=()=>$('dlgPlace').close();
+$('pSave').onclick=()=>{const n=$('pName').value.trim();if(n&&curP){curP.name=n;save();toast(T('renamed'))}$('dlgPlace').close();fillList()};
+$('pGo').onclick=()=>{$('dlgPlace').close();navigateTo(curP.id)};
+$('pCopy').onclick=()=>copy(fmtLL(curP.lat,curP.lon));
+$('pShare').onclick=()=>sharePlace(curP);
+$('pDel').onclick=()=>{const d=$('pDel');if(!d.classList.contains('sure')){d.classList.add('sure');d.textContent=T('sure');
+    setTimeout(()=>{d.classList.remove('sure');d.textContent=T('del')},3000);return}
+  places=places.filter(x=>x.id!==curP.id);if(cur===curP.id)cur=null;save();$('dlgPlace').close();fillList()};
+/* share a place as plain text: works by SMS with no internet, and pastes straight into "Add coordinates" */
+async function sharePlace(p){const text=T('shareMsg')(p.name,p.lat.toFixed(6)+', '+p.lon.toFixed(6));
+  if(navigator.share){try{await navigator.share({text});return}catch(e){if(e.name==='AbortError')return}}
+  copy(text)}
+
+/* ---------- starting point ("take me back") ---------- */
+let startPt=null;try{startPt=JSON.parse(localStorage.getItem('sahm.start')||'null')}catch(e){}
+function paintStart(){$('setStart').hidden=!!startPt;$('startBox').hidden=!startPt}
+$('setStart').onclick=()=>{const b=recent.filter(f=>f.acc<=40);
+  if(!pos||!b.length){toast(pos?T('startWeak'):T('waitGps'));return}
+  const a=avgFix(b);startPt={lat:a.lat,lon:a.lon,alt:a.alt,at:stamp()};
+  try{localStorage.setItem('sahm.start',JSON.stringify(startPt))}catch(e){}paintStart();render();toast(T('startSet'))};
+$('goStart').onclick=()=>navigateTo('__start');
+$('resetStart').onclick=()=>{const b=$('resetStart');if(!b.dataset.sure){b.dataset.sure=1;toast(T('startReset'));setTimeout(()=>delete b.dataset.sure,3000);return}
+  delete b.dataset.sure;startPt=null;try{localStorage.removeItem('sahm.start')}catch(e){}paintStart();$('setStart').click()};
 
 /* ---------- backup / restore: plain text, one place per line ---------- */
-function backupText(){return T('backupTitle')+'\n'+places.map(p=>p.name+': '+p.lat.toFixed(6)+', '+p.lon.toFixed(6)+(p.at?' | '+p.at:'')).join('\n')}
+function backupText(){return T('backupTitle')+'\n'+places.map(p=>p.name+': '+p.lat.toFixed(6)+', '+p.lon.toFixed(6)+(p.at?' | '+p.at:'')+(p.alt!=null?' | '+p.alt+'m':'')).join('\n')}
 $('backup').onclick=async()=>{
   if(!places.length){toast(T('noPlaces'));return}
   const text=backupText();
@@ -672,13 +862,14 @@ $('rOk').onclick=()=>{
   $('rText').value.split(/\r?\n/).forEach((line,i)=>{
     line=line.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/٫/g,'.').replace(/،/g,',').trim();
     // "name: lat, lon" (old backups) or "name: lat, lon | YYYY-MM-DD HH:MM" (1.7+)
+    let alt=null;const am=line.match(/\s*\|\s*(-?\d+)\s*m\s*$/i);if(am){alt=+am[1];line=line.slice(0,am.index)}
     let at='';const dm=line.match(/\s*\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*$/);
     if(dm){at=dm[1];line=line.slice(0,dm.index)}
     const m=line.match(/(-?\d+\.\d+)\s*,\s*(-?\d+\.\d+)\s*$/);if(!m)return;
     const c=okLL(m[1],m[2]);if(!c)return;
     const name=line.slice(0,m.index).replace(/[\s:|\-–—]+$/,'').trim()||T('place');
     if(places.some(p=>Math.abs(p.lat-c.lat)<1e-6&&Math.abs(p.lon-c.lon)<1e-6)){skipped++;return}
-    places.push({id:Date.now().toString(36)+i,name,lat:c.lat,lon:c.lon,at});added++;
+    const np={id:Date.now().toString(36)+i,name,lat:c.lat,lon:c.lon,at};if(alt!=null)np.alt=alt;places.push(np);added++;
   });
   if(!added&&!skipped){$('rErr').textContent=T('restoreErr');return}
   save();fillList();$('dlgRestore').close();toast(T('restored')(added,skipped))};
@@ -687,7 +878,8 @@ $('rOk').onclick=()=>{
 function paintSet(){$$('.seg').forEach(s=>{const k=s.dataset.k;s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(cfg[k])===b.dataset.v))})}
 $$('.seg button').forEach(b=>b.onclick=()=>{
   const k=b.parentNode.dataset.k,v=b.dataset.v;cfg[k]=k==='arrive'?+v:v;saveCfg();
-  if(k==='theme')applyTheme();if(k==='lang')applyLang();
+  if(k==='theme'||k==='eco')applyTheme();if(k==='lang'){applyLang();infoTick(true)}
+  if(k==='eco')wakeOn();
   paintSet();render()});
 $('share').onclick=async()=>{const url=location.href.split('#')[0];
   if(navigator.share){try{await navigator.share({title:T('appName'),text:T('shareText'),url});return}catch(e){if(e.name==='AbortError')return}}
@@ -696,7 +888,8 @@ $('aboutBtn').onclick=()=>$('dlgAbout').showModal();
 $('aClose').onclick=()=>$('dlgAbout').close();
 
 /* ---------- start (iOS needs a tap to grant compass) ---------- */
-async function wakeOn(){try{await navigator.wakeLock.request('screen')}catch(e){}}
+let wl=null;
+async function wakeOn(){try{if(cfg.eco==='on'){if(wl){await wl.release();wl=null}return}if(!wl||wl.released)wl=await navigator.wakeLock.request('screen')}catch(e){}}
 async function start(){
   $('start').hidden=true;
   if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){
@@ -745,7 +938,7 @@ function showInstall(){
 $('instNow').onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$('instNow').hidden=true};
 $('go').onclick=()=>{if(!isApp&&!devBypass){showInstall();return}start()};
 
-load();applyTheme();applyLang();
+load();applyTheme();applyLang();paintStart();
 const hh=decodeURIComponent(location.hash.slice(1));const hc=hh&&parseCoord(hh);
 if(hc){let p=places.find(x=>Math.abs(x.lat-hc.lat)<1e-6&&Math.abs(x.lon-hc.lon)<1e-6);if(!p)p=addPlace(T('fromLink'),hc);cur=p.id;save()}
 go('home');
