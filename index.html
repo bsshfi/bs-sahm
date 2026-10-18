@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=3.0">
+<link rel="apple-touch-icon" href="icon-180.png?v=3.1">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
@@ -342,7 +342,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.0</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.1</span></div>
     </div>
   </section>
 </main>
@@ -400,9 +400,9 @@ dialog .row{margin-top:16px}
   <p data-t="blurb"></p>
   <div class="credit">
     <div class="by" data-t="by"></div>
-    <b data-t="author"></b>
+    <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 3.0</div>
+  <div class="vpill">Ver 3.1</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -462,7 +462,7 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  shareText:'سهم: يوجهك لأي مكان بسهم واحد، بدون خرائط وبدون إنترنت.',linkCopied:'تم نسخ رابط التطبيق',
  tagline:'سهم واحد يوصلك. بدون خرائط، بدون إنترنت.',
  blurb:'مستوحى من خاصية قديمة في جوالات نوكيا: تحفظ مكاناً أو تكتب إحداثياته، وسهم واحد يؤشر لك على اتجاهه مع المسافة المتبقية. يعتمد على GPS والبوصلة فقط، وأماكنك تبقى في جهازك.',
- by:'فكرة وتنفيذ',author:'باسل بن شافي',close:'إغلاق',am:'ص',pm:'م',
+ by:'فكرة وتنفيذ',author:'bsshfi@gmail.com',close:'إغلاق',am:'ص',pm:'م',
  sunrise:'الشروق',sunset:'الغروب',near:(c,d,dir)=>'قرب '+c+' · '+d+' '+dir+'ها',inCity:c=>'في '+c+' (تقريبي)',approx:'تقريبي بدون إنترنت',
  wx:{0:'☀️ صافي',1:'🌤️ صافي غالباً',2:'⛅ غائم جزئياً',3:'☁️ غائم',45:'🌫️ ضباب',48:'🌫️ ضباب',51:'🌦️ رذاذ',61:'🌧️ مطر',71:'❄️ ثلج',80:'🌧️ زخات',95:'⛈️ عاصفة رعدية'},
  wind:'رياح',kmh:'كم/س',agoMin:n=>'قبل '+n+' د',
@@ -497,7 +497,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  shareText:'Sahm: guides you anywhere with one arrow. No maps, no internet.',linkCopied:'App link copied',
  tagline:'One arrow gets you there. No maps, no internet.',
  blurb:'Inspired by a feature from classic Nokia phones: save a place or enter its coordinates, and one arrow points the way with the distance left. It uses only GPS and the compass, and your places stay on your device.',
- by:'Idea & development',author:'Basil Bin Shafi',close:'Close',am:'AM',pm:'PM',
+ by:'Idea & development',author:'bsshfi@gmail.com',close:'Close',am:'AM',pm:'PM',
  sunrise:'Sunrise',sunset:'Sunset',near:(c,d,dir)=>d+' '+dir+' of '+c,inCity:c=>'In '+c+' (approx.)',approx:'Approximate, offline',
  wx:{0:'☀️ Clear',1:'🌤️ Mostly clear',2:'⛅ Partly cloudy',3:'☁️ Cloudy',45:'🌫️ Fog',48:'🌫️ Fog',51:'🌦️ Drizzle',61:'🌧️ Rain',71:'❄️ Snow',80:'🌧️ Showers',95:'⛈️ Thunderstorm'},
  wind:'Wind',kmh:'km/h',agoMin:n=>n+' min ago',
