@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#0d1210">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=3.3">
+<link rel="apple-touch-icon" href="icon-180.png?v=3.4">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
@@ -343,7 +343,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.3</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.4</span></div>
     </div>
   </section>
 </main>
@@ -403,7 +403,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 3.3</div>
+  <div class="vpill">Ver 3.4</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -513,7 +513,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
 /* ---------- settings store ---------- */
 const cfg={arrive:2,fmt:'dec',theme:'dark',lang:'ar',eco:'off',sort:'near'};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('sahm.set')||'{}'))}catch(e){}
-delete cfg.sound;
+delete cfg.sound;delete cfg.undefined;if(!['near','new'].includes(cfg.sort))cfg.sort='near';
 function saveCfg(){try{localStorage.setItem('sahm.set',JSON.stringify(cfg))}catch(e){}}
 const T=k=>(L[cfg.lang]||L.ar)[k];
 function applyTheme(){const th=['light','dark','red'].includes(cfg.theme)?cfg.theme:'dark';document.documentElement.dataset.theme=th;
@@ -805,7 +805,9 @@ $('fCoord').addEventListener('input',()=>{if(avgBuf){avgBuf.edited=true;$('fAvg'
 $('cancel').onclick=()=>{const wasStart=cur==='__start';cur=null;save();arrived=false;smooth=null;if(wasStart)clearStart();render();toast(T(wasStart?'startCleared':'canceled'))};
 $('copyHere').onclick=()=>{if(pos)copy(fmtLL(pos.lat,pos.lon))};
 function sortedPlaces(){const a=places.slice();
-  if(cfg.sort==='near'&&pos)a.sort((x,y)=>distance(pos,x)-distance(pos,y));else a.reverse();return a}
+  if(cfg.sort==='near'&&pos)a.sort((x,y)=>distance(pos,x)-distance(pos,y));
+  else{a.reverse();a.sort((x,y)=>(y.at||'').localeCompare(x.at||''))} // newest date first; places without a date go last
+  return a}
 function ndText(p){if(!pos)return '';const f=fmtDist(distance(pos,p));return f.v+' '+f.u+' · '+dirName(bearing(pos,p))}
 function fillList(){const Ls=$('list');Ls.innerHTML='';fillList.t=Date.now();
   $$('#sortSeg button').forEach(b=>b.classList.toggle('on',b.dataset.s===cfg.sort));
@@ -877,8 +879,8 @@ $('rOk').onclick=()=>{
   save();fillList();$('dlgRestore').close();toast(T('restored')(added,skipped))};
 
 /* ---------- settings ---------- */
-function paintSet(){$$('.seg').forEach(s=>{const k=s.dataset.k;s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(cfg[k])===b.dataset.v))})}
-$$('.seg button').forEach(b=>b.onclick=()=>{
+function paintSet(){$$('.seg[data-k]').forEach(s=>{const k=s.dataset.k;s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(cfg[k])===b.dataset.v))})}
+$$('.seg[data-k] button').forEach(b=>b.onclick=()=>{
   const k=b.parentNode.dataset.k,v=b.dataset.v;cfg[k]=k==='arrive'?+v:v;saveCfg();
   if(k==='theme'||k==='eco')applyTheme();if(k==='lang'){applyLang();infoTick(true)}
   if(k==='eco')wakeOn();
