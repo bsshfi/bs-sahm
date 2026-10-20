@@ -7,27 +7,29 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="سهم">
-<meta name="theme-color" content="#0d1210">
+<meta name="theme-color" content="#17110d">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=3.4">
+<link rel="apple-touch-icon" href="icon-180.png?v=3.5">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
 :root{
-  --bg:#0d1210; --bg2:#111815; --panel:#161e1b; --panel2:#1c2622; --line:#25302b; --fg:#eef3ef; --dim:#859790;
-  --arrow:#f2c14e; --arrow2:#d99a1e; --good:#4cc38a; --good2:#2f9a68; --ok:#f2c14e; --bad:#e5604f; --onArrow:#1a1404;
-  --glow:rgba(242,193,78,.25); --glowG:rgba(76,195,138,.35); --okBg:rgba(242,193,78,.08); --okLine:rgba(242,193,78,.25);
-  --badBg:rgba(229,96,79,.08); --badLine:rgba(229,96,79,.5); --shadow:rgba(0,0,0,.45); --scrim:rgba(0,0,0,.6); --bar:rgba(17,24,21,.92);
+  --bg:#17110d; --bg2:#22180f; --panel:#221a14; --panel2:#2c2119; --line:#3a2d23; --fg:#f4e9dc; --dim:#a8927e;
+  --arrow:#ff9330; --arrow2:#d9620c; --good:#4cc38a; --good2:#2f9a68; --ok:#f2a64e; --bad:#e5604f; --onArrow:#2a1404;
+  --dial:#2e2219; --dial2:#3a2b20; --dialLine:#57432f; --dialTick:#8c745e; --dialTxt:#f1e3cf; --dialDim:#b49c84; --rose:rgba(241,227,207,.10);
+  --glow:rgba(255,147,48,.28); --glowG:rgba(76,195,138,.35); --okBg:rgba(242,166,78,.09); --okLine:rgba(242,166,78,.3);
+  --badBg:rgba(229,96,79,.08); --badLine:rgba(229,96,79,.5); --shadow:rgba(0,0,0,.45); --scrim:rgba(0,0,0,.6); --bar:rgba(34,26,20,.95);
   --ui:-apple-system,"SF Arabic","Geeza Pro",system-ui,sans-serif;
   --num:-apple-system,"SF Pro Rounded","SF Pro Display",system-ui,sans-serif;
   color-scheme:dark;
 }
-/* light: warm beige paper */
+/* light: the icon's sand beige with a coffee-brown dial */
 :root[data-theme="light"]{
-  --bg:#efe6d6; --bg2:#f7f1e6; --panel:#fbf7ef; --panel2:#f1e8d8; --line:#ded1bb; --fg:#2b241a; --dim:#7b6f5d;
-  --arrow:#e2a326; --arrow2:#bf8216; --good:#2f9a68; --good2:#237a52; --ok:#a8730a; --bad:#c4473a; --onArrow:#2b1d04;
-  --glow:rgba(191,130,22,.28); --glowG:rgba(47,154,104,.3); --okBg:rgba(226,163,38,.12); --okLine:rgba(191,130,22,.35);
-  --badBg:rgba(196,71,58,.07); --badLine:rgba(196,71,58,.45); --shadow:rgba(80,60,30,.18); --scrim:rgba(60,45,25,.35); --bar:rgba(251,247,239,.94);
+  --bg:#f1e4d1; --bg2:#f8efe2; --panel:#fffaf3; --panel2:#f4e8d7; --line:#e4d3bc; --fg:#3a2a20; --dim:#86705e;
+  --arrow:#f5841f; --arrow2:#d4610b; --good:#2f9a68; --good2:#237a52; --ok:#b8640a; --bad:#c4473a; --onArrow:#2e1605;
+  --dial:#4a3228; --dial2:#5a3e31; --dialLine:#6e5242; --dialTick:#c9b29b; --dialTxt:#f6eadb; --dialDim:#cdb59c; --rose:rgba(246,234,219,.13);
+  --glow:rgba(213,97,11,.28); --glowG:rgba(47,154,104,.3); --okBg:rgba(245,132,31,.1); --okLine:rgba(213,97,11,.32);
+  --badBg:rgba(196,71,58,.07); --badLine:rgba(196,71,58,.45); --shadow:rgba(74,50,40,.18); --scrim:rgba(58,42,32,.35); --bar:rgba(255,250,243,.96);
   color-scheme:light;
 }
 /* red: night mode, keeps your eyes used to the dark */
@@ -36,6 +38,7 @@
   --arrow:#ff3b2a; --arrow2:#b8231a; --good:#ff8c6b; --good2:#d9583f; --ok:#ff7a4a; --bad:#ff2b1c; --onArrow:#1a0000;
   --glow:rgba(255,59,42,.25); --glowG:rgba(255,140,107,.3); --okBg:rgba(255,90,60,.08); --okLine:rgba(255,90,60,.3);
   --badBg:rgba(255,43,28,.08); --badLine:rgba(255,43,28,.5); --shadow:rgba(0,0,0,.6); --scrim:rgba(0,0,0,.7); --bar:rgba(23,5,5,.95);
+  --dial:#170505; --dial2:#200808; --dialLine:#3a0f0c; --dialTick:#7a2219; --dialTxt:#ff6a55; --dialDim:#a8392c; --rose:rgba(255,106,85,.08);
   color-scheme:dark;
 }
 :root[data-theme="red"] img{filter:grayscale(1) sepia(1) hue-rotate(-50deg) saturate(5) brightness(.75)}
@@ -79,18 +82,20 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .dial{position:relative;width:min(78vw,40vh);aspect-ratio:1;max-width:100%;overflow:hidden;border-radius:50%}
 #bezel{position:absolute;inset:0;transition:transform .25s ease-out}
 #bezel svg{width:100%;height:100%}
-.tick{stroke:var(--line)}.tick.maj{stroke:var(--dim)}
-.card{fill:var(--dim);font:600 12px var(--ui)}
-.card.n{fill:var(--bad)}
-.face{fill:var(--panel);stroke:var(--line)}
+.tick{stroke:var(--dialLine)}.tick.maj{stroke:var(--dialTick)}
+.card{fill:var(--dialDim);font:700 13px var(--num)}
+.card.n{fill:var(--arrow)}
+.face{fill:var(--dial);stroke:var(--dialLine)}
+.rose{fill:var(--rose)}
+.dial{box-shadow:0 14px 40px var(--shadow),0 0 0 6px var(--panel2)}
 #arrow{position:absolute;inset:20%;transition:transform .25s ease-out;filter:drop-shadow(0 6px 14px var(--glow))}
 #arrow svg{width:100%;height:100%}
-#arrow .a1{fill:var(--arrow)}#arrow .a2{fill:var(--arrow2)}
+#arrow .a1{fill:var(--arrow)}#arrow .a2{fill:var(--arrow2)}#arrow .hub{fill:var(--dial2);stroke:var(--dialTxt);stroke-width:2.5}
 .aligned #arrow .a1{fill:var(--good)}.aligned #arrow .a2{fill:var(--good2)}
 .aligned #arrow{filter:drop-shadow(0 6px 16px var(--glowG))}
 #kaaba{position:absolute;top:3%;left:50%;width:9%;transform:translateX(-50%);display:none}
 .qibla #kaaba{display:block}
-.flag{position:absolute;inset:20%;border-radius:50%;display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--good);background:var(--panel);font-size:24px;font-weight:700}
+.flag{position:absolute;inset:20%;border-radius:50%;display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:var(--good);background:var(--dial2);font-size:24px;font-weight:700}
 .flag svg{width:44%;height:auto}
 .arrived #arrow{opacity:0}
 .arrived .flag{display:flex;animation:pop .35s ease-out}
@@ -109,26 +114,36 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .warn:not(:empty){color:var(--ok);background:var(--okBg);border:1px solid var(--okLine);border-radius:12px;padding:8px 12px;max-width:420px;line-height:1.5}
 
 /* home idle */
-.info{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:7px;font-size:13.5px}
-.info .r{display:flex;align-items:center;gap:8px;min-width:0}
+.here{width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px}
+.info{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px;font-size:13.5px}
+.info .r{display:flex;align-items:center;gap:8px;min-width:0;padding:0 4px}
 .info .r span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.info .sun{display:flex;gap:14px;flex-wrap:wrap}
-.info .sun b,.info .wx b{font-family:var(--num);font-weight:600}
-.info .dimtxt{color:var(--dim);font-size:12px}
-.big{width:100%;padding:16px;font-size:16px;border-radius:16px}
+.info .place{font-weight:600}.info .place svg{color:var(--arrow);flex:none}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:9px 12px}
+.tile .ic{font-size:22px;line-height:1}
+.tile .tl{color:var(--dim);font-size:11.5px}
+.tile b{font-family:var(--num);font-size:16px;font-weight:700}
+.info .wx b{font-family:var(--num);font-weight:600}
+.info .dimtxt,.dimtxt{color:var(--dim);font-size:12px}
+/* location: the hero card, in the icon's coffee brown */
+.loc{background:linear-gradient(160deg,var(--dial2),var(--dial));color:var(--dialTxt);border-radius:22px;padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 12px 30px var(--shadow)}
+.loc .lbl{color:var(--dialDim);font-size:13px;display:flex;align-items:center;gap:8px}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--arrow);box-shadow:0 0 0 0 var(--glow);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.coords{direction:ltr;font-family:var(--num);font-size:clamp(24px,7.5vw,34px);font-weight:700;font-variant-numeric:tabular-nums;text-align:center;line-height:1.25;user-select:text;-webkit-user-select:text;letter-spacing:-.01em}
+.mini{width:100%;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--dialLine);padding-top:10px}
+.mini>div{text-align:center;display:flex;flex-direction:column;gap:3px}
+.mini>div+div{border-inline-start:1px solid var(--dialLine)}
+.mini span{color:var(--dialDim);font-size:11.5px}
+.mini b{font-family:var(--num);font-size:16px;font-weight:700;direction:ltr}
+.loc .pill{background:rgba(255,255,255,.08);border-color:var(--dialLine);color:var(--dialTxt)}
+.pill{padding:8px 16px;font-size:14px;border-radius:999px}
+.big{width:100%;padding:16px;font-size:16px;border-radius:16px;box-shadow:0 8px 20px var(--glow)}
 .startrow{display:flex;gap:8px}.startrow .big{flex:1}
 .startrow .sq{width:56px;flex:none;padding:0;border-radius:16px;color:var(--bad)}
 .startrow .sq.sure{background:var(--bad);color:#fff;border-color:var(--bad)}
 #startDist{font-family:var(--num);font-weight:600;opacity:.85}
-.here{width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px}
-.loc{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px 18px 16px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.loc .lbl{color:var(--dim);font-size:13px;display:flex;align-items:center;gap:6px}
-.coords{direction:ltr;font-family:var(--num);font-size:clamp(24px,7.5vw,34px);font-weight:600;font-variant-numeric:tabular-nums;text-align:center;line-height:1.3;user-select:text;-webkit-user-select:text}
-.pill{padding:8px 16px;font-size:14px;border-radius:999px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.cell{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center}
-.cell div{color:var(--dim);font-size:12px}
-.cell b{display:block;font-family:var(--num);font-size:17px;font-weight:600;margin-top:4px;font-variant-numeric:tabular-nums;direction:ltr}
 
 /* controls */
 button,input,textarea{font:inherit;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 14px}
@@ -263,35 +278,38 @@ dialog .row{margin-top:16px}
   <section class="page stage" id="stage">
     <div class="here" id="here">
       <div class="info">
-        <div class="r"><span>📍</span><span id="placeName" class="dimtxt">--</span></div>
-        <div class="r sun"><span>🌅 <span data-t="sunrise"></span> <b id="sunR">--</b></span><span>🌇 <span data-t="sunset"></span> <b id="sunS">--</b></span></div>
+        <div class="r place"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="placeName">--</span></div>
+        <div class="tiles">
+          <div class="tile"><span class="ic">🌅</span><div><div class="tl" data-t="sunrise"></div><b id="sunR">--</b></div></div>
+          <div class="tile"><span class="ic">🌇</span><div><div class="tl" data-t="sunset"></div><b id="sunS">--</b></div></div>
+        </div>
         <div class="r wx" id="wxRow" hidden><span id="wxTxt"></span></div>
       </div>
       <div class="loc">
-        <div class="lbl"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span data-t="yourLoc"></span></div>
+        <div class="lbl"><span class="pulse"></span><span data-t="yourLoc"></span></div>
         <div class="coords" id="coords">--</div>
+        <div class="mini">
+          <div><span data-t="accuracy"></span><b id="hAcc">--</b></div>
+          <div><span data-t="altitude"></span><b id="hAlt">--</b></div>
+          <div><span data-t="speed"></span><b id="hSpd">--</b></div>
+        </div>
         <button class="pill" id="copyHere"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span data-t="copyCoords"></span></button>
-      </div>
-      <div class="grid">
-        <div class="cell"><div data-t="accuracy"></div><b id="hAcc">--</b></div>
-        <div class="cell"><div data-t="altitude"></div><b id="hAlt">--</b></div>
-        <div class="cell"><div data-t="speed"></div><b id="hSpd">--</b></div>
-      </div>
-      <div class="row">
-        <button class="saveHere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span data-t="saveHere"></span></button>
-        <button class="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-t="addCoord"></span></button>
       </div>
       <button class="primary big" id="setStart" data-t="setStart"></button>
       <div class="startrow" id="startBox" hidden>
         <button class="primary big" id="goStart"><span data-t="goStart"></span> <span id="startDist"></span></button>
         <button class="sq" id="resetStart" aria-label="remove"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
+      <div class="row">
+        <button class="saveHere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span data-t="saveHere"></span></button>
+        <button class="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-t="addCoord"></span></button>
+      </div>
     </div>
 
     <div class="navhead" id="navhead" hidden></div>
     <div class="dial" id="dial" hidden>
       <div id="bezel"><svg viewBox="0 0 200 200" id="bezelSvg"></svg></div>
-      <div id="arrow"><svg viewBox="0 0 100 100"><path class="a2" d="M50 4 L86 92 L50 72 Z"/><path class="a1" d="M50 4 L14 92 L50 72 Z"/></svg></div>
+      <div id="arrow"><svg viewBox="0 0 100 100"><path class="a2" d="M50 4 L86 92 L50 72 Z"/><path class="a1" d="M50 4 L14 92 L50 72 Z"/><circle class="hub" cx="50" cy="50" r="5"/></svg></div>
       <div class="flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span data-t="arrived"></span></div>
     </div>
     <div class="dist" id="dist" hidden>--</div>
@@ -343,7 +361,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.4</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.5</span></div>
     </div>
   </section>
 </main>
@@ -403,7 +421,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 3.4</div>
+  <div class="vpill">Ver 3.5</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -511,13 +529,13 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  ecoHint:'Lets the screen turn off, updates the compass less often and stops animations. GPS keeps its full accuracy.'}};
 
 /* ---------- settings store ---------- */
-const cfg={arrive:2,fmt:'dec',theme:'dark',lang:'ar',eco:'off',sort:'near'};
+const cfg={arrive:2,fmt:'dec',theme:'light',lang:'ar',eco:'off',sort:'near'};
 try{Object.assign(cfg,JSON.parse(localStorage.getItem('sahm.set')||'{}'))}catch(e){}
 delete cfg.sound;delete cfg.undefined;if(!['near','new'].includes(cfg.sort))cfg.sort='near';
 function saveCfg(){try{localStorage.setItem('sahm.set',JSON.stringify(cfg))}catch(e){}}
 const T=k=>(L[cfg.lang]||L.ar)[k];
 function applyTheme(){const th=['light','dark','red'].includes(cfg.theme)?cfg.theme:'dark';document.documentElement.dataset.theme=th;
-  document.querySelector('meta[name=theme-color]').content={light:'#efe6d6',dark:'#0d1210',red:'#0b0202'}[th];
+  document.querySelector('meta[name=theme-color]').content={light:'#f1e4d1',dark:'#17110d',red:'#0b0202'}[th];
   document.documentElement.classList.toggle('eco',cfg.eco==='on')}
 function applyLang(){const en=cfg.lang==='en';document.documentElement.lang=en?'en':'ar';document.documentElement.dir=en?'ltr':'rtl';
   $$('[data-t]').forEach(el=>{const v=T(el.dataset.t);if(typeof v==='string')el.innerHTML=v});
@@ -527,6 +545,8 @@ function applyLang(){const en=cfg.lang==='en';document.documentElement.lang=en?'
 
 /* ---------- compass bezel ---------- */
 function drawBezel(){const s=$('bezelSvg');let h='<circle class="face" cx="100" cy="100" r="96" stroke-width="1.5"/>';
+  const star=(n,R1,R2,off)=>{let pts=[];for(let i=0;i<n*2;i++){const a=rad(off+i*180/n),r=i%2?R2:R1;pts.push((100+r*Math.sin(a)).toFixed(1)+','+(100-r*Math.cos(a)).toFixed(1))}return '<polygon class="rose" points="'+pts.join(' ')+'"/>'};
+  h+=star(4,78,14,0)+star(4,52,12,45);
   for(let i=0;i<72;i++){const a=i*5,maj=a%30===0,r1=maj?82:86,r2=92,x=t=>100+t*Math.sin(rad(a)),y=t=>100-t*Math.cos(rad(a));
     h+='<line class="tick'+(maj?' maj':'')+'" x1="'+x(r1)+'" y1="'+y(r1)+'" x2="'+x(r2)+'" y2="'+y(r2)+'" stroke-width="'+(maj?2:1)+'" stroke-linecap="round"/>'}
   const lab=cfg.lang==='en'?['N','E','S','W']:['ش','ق','ج','غ'];
