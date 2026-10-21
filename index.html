@@ -9,8 +9,13 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#17110d">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=3.7">
+<link rel="apple-touch-icon" href="icon-180.png?v=4.0">
 <style>
+/* UI font: IBM Plex Sans Arabic (SIL Open Font License, see OFL-IBM-Plex.txt), bundled so it works offline */
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(plex-ar-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:700;font-display:swap;src:url(plex-ar-700.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(plex-la-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:700;font-display:swap;src:url(plex-la-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
 :root{
@@ -19,7 +24,7 @@
   --dial:#2e2219; --dial2:#3a2b20; --dialLine:#57432f; --dialTick:#8c745e; --dialTxt:#f1e3cf; --dialDim:#b49c84; --rose:rgba(241,227,207,.10);
   --glow:rgba(255,147,48,.28); --glowG:rgba(76,195,138,.35); --okBg:rgba(242,166,78,.09); --okLine:rgba(242,166,78,.3);
   --badBg:rgba(229,96,79,.08); --badLine:rgba(229,96,79,.5); --shadow:rgba(0,0,0,.45); --scrim:rgba(0,0,0,.6); --bar:rgba(34,26,20,.95);
-  --ui:-apple-system,"SF Arabic","Geeza Pro",system-ui,sans-serif;
+  --ui:"IBM Plex Sans Arabic",-apple-system,"SF Arabic","Geeza Pro",system-ui,sans-serif;
   --num:-apple-system,"SF Pro Rounded","SF Pro Display",system-ui,sans-serif;
   color-scheme:dark;
 }
@@ -114,8 +119,11 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .warn:not(:empty){color:var(--ok);background:var(--okBg);border:1px solid var(--okLine);border-radius:12px;padding:8px 12px;max-width:420px;line-height:1.5}
 
 /* home idle */
-.here{width:100%;max-width:440px;display:flex;flex-direction:column;gap:12px}
-.info{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px;font-size:13.5px}
+.here{width:100%;max-width:440px;display:flex;flex-direction:column;gap:9px}
+.info{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px 12px;display:flex;flex-direction:column;gap:7px;font-size:13.5px}
+.info .wxb{margin-inline-start:auto;font-weight:500;flex:none;white-space:nowrap}.info .wxb b{font-family:var(--num)}
+.srow{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:0 4px;font-size:13px}
+.srow b{font-family:var(--num);font-weight:700}.srow .tl{font-size:12px}
 .info .r{display:flex;align-items:center;gap:8px;min-width:0;padding:0 4px}
 .info .r span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .info .place{font-weight:600}.info .place svg{color:var(--arrow);flex:none}
@@ -127,11 +135,11 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .info .wx b{font-family:var(--num);font-weight:600}
 .info .dimtxt,.dimtxt{color:var(--dim);font-size:12px}
 /* seasons & stars */
-.season{display:flex;flex-direction:column;align-items:stretch;gap:9px;text-align:start;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px;font:inherit;color:var(--fg);width:100%}
+.season{display:flex;flex-direction:column;align-items:stretch;gap:8px;text-align:start;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:11px 12px;font:inherit;color:var(--fg);width:100%}
 .season:active{transform:scale(.99)}
 .shead{display:flex;align-items:center;gap:12px}
-.sem{font-size:30px;line-height:1;width:48px;height:48px;border-radius:14px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;flex:none}
-.sname{flex:1;min-width:0}.sname b{font-size:20px;font-weight:800;display:block}
+.sem{font-size:26px;line-height:1;width:42px;height:42px;border-radius:14px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;flex:none}
+.sname{flex:1;min-width:0}.sname b{font-size:19px;font-weight:800;display:block;line-height:1.25}
 .tl{color:var(--dim);font-size:11.5px}
 .sleft{text-align:center;flex:none}.sleft b{display:block;font-family:var(--num);font-size:24px;font-weight:800;color:var(--arrow);line-height:1}
 .sleft span{color:var(--dim);font-size:11px}
@@ -139,13 +147,13 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--arrow2),var(--arrow));border-radius:99px}
 [dir=rtl] .bar i{background:linear-gradient(270deg,var(--arrow2),var(--arrow))}
 .srange{color:var(--dim);font-size:12px;font-variant-numeric:tabular-nums}
-.schips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.schip{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px 10px;min-width:0}
-.schip>span{font-size:18px}.schip>div{min-width:0}
-.schip b{display:block;font-size:13.5px;line-height:1.35}
+.schips{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.schip{display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 8px;min-width:0}
+.schip>span{font-size:16px}.schip>div{min-width:0}
+.schip b{display:block;font-size:13px;line-height:1.3}
 .schip small{display:block;color:var(--dim);font-size:11px}
 .stemp{font-size:12.5px;color:var(--dim)}.stemp b{color:var(--fg);font-family:var(--num)}
-.snext{font-size:13px;border-top:1px dashed var(--line);padding-top:9px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.snext{font-size:12.5px;border-top:1px dashed var(--line);padding-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .snext b{font-weight:700}
 .snext .soon{background:var(--arrow);color:var(--onArrow);font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px}
 .yr .seg{margin-bottom:10px}
@@ -156,19 +164,19 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .yrow.now{border-color:var(--arrow);background:var(--okBg)}.yrow.now .n{color:var(--arrow)}
 
 /* location: the hero card, in the icon's coffee brown */
-.loc{background:linear-gradient(160deg,var(--dial2),var(--dial));color:var(--dialTxt);border-radius:22px;padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 12px 30px var(--shadow)}
+.loc{background:linear-gradient(160deg,var(--dial2),var(--dial));color:var(--dialTxt);border-radius:20px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 12px 30px var(--shadow)}
 .loc .lbl{color:var(--dialDim);font-size:13px;display:flex;align-items:center;gap:8px}
 .pulse{width:8px;height:8px;border-radius:50%;background:var(--arrow);box-shadow:0 0 0 0 var(--glow);animation:pulse 2s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
-.coords{direction:ltr;font-family:var(--num);font-size:clamp(24px,7.5vw,34px);font-weight:700;font-variant-numeric:tabular-nums;text-align:center;line-height:1.25;user-select:text;-webkit-user-select:text;letter-spacing:-.01em}
-.mini{width:100%;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--dialLine);padding-top:10px}
+.coords{direction:ltr;font-family:var(--num);font-size:clamp(19px,6vw,26px);font-weight:700;font-variant-numeric:tabular-nums;text-align:center;line-height:1.25;user-select:text;-webkit-user-select:text;letter-spacing:-.01em}
+.mini{width:100%;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--dialLine);padding-top:8px}
 .mini>div{text-align:center;display:flex;flex-direction:column;gap:3px}
 .mini>div+div{border-inline-start:1px solid var(--dialLine)}
 .mini span{color:var(--dialDim);font-size:11.5px}
 .mini b{font-family:var(--num);font-size:16px;font-weight:700;direction:ltr}
 .loc .pill{background:rgba(255,255,255,.08);border-color:var(--dialLine);color:var(--dialTxt)}
 .pill{padding:8px 16px;font-size:14px;border-radius:999px}
-.big{width:100%;padding:16px;font-size:16px;border-radius:16px;box-shadow:0 8px 20px var(--glow)}
+.big{width:100%;padding:14px;font-size:16px;border-radius:16px;box-shadow:0 8px 20px var(--glow)}
 .startrow{display:flex;gap:8px}.startrow .big{flex:1}
 .startrow .sq{width:56px;flex:none;padding:0;border-radius:16px;color:var(--bad)}
 .startrow .sq.sure{background:var(--bad);color:#fff;border-color:var(--bad)}
@@ -254,6 +262,8 @@ dialog .row{margin-top:16px}
 /* start */
 #start{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center;z-index:5}
 #start h1{margin:0;font-size:34px}
+.logo{display:block;margin:0 auto;height:44px;aspect-ratio:1023/376;background:var(--fg);-webkit-mask:url(logo.png) center/contain no-repeat;mask:url(logo.png) center/contain no-repeat}
+.about .logo{height:34px;margin-top:2px}
 #start p{color:var(--dim);max-width:30ch;line-height:1.7;margin:0}
 #start button{min-width:160px}
 #start img{border-radius:26px;box-shadow:0 0 0 1px var(--line);filter:drop-shadow(0 10px 24px var(--glow))}
@@ -283,7 +293,7 @@ dialog .row{margin-top:16px}
 
 <div id="start">
   <img src="icon.png" alt="" width="112" height="112">
-  <h1 data-t="appName">سهم</h1>
+  <h1 class="logo" role="img" aria-label="سهم"></h1>
   <p data-t="startText"></p>
   <button class="primary" id="go" data-t="start"></button>
 </div>
@@ -307,22 +317,18 @@ dialog .row{margin-top:16px}
   <section class="page stage" id="stage">
     <div class="here" id="here">
       <div class="info">
-        <div class="r place"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="placeName">--</span></div>
-        <div class="tiles">
-          <div class="tile"><span class="ic">🌅</span><div><div class="tl" data-t="sunrise"></div><b id="sunR">--</b></div></div>
-          <div class="tile"><span class="ic">🌇</span><div><div class="tl" data-t="sunset"></div><b id="sunS">--</b></div></div>
-        </div>
-        <div class="r wx" id="wxRow" hidden><span id="wxTxt"></span></div>
+        <div class="r place"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="placeName">--</span><b class="wxb" id="wxRow" hidden><span id="wxTxt"></span></b></div>
+        <div class="srow"><span>🌅 <span class="tl" data-t="sunrise"></span> <b id="sunR">--</b></span><span>🌇 <span class="tl" data-t="sunset"></span> <b id="sunS">--</b></span><span id="windTxt" hidden></span></div>
       </div>
       <button class="season" id="seasonCard" type="button">
         <div class="shead">
           <span class="sem" id="msEmoji">🍂</span>
-          <div class="sname"><div class="tl" data-t="msNow"></div><b id="msName">--</b></div>
+          <div class="sname"><div class="tl" data-t="msNow"></div><b id="msName">--</b><div class="tl" id="msRange"></div></div>
           <div class="sleft"><b id="msLeft">--</b><span id="msLeftLbl"></span></div>
         </div>
         <div class="bar"><i id="msBar"></i></div>
-        <div class="srange" id="msRange"></div>
         <div class="schips">
+          <div class="schip"><span id="fsEmoji">🍂</span><div><div class="tl" data-t="faslNow"></div><b id="fsName">--</b><small id="fsLeft"></small></div></div>
           <div class="schip"><span>⭐</span><div><div class="tl" data-t="taliNow"></div><b id="tlName">--</b><small id="tlLeft"></small></div></div>
           <div class="schip"><span>🌡️</span><div><div class="tl" data-t="tempLbl"></div><b id="tlTemp">--</b><small id="tlAvg"></small></div></div>
         </div>
@@ -404,7 +410,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.7</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 4.0</span></div>
     </div>
   </section>
 </main>
@@ -465,14 +471,15 @@ dialog .row{margin-top:16px}
 
 <dialog id="dlgAbout" class="about">
   <img src="icon.png" alt="" width="76" height="76">
-  <div class="name">سهم <span>Sahm</span></div>
+  <div class="logo" role="img" aria-label="سهم"></div>
+  <div class="name"><span>Sahm</span></div>
   <div class="tag" data-t="tagline"></div>
   <p data-t="blurb"></p>
   <div class="credit">
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 3.7</div>
+  <div class="vpill">Ver 4.0</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -543,8 +550,8 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  paste:'📋 لصق',pasteFail:'اضغط مطولاً على الخانة واختر لصق',
  red:'أحمر',redHint:'الأحمر للّيل: ما يعمي عيونك في الظلام ويريّح البطارية.',ecoLbl:'توفير البطارية',on:'تشغيل',off:'إيقاف',
  ecoHint:'يسمح للشاشة تنطفي، ويخفف تحديث البوصلة، ويوقف الحركات. الـGPS يبقى بدقته الكاملة.',
- msNow:'الموسم الحالي',taliNow:'الطالع',tempLbl:'معدل الحرارة',avgT:c=>'المتوسط '+c+'°',dayLeft:'يوم باقي',daysLeft:n=>'باقي '+n+' '+(n===1?'يوم':n===2?'يومين':n<=10?'أيام':'يوم'),
- lastDay:'آخر يوم',range:(a,b,d,L)=>'من '+a+' إلى '+b+' · اليوم '+d+' من '+L,
+ msNow:'الموسم الحالي',faslNow:'الفصل',taliNow:'الطالع',tempLbl:'الحرارة',avgT:c=>'المتوسط '+c+'°',dayLeft:'يوم باقي',daysLeft:n=>'باقي '+n+' '+(n===1?'يوم':n===2?'يومين':n<=10?'أيام':'يوم'),
+ lastDay:'آخر يوم',range:(a,b,d,L)=>a+' – '+b+' · اليوم '+d+' من '+L,
  next:(e,n,d,dt)=>'⏭️ يدخل '+e+' <b>'+n+'</b> '+(d===1?'بكرة':'بعد '+d+' '+(d===2?'يومين':d<=10?'أيام':'يوم'))+' · '+dt,soon:'قرّب',
  temp:(n,a,b,c)=>'🌡️ معدل الحرارة في '+n+': <b><bdi dir="ltr">'+a+'° – '+b+'°</bdi></b> (المتوسط '+c+'°)',
  yearTitle:'المواسم والطوالع',yrMawasim:'المواسم (الدارجة)',yrTawali:'الطوالع',days:n=>n+' يوم',
@@ -585,7 +592,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  paste:'📋 Paste',pasteFail:'Long-press the field and choose Paste',
  red:'Red',redHint:'Red is for night: it keeps your eyes used to the dark and is easy on the battery.',ecoLbl:'Battery saver',on:'On',off:'Off',
  ecoHint:'Lets the screen turn off, updates the compass less often and stops animations. GPS keeps its full accuracy.',
- msNow:'Current season',taliNow:'Star (Tali‘)',tempLbl:'Typical temperature',avgT:c=>'avg '+c+'°',dayLeft:'days left',daysLeft:n=>n+' day'+(n===1?'':'s')+' left',
+ msNow:'Current season',faslNow:'Quarter',taliNow:'Star (Tali‘)',tempLbl:'Temperature',avgT:c=>'avg '+c+'°',dayLeft:'days left',daysLeft:n=>n+' day'+(n===1?'':'s')+' left',
  lastDay:'Last day',range:(a,b,d,L)=>a+' – '+b+' · day '+d+' of '+L,
  next:(e,n,d,dt)=>'⏭️ '+e+' <b>'+n+'</b> starts '+(d===1?'tomorrow':'in '+d+' days')+' · '+dt,soon:'Soon',
  temp:(n,a,b,c)=>'🌡️ Typical temperature in '+n+': <b><bdi dir="ltr">'+a+'° – '+b+'°</bdi></b> (avg '+c+'°)',
@@ -764,7 +771,7 @@ function render(){
   if(!nav){
     $('stage').classList.remove('arrived','aligned');$('warn').textContent=pos&&pos.acc>40?T('wWeakMove'):'';
     if(!pos){$('coords').textContent='--';return}
-    $('coords').innerHTML=fmtLat(pos.lat)+(cfg.fmt==='dms'?'<br>':',<br>')+fmtLon(pos.lon);
+    $('coords').textContent=fmtLL(pos.lat,pos.lon);
     $('hAcc').textContent='±'+Math.round(pos.acc)+' m';
     $('hAlt').textContent=pos.alt!=null?Math.round(pos.alt)+' m':'--';
     $('hSpd').textContent=pos.speed!=null&&pos.speed>=0?(pos.speed*3.6).toFixed(1)+' km/h':'--';
@@ -848,8 +855,9 @@ function infoTick(force){if(!pos)return;const now=Date.now();if(!force&&now-(inf
   $('placeName').textContent=near?net.place.txt:nearestCity(pos)+(navigator.onLine?'':' · '+T('approx'));
   const w=net.wx, fresh=w&&now-w.t<6*3600e3&&distance(pos,w)<20000;
   if(fresh){const ago=Math.round((now-w.t)/60e3);
-    $('wxTxt').innerHTML=wxName(w.code)+' · 🌡️ <b>'+w.temp+'°</b> · 💨 '+T('wind')+' <b>'+w.wind+'</b> '+T('kmh')+(ago>=15?' <span class="dimtxt">('+T('agoMin')(ago)+')</span>':'');$('wxRow').hidden=false}
-  else $('wxRow').hidden=true;
+    $('wxTxt').innerHTML=wxName(w.code)+' <b>'+w.temp+'°</b>'+(ago>=15?' <span class="dimtxt">('+T('agoMin')(ago)+')</span>':'');$('wxRow').hidden=false;
+    $('windTxt').innerHTML='💨 <b>'+w.wind+'</b> '+T('kmh');$('windTxt').hidden=false}
+  else{$('wxRow').hidden=true;$('windTxt').hidden=true}
   if(cfg.eco!=='on'||!w)netFetch()}
 addEventListener('online',()=>infoTick(true));
 
@@ -888,6 +896,7 @@ function seasonTick(){const now=new Date();
   $('msBar').style.width=Math.round(m.day/m.len*100)+'%';
   const last=new Date(m.next);last.setDate(last.getDate()-1);
   $('msRange').textContent=T('range')(fmtD(m.start),fmtD(last),m.day,m.len);
+  const fq=cyc(FUSUL,3,now);$('fsEmoji').textContent=f[2];$('fsName').textContent=nm(f);$('fsLeft').textContent=fq.left===1?T('lastDay'):T('daysLeft')(fq.left);
   $('tlName').textContent=nm(TAWALI[t.i]);$('tlLeft').textContent=t.left===1?T('lastDay'):T('daysLeft')(t.left);
   const tr=TAWALI[t.i];$('tlTemp').innerHTML='<bdi dir="ltr">'+Math.round(tr[4])+'° – '+tr[5]+'°</bdi>';$('tlAvg').textContent=T('avgT')(tr[6]);
   const nf=fasl(m.next);
