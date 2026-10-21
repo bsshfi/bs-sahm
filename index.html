@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#17110d">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=3.5">
+<link rel="apple-touch-icon" href="icon-180.png?v=3.7">
 <style>
 /* Layout: status chip on top; one page at a time in the middle (Home / Qibla share the compass dial,
    Favourites and Settings are scrolling lists); a tab bar fixed to the bottom. */
@@ -126,6 +126,35 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .tile b{font-family:var(--num);font-size:16px;font-weight:700}
 .info .wx b{font-family:var(--num);font-weight:600}
 .info .dimtxt,.dimtxt{color:var(--dim);font-size:12px}
+/* seasons & stars */
+.season{display:flex;flex-direction:column;align-items:stretch;gap:9px;text-align:start;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:14px;font:inherit;color:var(--fg);width:100%}
+.season:active{transform:scale(.99)}
+.shead{display:flex;align-items:center;gap:12px}
+.sem{font-size:30px;line-height:1;width:48px;height:48px;border-radius:14px;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;flex:none}
+.sname{flex:1;min-width:0}.sname b{font-size:20px;font-weight:800;display:block}
+.tl{color:var(--dim);font-size:11.5px}
+.sleft{text-align:center;flex:none}.sleft b{display:block;font-family:var(--num);font-size:24px;font-weight:800;color:var(--arrow);line-height:1}
+.sleft span{color:var(--dim);font-size:11px}
+.bar{height:6px;border-radius:99px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--arrow2),var(--arrow));border-radius:99px}
+[dir=rtl] .bar i{background:linear-gradient(270deg,var(--arrow2),var(--arrow))}
+.srange{color:var(--dim);font-size:12px;font-variant-numeric:tabular-nums}
+.schips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.schip{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:8px 10px;min-width:0}
+.schip>span{font-size:18px}.schip>div{min-width:0}
+.schip b{display:block;font-size:13.5px;line-height:1.35}
+.schip small{display:block;color:var(--dim);font-size:11px}
+.stemp{font-size:12.5px;color:var(--dim)}.stemp b{color:var(--fg);font-family:var(--num)}
+.snext{font-size:13px;border-top:1px dashed var(--line);padding-top:9px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.snext b{font-weight:700}
+.snext .soon{background:var(--arrow);color:var(--onArrow);font-size:11px;font-weight:700;border-radius:99px;padding:2px 8px}
+.yr .seg{margin-bottom:10px}
+.yrlist{display:flex;flex-direction:column;gap:6px;max-height:55vh;overflow:auto}
+.yrow{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+.yrow .e{font-size:18px}.yrow .n{flex:1;min-width:0;font-weight:600}.yrow .n small{display:block;color:var(--dim);font-weight:400;font-size:11.5px}
+.yrow .dd{color:var(--dim);font-size:12px;text-align:end;font-variant-numeric:tabular-nums}
+.yrow.now{border-color:var(--arrow);background:var(--okBg)}.yrow.now .n{color:var(--arrow)}
+
 /* location: the hero card, in the icon's coffee brown */
 .loc{background:linear-gradient(160deg,var(--dial2),var(--dial));color:var(--dialTxt);border-radius:22px;padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:12px;box-shadow:0 12px 30px var(--shadow)}
 .loc .lbl{color:var(--dialDim);font-size:13px;display:flex;align-items:center;gap:8px}
@@ -285,6 +314,20 @@ dialog .row{margin-top:16px}
         </div>
         <div class="r wx" id="wxRow" hidden><span id="wxTxt"></span></div>
       </div>
+      <button class="season" id="seasonCard" type="button">
+        <div class="shead">
+          <span class="sem" id="msEmoji">🍂</span>
+          <div class="sname"><div class="tl" data-t="msNow"></div><b id="msName">--</b></div>
+          <div class="sleft"><b id="msLeft">--</b><span id="msLeftLbl"></span></div>
+        </div>
+        <div class="bar"><i id="msBar"></i></div>
+        <div class="srange" id="msRange"></div>
+        <div class="schips">
+          <div class="schip"><span>⭐</span><div><div class="tl" data-t="taliNow"></div><b id="tlName">--</b><small id="tlLeft"></small></div></div>
+          <div class="schip"><span>🌡️</span><div><div class="tl" data-t="tempLbl"></div><b id="tlTemp">--</b><small id="tlAvg"></small></div></div>
+        </div>
+        <div class="snext" id="msNext"></div>
+      </button>
       <div class="loc">
         <div class="lbl"><span class="pulse"></span><span data-t="yourLoc"></span></div>
         <div class="coords" id="coords">--</div>
@@ -361,7 +404,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.5</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 3.7</span></div>
     </div>
   </section>
 </main>
@@ -404,6 +447,14 @@ dialog .row{margin-top:16px}
   <div class="row"><button class="primary" id="pSave" data-t="save"></button><button id="pClose" data-t="close"></button></div>
 </dialog>
 
+<dialog id="dlgSeasons" class="yr">
+  <h3 data-t="yearTitle"></h3>
+  <div class="seg" id="yrSeg"><button data-y="m" data-t="yrMawasim"></button><button data-y="t" data-t="yrTawali"></button></div>
+  <div class="yrlist" id="yrList"></div>
+  <div class="sh" data-t="yrSrc" style="margin-top:10px"></div>
+  <div class="row"><button id="yrClose" data-t="close"></button></div>
+</dialog>
+
 <dialog id="dlgRestore">
   <h3 data-t="restoreTitle"></h3>
   <div class="sub" data-t="restoreHint"></div>
@@ -421,7 +472,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 3.5</div>
+  <div class="vpill">Ver 3.7</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -491,7 +542,14 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  shareMsg:(n,c)=>'📍 '+n+'\n'+c+'\nأُرسل من تطبيق سهم: انسخ الإحداثيات والصقها في «أضف إحداثيات»',
  paste:'📋 لصق',pasteFail:'اضغط مطولاً على الخانة واختر لصق',
  red:'أحمر',redHint:'الأحمر للّيل: ما يعمي عيونك في الظلام ويريّح البطارية.',ecoLbl:'توفير البطارية',on:'تشغيل',off:'إيقاف',
- ecoHint:'يسمح للشاشة تنطفي، ويخفف تحديث البوصلة، ويوقف الحركات. الـGPS يبقى بدقته الكاملة.'},
+ ecoHint:'يسمح للشاشة تنطفي، ويخفف تحديث البوصلة، ويوقف الحركات. الـGPS يبقى بدقته الكاملة.',
+ msNow:'الموسم الحالي',taliNow:'الطالع',tempLbl:'معدل الحرارة',avgT:c=>'المتوسط '+c+'°',dayLeft:'يوم باقي',daysLeft:n=>'باقي '+n+' '+(n===1?'يوم':n===2?'يومين':n<=10?'أيام':'يوم'),
+ lastDay:'آخر يوم',range:(a,b,d,L)=>'من '+a+' إلى '+b+' · اليوم '+d+' من '+L,
+ next:(e,n,d,dt)=>'⏭️ يدخل '+e+' <b>'+n+'</b> '+(d===1?'بكرة':'بعد '+d+' '+(d===2?'يومين':d<=10?'أيام':'يوم'))+' · '+dt,soon:'قرّب',
+ temp:(n,a,b,c)=>'🌡️ معدل الحرارة في '+n+': <b><bdi dir="ltr">'+a+'° – '+b+'°</bdi></b> (المتوسط '+c+'°)',
+ yearTitle:'المواسم والطوالع',yrMawasim:'المواسم (الدارجة)',yrTawali:'الطوالع',days:n=>n+' يوم',
+ yrSrc:'المواسم والطوالع ومعدلات الحرارة من «دليل الطوالع والنجوم» للأستاذ الدكتور عبدالله المسند. كل التواريخ محفوظة في التطبيق وتشتغل بدون إنترنت.',
+ months:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']},
 en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow. GPS and compass only, no maps, no internet.',start:'Start',
  tabSet:'Settings',tabQibla:'Qibla',tabFav:'Favorites',tabHome:'Home',
  gWait:'Waiting for GPS…',gStop:'GPS stopped',gEx:'GPS excellent',gGood:'GPS good',gMid:'GPS fair',gWeak:'GPS weak',gPerm:'No location permission',gNone:'No GPS signal',
@@ -526,7 +584,14 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  shareMsg:(n,c)=>'📍 '+n+'\n'+c+'\nSent from Sahm: copy the coordinates and paste them into “Add coordinates”',
  paste:'📋 Paste',pasteFail:'Long-press the field and choose Paste',
  red:'Red',redHint:'Red is for night: it keeps your eyes used to the dark and is easy on the battery.',ecoLbl:'Battery saver',on:'On',off:'Off',
- ecoHint:'Lets the screen turn off, updates the compass less often and stops animations. GPS keeps its full accuracy.'}};
+ ecoHint:'Lets the screen turn off, updates the compass less often and stops animations. GPS keeps its full accuracy.',
+ msNow:'Current season',taliNow:'Star (Tali‘)',tempLbl:'Typical temperature',avgT:c=>'avg '+c+'°',dayLeft:'days left',daysLeft:n=>n+' day'+(n===1?'':'s')+' left',
+ lastDay:'Last day',range:(a,b,d,L)=>a+' – '+b+' · day '+d+' of '+L,
+ next:(e,n,d,dt)=>'⏭️ '+e+' <b>'+n+'</b> starts '+(d===1?'tomorrow':'in '+d+' days')+' · '+dt,soon:'Soon',
+ temp:(n,a,b,c)=>'🌡️ Typical temperature in '+n+': <b><bdi dir="ltr">'+a+'° – '+b+'°</bdi></b> (avg '+c+'°)',
+ yearTitle:'Seasons and stars',yrMawasim:'Seasons',yrTawali:'Stars',days:n=>n+' days',
+ yrSrc:'Seasons, stars and temperatures from “Guide to the Rising Stars” by Prof. Abdullah Al-Misnid. All dates are built into the app and work offline.',
+ months:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']}};
 
 /* ---------- settings store ---------- */
 const cfg={arrive:2,fmt:'dec',theme:'light',lang:'ar',eco:'off',sort:'near'};
@@ -788,6 +853,63 @@ function infoTick(force){if(!pos)return;const now=Date.now();if(!force&&now-(inf
   if(cfg.eco!=='on'||!w)netFetch()}
 addEventListener('online',()=>infoTick(true));
 
+/* ---------- seasons (الدارجة) and rising stars (الطوالع) — built in, no internet ----------
+   From «دليل الطوالع والنجوم» (أ.د عبدالله المسند): 28 stars, 13 days each (الجبهة 14) = 365.
+   Two typos in the printed table are corrected here: الهنعة starts 16 July (not June) and الذراع 29 July (not June);
+   the chain proves it (الهقعة 3 Jul + 13 = 16 Jul, + 13 = 29 Jul, + 13 = 11 Aug = النثرة).
+   Each row: Arabic, English, start month, start day, min °, max °, average °. */
+const TAWALI=[['الإكليل','Al-Iklil',12,7,9,23,15.8],['القلب','Al-Qalb',12,20,7.2,21,14.0],['الشولة','Ash-Shawlah',1,2,6.5,20,13.2],['النعائم','An-Na‘aim',1,15,7,20,13.6],
+['البلدة','Al-Baldah',1,28,6.5,21,13.6],['سعد الذابح','Sa‘d adh-Dhabih',2,10,8.1,20,14.2],['سعد بلع','Sa‘d Bula‘',2,23,9.7,23,16.5],
+['سعد السعود','Sa‘d as-Su‘ud',3,8,12.7,27,19.6],['سعد الأخبية','Sa‘d al-Akhbiyah',3,21,13.3,26,19.4],['المقدم','Al-Muqaddam',4,3,15.9,30,23.1],['المؤخر','Al-Mu’akhkhar',4,16,18,32,25.1],
+['الرشا','Ar-Risha',4,29,20.4,36,28.0],['الشرطين','Ash-Sharatain',5,12,22.7,38,30.5],['البطين','Al-Butain',5,25,22.8,40,31.4],
+['الثريا','Ath-Thurayya',6,7,23.3,41,32.0],['الدبران','Ad-Dabaran',6,20,22.2,36,29.1],['الهقعة','Al-Haq‘ah',7,3,22.5,39,31.0],['الهنعة','Al-Han‘ah',7,16,24.5,43,33.5],
+['الذراع','Adh-Dhira‘',7,29,24,43,33.3],['النثرة','An-Nathrah',8,11,22.9,42,32.4],['الطرف','At-Tarf',8,24,22.5,42,32.0],
+['الجبهة','Al-Jabhah',9,6,22.4,41,31.5],['الزبرة','Az-Zubrah',9,20,20.4,38,29.4],['الصرفة','As-Sarfah',10,3,18.6,36,27.4],['العواء','Al-‘Awwa’',10,16,17.4,34,25.6],
+['السماك','As-Simak',10,29,15.1,30,22.6],['الغفر','Al-Ghafr',11,11,12.1,26,19.2],['الزبانا','Az-Zubana',11,24,11.1,25,18.0]];
+// the 12 seasons as people call them (الدارجة): 39+26+39+26+26+39+13+26+13+13+53+52 = 365
+const MAWASIM=[['المربعانية','Al-Murabba‘aniyah',12,7],['الشبط','Ash-Shabat',1,15],['العقارب','Al-‘Aqarib',2,10],['الحميمين','Al-Hamimain',3,21],['الذراعين','Adh-Dhira‘ain',4,16],
+['الثريا','Ath-Thurayya',5,12],['التويبع','At-Tuwaiyi‘',6,20],['الجوزاء','Al-Jawza’',7,3],['المرزم','Al-Mirzam',7,29],['الكليبين','Al-Kulaibain',8,11],['سهيل','Suhail',8,24],['الوسم','Al-Wasm',10,16]];
+// the four quarters of the table, for the emoji
+const FUSUL=[['الشتاء','Winter','❄️',12,7],['الربيع','Spring','🌸',3,8],['الصيف','Summer','☀️',6,7],['الخريف','Autumn','🍂',9,6]];
+const day0=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate());
+const dDiff=(a,b)=>Math.round((day0(b)-day0(a))/864e5);
+// find the period (from a cyclic list of [.., month, day] starts) that contains a date
+function cyc(list,mi,date){const t=day0(date),y=t.getFullYear(),c=[];
+  [y-1,y,y+1].forEach(Y=>list.forEach((r,i)=>c.push({i,s:new Date(Y,r[mi]-1,r[mi+1])})));c.sort((a,b)=>a.s-b.s);
+  let k=0;for(let j=0;j<c.length;j++)if(c[j].s<=t)k=j;const cur=c[k],nx=c[k+1];
+  return{i:cur.i,start:cur.s,next:nx.s,nextI:nx.i,len:dDiff(cur.s,nx.s),day:dDiff(cur.s,t)+1,left:dDiff(t,nx.s)}}
+const nm=r=>cfg.lang==='en'?r[1]:r[0];
+const fmtD=d=>cfg.lang==='en'?T('months')[d.getMonth()]+' '+d.getDate():d.getDate()+' '+T('months')[d.getMonth()];
+const fasl=d=>FUSUL[cyc(FUSUL,3,d).i];
+function seasonTick(){const now=new Date();
+  const m=cyc(MAWASIM,2,now), t=cyc(TAWALI,2,now), f=fasl(now);
+  $('msEmoji').textContent=f[2];$('msName').textContent=nm(MAWASIM[m.i]);
+  $('msLeft').textContent=m.left;$('msLeftLbl').textContent=T('dayLeft');
+  $('msBar').style.width=Math.round(m.day/m.len*100)+'%';
+  const last=new Date(m.next);last.setDate(last.getDate()-1);
+  $('msRange').textContent=T('range')(fmtD(m.start),fmtD(last),m.day,m.len);
+  $('tlName').textContent=nm(TAWALI[t.i]);$('tlLeft').textContent=t.left===1?T('lastDay'):T('daysLeft')(t.left);
+  const tr=TAWALI[t.i];$('tlTemp').innerHTML='<bdi dir="ltr">'+Math.round(tr[4])+'° – '+tr[5]+'°</bdi>';$('tlAvg').textContent=T('avgT')(tr[6]);
+  const nf=fasl(m.next);
+  $('msNext').innerHTML=T('next')(nf[2],nm(MAWASIM[m.nextI]),m.left,fmtD(m.next))+(m.left<=7?' <span class="soon">'+T('soon')+'</span>':'');
+  seasonTick.day=now.getDate()}
+setInterval(()=>{if(new Date().getDate()!==seasonTick.day)seasonTick()},60e3);
+// the year at a glance
+let yrTab='m';
+function fillYear(){const now=new Date(),L=$('yrList');L.innerHTML='';
+  $$('#yrSeg button').forEach(b=>b.classList.toggle('on',b.dataset.y===yrTab));
+  const list=yrTab==='m'?MAWASIM:TAWALI, cur=cyc(list,2,now).i;
+  list.forEach((r,i)=>{const p=cyc(list,2,new Date(now.getFullYear(),r[2]-1,r[3])), last=new Date(p.next);last.setDate(last.getDate()-1);
+    const sub=yrTab==='t'?nm(MAWASIM[cyc(MAWASIM,2,p.start).i])+' · 🌡️ \u2066'+Math.round(r[4])+'° – '+r[5]+'°\u2069':T('days')(p.len);
+    const row=document.createElement('div');row.className='yrow'+(i===cur?' now':'');
+    row.innerHTML='<span class="e"></span><div class="n"><span></span><small></small></div><div class="dd"></div>';
+    row.querySelector('.e').textContent=fasl(p.start)[2];row.querySelector('.n span').textContent=nm(r);
+    row.querySelector('small').textContent=sub;row.querySelector('.dd').textContent=fmtD(p.start)+' – '+fmtD(last);
+    L.appendChild(row);if(i===cur)setTimeout(()=>row.scrollIntoView({block:'center'}),50)})}
+$('seasonCard').onclick=()=>{fillYear();$('dlgSeasons').showModal()};
+$$('#yrSeg button').forEach(b=>b.onclick=()=>{yrTab=b.dataset.y;fillYear()});
+$('yrClose').onclick=()=>$('dlgSeasons').close();
+
 /* ---------- tabs ---------- */
 function setTitle(){$('ptitle').textContent=tab==='home'?'':T({set:'tabSet',qibla:'tabQibla',fav:'tabFav'}[tab])}
 function go(name){tab=name;smooth=null;smoothB=null;arrived=false;
@@ -902,7 +1024,8 @@ $('rOk').onclick=()=>{
 function paintSet(){$$('.seg[data-k]').forEach(s=>{const k=s.dataset.k;s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(cfg[k])===b.dataset.v))})}
 $$('.seg[data-k] button').forEach(b=>b.onclick=()=>{
   const k=b.parentNode.dataset.k,v=b.dataset.v;cfg[k]=k==='arrive'?+v:v;saveCfg();
-  if(k==='theme'||k==='eco')applyTheme();if(k==='lang'){applyLang();infoTick(true)}
+  if(k==='theme'||k==='eco')applyTheme();
+  if(k==='lang'){applyLang();infoTick(true);seasonTick()}
   if(k==='eco')wakeOn();
   paintSet();render()});
 $('share').onclick=async()=>{const url=location.href.split('#')[0];
@@ -962,7 +1085,7 @@ function showInstall(){
 $('instNow').onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$('instNow').hidden=true};
 $('go').onclick=()=>{if(!isApp&&!devBypass){showInstall();return}start()};
 
-load();applyTheme();applyLang();paintStart();
+load();applyTheme();applyLang();paintStart();seasonTick();
 const hh=decodeURIComponent(location.hash.slice(1));const hc=hh&&parseCoord(hh);
 if(hc){let p=places.find(x=>Math.abs(x.lat-hc.lat)<1e-6&&Math.abs(x.lon-hc.lon)<1e-6);if(!p)p=addPlace(T('fromLink'),hc);cur=p.id;save()}
 go('home');
