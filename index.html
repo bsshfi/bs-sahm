@@ -11,7 +11,7 @@
 <script>/* pick the saved theme before the first paint, so the edges never flash another colour */
 try{var t=(JSON.parse(localStorage.getItem('sahm.set')||'{}').theme)||'light';if(['light','dark','red'].indexOf(t)<0)t='light';document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=6.6">
+<link rel="apple-touch-icon" href="icon-180.png?v=6.8">
 <style>
 /* UI font: IBM Plex Sans Arabic (SIL Open Font License, see OFL-IBM-Plex.txt), bundled so it works offline */
 @font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(plex-ar-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}
@@ -493,6 +493,12 @@ html.app body{background-color:var(--sky1);background-image:linear-gradient(var(
   background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:8px 8px 8px 12px;box-shadow:0 10px 28px var(--shadow);font-size:13.5px;font-weight:600}
 .upd>span{flex:1;min-width:0}
 .upd button{padding:8px 12px;font-size:13px;border-radius:12px;flex:none}
+
+.about .tag{color:var(--fg);font-weight:600}
+.about .tag2{color:var(--dim);font-size:13.5px;margin-top:2px}
+.about p+p{margin-top:8px}
+.about .mail{color:var(--arrow);text-decoration:none;user-select:text;-webkit-user-select:text}
+.about .aend{color:var(--dim);font-size:13px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -640,7 +646,7 @@ html.app body{background-color:var(--sky1);background-image:linear-gradient(var(
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 6.6</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 6.8</span></div>
     </div>
   </section>
 </main>
@@ -746,12 +752,15 @@ html.app body{background-color:var(--sky1);background-image:linear-gradient(var(
   <div class="logo" role="img" aria-label="سهم"></div>
   <div class="name"><span>Sahm</span></div>
   <div class="tag" data-t="tagline"></div>
+  <div class="tag2" data-t="aboutSub"></div>
   <p data-t="blurb"></p>
+  <p data-t="blurb2"></p>
   <div class="credit">
     <div class="by" data-t="by"></div>
-    <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
+    <b dir="ltr"><a class="mail" href="mailto:bsshfi@gmail.com">bsshfi@gmail.com</a></b>
   </div>
-  <div class="vpill">Ver 6.6</div>
+  <div class="vpill"><span data-t="verLbl"></span> 6.8</div>
+  <div class="aend" data-t="aboutEnd"></div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -809,10 +818,11 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  copied:'تم النسخ',canceled:'تم إلغاء التوجيه',waitGps:'بانتظار GPS',noPlaces:'ما فيه أماكن محفوظة',place:'مكان',fromLink:'من رابط',backupTitle:'سهم — أماكني',
  arriveLbl:'مسافة «وصلت»',arriveHint:'10 م مناسبة لو تدور على سيارة أو خيمة.',fmtLbl:'صيغة الإحداثيات',fmtHint:'للعرض والنسخ. النسخة الاحتياطية تبقى عشرية دائماً.',
  themeLbl:'نمط المظهر',light:'فاتح',dark:'مظلم',langLbl:'اللغة',share:'مشاركة التطبيق',about:'حول التطبيق',version:'نسخة التطبيق',
- shareText:'سهم: يوجهك لأي مكان بسهم واحد، بدون خرائط وبدون إنترنت.',linkCopied:'تم نسخ رابط التطبيق',
- tagline:'سهم واحد يوصلك. بدون خرائط، بدون إنترنت.',
- blurb:'مستوحى من خاصية قديمة في جوالات نوكيا: تحفظ مكاناً أو تكتب إحداثياته، وسهم واحد يؤشر لك على اتجاهه مع المسافة المتبقية. يعتمد على GPS والبوصلة فقط، وأماكنك تبقى في جهازك.',
- by:'فكرة وتنفيذ',author:'bsshfi@gmail.com',close:'إغلاق',am:'ص',pm:'م',
+ shareText:'🏹 سهم | Sahm\nوجهتك بسهم واحد.\nاحفظ موقعك، أو أدخل الإحداثيات، واتبع السهم حتى تصل. بدون خرائط، وبدون إنترنت.\n📍 وجهة واضحة. طريق أبسط.\nجرّبه:',linkCopied:'تم نسخ رابط التطبيق',
+ tagline:'وجهتك بسهم واحد.',aboutSub:'فكرة بسيطة. وصول مباشر.',
+ blurb:'يمنحك سهم طريقة مختلفة للوصول إلى الأماكن؛ احفظ موقعًا تريد العودة إليه، أو أدخل إحداثيات وجهتك، واتبع اتجاه السهم واعرف المسافة المتبقية حتى تصل.',
+ blurb2:'لا تحتاج إلى خرائط أو اتصال بالإنترنت لتحديد اتجاه وجهتك. يعتمد سهم على GPS والبوصلة في جهازك، وتبقى مواقعك المحفوظة على جهازك.',verLbl:'الإصدار',aboutEnd:'سهم — وجهتك، على طريقتك.',
+ by:'فكرة وتطوير',author:'bsshfi@gmail.com',close:'إغلاق',am:'ص',pm:'م',
  sunrise:'الشروق',sunset:'الغروب',near:(c,d,dir)=>'قرب '+c+' · '+d+' '+dir+'ها',inCity:c=>'في '+c+' (تقريبي)',approx:'تقريبي بدون إنترنت',
  wx:{0:'☀️ صافي',1:'🌤️ صافي غالباً',2:'⛅ غائم جزئياً',3:'☁️ غائم',45:'🌫️ ضباب',48:'🌫️ ضباب',51:'🌦️ رذاذ',61:'🌧️ مطر',71:'❄️ ثلج',80:'🌧️ زخات',95:'⛈️ عاصفة رعدية'},
  wind:'رياح',kmh:'كم/س',agoMin:n=>'قبل '+n+' د',
@@ -832,7 +842,7 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  arTitle:'📐 قياس المساحة',arStart:'▶︎ ابدأ وامشِ حولها',arCorner:'📍 أضف ركن',arEmpty:'امشِ حول المكان، أو قف عند كل ركن واضغط «أضف ركن»',
  arHint:'للدقة: قف عند كل ركن واضغط «أضف ركن» (يحسب متوسط آخر القراءات). المساحة تقريبية حسب دقة الـGPS.',cornerAdded:'تمت إضافة الركن',
  sosTitle:'🆘 الطوارئ',sosShare:'📤 أرسل موقعي',sosMeta:(a,al,t,age)=>'دقة ±'+a+' م · ارتفاع '+al+' م · آخر قراءة '+t+' (قبل '+age+' ث)',
- sosMsg:(c,a,t)=>'🆘 أحتاج مساعدة. موقعي:\n'+c+'\nدقة ±'+a+' م · الساعة '+t+'\nhttps://maps.google.com/?q='+c.replace(' ',''),
+ sosMsg:(c,a,t)=>'🆘 أحتاج مساعدة\nموقعي الحالي:\n'+c+'\nدقة الموقع: ±'+a+' م · '+t+'\nhttps://maps.google.com/?q='+c.replace(' ',''),
  sosNote:'«أرسل موقعي» يفتح المشاركة: اختر الرسائل عشان توصل SMS حتى بدون إنترنت.',
  mdLit:'الإضاءة',mdRise:'طلوع القمر',mdSet:'غروب القمر',mdNote:'الطور والإضاءة وأوقات القمر محسوبة في الجوال بدون إنترنت، والأوقات تقريبية بدقائق.',
  prNext:n=>'باقي على '+n,pr_fajr:'الفجر',pr_sunrise:'الشروق',pr_dhuhr:'الظهر',pr_asr:'العصر',pr_maghrib:'المغرب',pr_isha:'العشاء',
@@ -866,9 +876,10 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  copied:'Copied',canceled:'Guiding stopped',waitGps:'Waiting for GPS',noPlaces:'No saved places',place:'Place',fromLink:'From link',backupTitle:'Sahm — my places',
  arriveLbl:'"Arrived" distance',arriveHint:'10 m works well when looking for a car or a tent.',fmtLbl:'Coordinate format',fmtHint:'For display and copying. Backups always stay decimal.',
  themeLbl:'Appearance',light:'Light',dark:'Dark',langLbl:'Language',share:'Share the app',about:'About',version:'App version',
- shareText:'Sahm: guides you anywhere with one arrow. No maps, no internet.',linkCopied:'App link copied',
- tagline:'One arrow gets you there. No maps, no internet.',
- blurb:'Inspired by a feature from classic Nokia phones: save a place or enter its coordinates, and one arrow points the way with the distance left. It uses only GPS and the compass, and your places stay on your device.',
+ shareText:'🏹 Sahm | سهم\nYour destination, one arrow.\nSave your spot or enter coordinates, then follow the arrow until you arrive. No maps, no internet.\n📍 A clear destination. A simpler way.\nTry it:',linkCopied:'App link copied',
+ tagline:'Your destination, one arrow.',aboutSub:'A simple idea. A direct way there.',
+ blurb:'Sahm gives you a different way to reach places: save a spot you want to come back to, or enter your destination’s coordinates, then follow the arrow and watch the distance left until you arrive.',
+ blurb2:'You don’t need maps or an internet connection to find your way. Sahm uses your phone’s GPS and compass, and your saved places stay on your device.',verLbl:'Version',aboutEnd:'Sahm — your destination, your way.',
  by:'Idea & development',author:'bsshfi@gmail.com',close:'Close',am:'AM',pm:'PM',
  sunrise:'Sunrise',sunset:'Sunset',near:(c,d,dir)=>d+' '+dir+' of '+c,inCity:c=>'In '+c+' (approx.)',approx:'Approximate, offline',
  wx:{0:'☀️ Clear',1:'🌤️ Mostly clear',2:'⛅ Partly cloudy',3:'☁️ Cloudy',45:'🌫️ Fog',48:'🌫️ Fog',51:'🌦️ Drizzle',61:'🌧️ Rain',71:'❄️ Snow',80:'🌧️ Showers',95:'⛈️ Thunderstorm'},
@@ -889,7 +900,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  arTitle:'📐 Measure area',arStart:'▶︎ Start and walk around',arCorner:'📍 Add corner',arEmpty:'Walk around the place, or stand at each corner and tap “Add corner”',
  arHint:'For accuracy: stand at each corner and tap “Add corner” (it averages the latest readings). The area is as accurate as the GPS.',cornerAdded:'Corner added',
  sosTitle:'🆘 Emergency',sosShare:'📤 Send my location',sosMeta:(a,al,t,age)=>'±'+a+' m · altitude '+al+' m · last reading '+t+' ('+age+' s ago)',
- sosMsg:(c,a,t)=>'🆘 I need help. My location:\n'+c+'\n±'+a+' m · at '+t+'\nhttps://maps.google.com/?q='+c.replace(' ',''),
+ sosMsg:(c,a,t)=>'🆘 I need help\nMy current location:\n'+c+'\nLocation accuracy: ±'+a+' m · '+t+'\nhttps://maps.google.com/?q='+c.replace(' ',''),
  sosNote:'“Send my location” opens sharing: choose Messages so it goes as SMS even without internet.',
  mdLit:'Illuminated',mdRise:'Moonrise',mdSet:'Moonset',mdNote:'Phase, light and moon times are worked out on the phone with no internet; times are approximate to a few minutes.',
  prNext:n=>n+' in',pr_fajr:'Fajr',pr_sunrise:'Sunrise',pr_dhuhr:'Dhuhr',pr_asr:'Asr',pr_maghrib:'Maghrib',pr_isha:'Isha',
@@ -1548,9 +1559,9 @@ $$('.seg[data-k] button').forEach(b=>b.onclick=()=>{
   if(k==='lang'){applyLang();infoTick(true);seasonTick();moonTick();paintPray.key=''}
   if(k==='eco')wakeOn();
   paintSet();render()});
-$('share').onclick=async()=>{const url=location.href.split('#')[0];
-  if(navigator.share){try{await navigator.share({title:T('appName'),text:T('shareText'),url});return}catch(e){if(e.name==='AbortError')return}}
-  if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast(T('linkCopied'))).catch(()=>toast(url));else toast(url)};
+$('share').onclick=async()=>{const url=location.origin+location.pathname.replace(/index\.html$/,''),text=T('shareText')+'\n'+url;
+  if(navigator.share){try{await navigator.share({title:T('appName'),text});return}catch(e){if(e.name==='AbortError')return}}
+  if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>toast(T('linkCopied'))).catch(()=>toast(url));else toast(url)};
 $('aboutBtn').onclick=()=>$('dlgAbout').showModal();
 $('aClose').onclick=()=>$('dlgAbout').close();
 
