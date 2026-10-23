@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#17110d">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=5.0">
+<link rel="apple-touch-icon" href="icon-180.png?v=6.0">
 <style>
 /* UI font: IBM Plex Sans Arabic (SIL Open Font License, see OFL-IBM-Plex.txt), bundled so it works offline */
 @font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(plex-ar-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}
@@ -61,17 +61,21 @@ svg{display:block}
 .ltr{direction:ltr;unicode-bidi:isolate}
 
 /* top status */
-.top{display:flex;align-items:center;gap:8px;padding:10px 0 2px}
-.chips{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
-.chips .chip{padding:5px 10px}
-.moonw{margin-inline-start:auto;flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:0;padding:0 2px;color:var(--fg)}
-.moonw svg{width:38px;height:38px;filter:drop-shadow(0 2px 6px var(--shadow))}
-.moonw span{font-size:11.5px;font-weight:700;white-space:nowrap;color:var(--dim)}
+.top{display:flex;align-items:center;gap:6px;padding:8px 0 0}
+.tcol{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.chips{display:flex;gap:5px;min-width:0}
+.chips .chip{padding:4px 8px;gap:5px;min-width:0;flex:0 1 auto}
+.chips .chip b{font-size:12px}.chips .chip .acc{font-size:11px}
+.chips .bars{height:12px}.chips .bars i{width:3px}.chips .bars i:nth-child(4){height:12px}.chips .bars i:nth-child(3){height:9px}.chips .bars i:nth-child(2){height:6px}.chips .bars i:nth-child(1){height:4px}
+.hshort{margin-inline-start:auto;font-size:12px;font-weight:700;color:var(--dim);white-space:nowrap;font-variant-numeric:tabular-nums}
+.ptitle:not(:empty)~.hshort{display:none}
+.moonw{flex:none;display:flex;background:transparent;border:0;padding:0;margin:-4px -4px -10px 0;color:var(--fg);box-shadow:none}
+.moonw svg{width:58px;height:58px;filter:drop-shadow(0 3px 10px var(--shadow))}
 .moon-dlg{text-align:center}.moonbig{width:120px;height:120px;margin:4px auto 6px;display:block;filter:drop-shadow(0 6px 18px var(--shadow))}
 .moon-dlg h3{margin:4px 0 2px}.mdh{color:var(--dim);margin-bottom:12px}
 .sunwarn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:8px!important;padding-bottom:8px!important;background:var(--okBg);border:1px solid var(--okLine);color:var(--ok);border-radius:14px;padding:8px 12px;font-size:13.5px;font-weight:600;text-align:center}
 .tools{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.tool{flex-direction:column;gap:3px;padding:9px 2px;font-size:11.5px;border-radius:14px;position:relative}
+.tool{flex-direction:column;gap:3px;padding:7px 2px;font-size:11.5px;border-radius:14px;position:relative}
 .tool .ti{font-size:20px;line-height:1}
 .tool.sos{border-color:var(--badLine);color:var(--bad);background:var(--badBg)}
 .rec{position:absolute;top:6px;inset-inline-end:8px;width:8px;height:8px;border-radius:50%;background:var(--bad);animation:pulse 1.4s infinite}
@@ -92,7 +96,7 @@ svg{display:block}
 .sosdms{font-family:var(--num);direction:ltr;color:var(--dim);font-size:15px}
 .sosmeta{color:var(--dim);font-size:13px;margin:8px 0 14px}
 .calls{display:flex;gap:8px;margin:12px 0 8px}
-.call{flex:1;text-decoration:none;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 6px;font-weight:700;font-family:var(--num)}
+.call{flex:1;text-align:center;user-select:text;-webkit-user-select:text;text-decoration:none;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 6px;font-weight:700;font-family:var(--num)}
 .pray{width:100%;max-width:440px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px}
 .pnext{display:flex;align-items:center;justify-content:space-between;font-weight:700}
 .pnext b{font-family:var(--num);color:var(--arrow);font-size:18px}
@@ -115,7 +119,7 @@ svg{display:block}
 .sub .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-inline-end:5px;vertical-align:1px}
 
 /* pages */
-main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(58px + env(safe-area-inset-bottom))}
 .page{flex:1;min-height:0}
 .scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:8px 0 24px;display:flex;flex-direction:column;gap:12px}
 .scroll>*{flex-shrink:0}
@@ -158,7 +162,7 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .warn:not(:empty){color:var(--ok);background:var(--okBg);border:1px solid var(--okLine);border-radius:12px;padding:8px 12px;max-width:420px;line-height:1.5}
 
 /* home idle */
-.here{width:100%;max-width:440px;display:flex;flex-direction:column;gap:9px}
+.here{width:100%;max-width:440px;display:flex;flex-direction:column;gap:8px}
 .info{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px 12px;display:flex;flex-direction:column;gap:7px;font-size:13.5px}
 .info .wxb{margin-inline-start:auto;font-weight:500;flex:none;white-space:nowrap}.info .wxb b{font-family:var(--num)}
 .srow{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:0 4px;font-size:13px}
@@ -203,19 +207,19 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .yrow.now{border-color:var(--arrow);background:var(--okBg)}.yrow.now .n{color:var(--arrow)}
 
 /* location: the hero card, in the icon's coffee brown */
-.loc{background:linear-gradient(160deg,var(--dial2),var(--dial));color:var(--dialTxt);border-radius:20px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 12px 30px var(--shadow)}
+.loc{background:linear-gradient(160deg,var(--dial2),var(--dial));color:var(--dialTxt);border-radius:18px;padding:9px 12px;display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:0 12px 30px var(--shadow)}
 .loc .lbl{color:var(--dialDim);font-size:13px;display:flex;align-items:center;gap:8px}
 .pulse{width:8px;height:8px;border-radius:50%;background:var(--arrow);box-shadow:0 0 0 0 var(--glow);animation:pulse 2s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
-.coords{direction:ltr;font-family:var(--num);font-size:clamp(19px,6vw,26px);font-weight:700;font-variant-numeric:tabular-nums;text-align:center;line-height:1.25;user-select:text;-webkit-user-select:text;letter-spacing:-.01em}
-.mini{width:100%;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--dialLine);padding-top:8px}
-.mini>div{text-align:center;display:flex;flex-direction:column;gap:3px}
+.coords{direction:ltr;font-family:var(--num);font-size:clamp(18px,5.4vw,23px);font-weight:700;font-variant-numeric:tabular-nums;text-align:center;line-height:1.25;user-select:text;-webkit-user-select:text;letter-spacing:-.01em}
+.mini{width:100%;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--dialLine);padding-top:5px}
+.mini>div{text-align:center;display:flex;flex-direction:column;gap:1px}
 .mini>div+div{border-inline-start:1px solid var(--dialLine)}
-.mini span{color:var(--dialDim);font-size:11.5px}
-.mini b{font-family:var(--num);font-size:16px;font-weight:700;direction:ltr}
-.loc .pill{background:rgba(255,255,255,.08);border-color:var(--dialLine);color:var(--dialTxt)}
+.mini span{color:var(--dialDim);font-size:11px}
+.mini b{font-family:var(--num);font-size:14.5px;font-weight:700;direction:ltr}
+.loc .pill{padding:5px 14px;font-size:13px;background:rgba(255,255,255,.08);border-color:var(--dialLine);color:var(--dialTxt)}
 .pill{padding:8px 16px;font-size:14px;border-radius:999px}
-.big{width:100%;padding:14px;font-size:16px;border-radius:16px;box-shadow:0 8px 20px var(--glow)}
+.big{width:100%;padding:12px;font-size:16px;border-radius:16px;box-shadow:0 8px 20px var(--glow)}
 .startrow{display:flex;gap:8px}.startrow .big{flex:1}
 .startrow .sq{width:56px;flex:none;padding:0;border-radius:16px;color:var(--bad)}
 .startrow .sq.sure{background:var(--bad);color:#fff;border-color:var(--bad)}
@@ -271,9 +275,9 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px soli
 
 /* tab bar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;background:var(--panel);border-top:1px solid var(--line);box-shadow:0 120px 0 var(--panel);
-  padding:6px max(8px,env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
-.tabbar button{flex:1;flex-direction:column;gap:3px;border:0;background:transparent;padding:6px 2px;font-size:11px;color:var(--dim);border-radius:12px}
-.tabbar button svg{width:24px;height:24px}
+  padding:3px max(8px,env(safe-area-inset-right)) calc(2px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+.tabbar button{flex:1;flex-direction:column;gap:2px;border:0;background:transparent;padding:4px 2px;font-size:10.5px;color:var(--dim);border-radius:12px}
+.tabbar button svg{width:21px;height:21px}
 .tabbar button.on{color:var(--arrow);font-weight:700}
 .tabbar button.on svg{filter:drop-shadow(0 2px 6px var(--glow))}
 
@@ -326,6 +330,133 @@ dialog .row{margin-top:16px}
 @keyframes bob{50%{transform:translateY(6px)}}
 @media (prefers-reduced-motion:reduce){#install .point{animation:none}}
 @media (prefers-reduced-motion:reduce){#arrow,#bezel{transition:none}.arrived .flag{animation:none}}
+
+/* ===== 6.0 look: night-sky header, warm cards, navy location card ===== */
+:root[data-theme="light"]{
+  --bg:#f2ece5; --bg2:#f6f1eb; --panel:#fdfbf8; --panel2:#f6ece0; --line:#ebe1d5; --fg:#1d2433; --dim:#7a7e8b;
+  --dial:#1e2839; --dial2:#2a3650; --dialLine:#3b4864; --dialTick:#98a2b8; --dialTxt:#f2f4f8; --dialDim:#aeb6c9; --rose:rgba(242,244,248,.1);
+  --shadow:rgba(30,40,57,.13); --scrim:rgba(20,26,40,.4); --bar:rgba(250,247,241,.97);
+  --sky1:#0e1c33; --sky2:#1f2e4b; --sky3:#3b4159;
+}
+:root[data-theme="dark"],:root:not([data-theme]){
+  --bg:#0c1220; --bg2:#121a2c; --panel:#151d30; --panel2:#1b2439; --line:#28324c; --fg:#eef1f7; --dim:#8f99b0;
+  --dial:#1b2438; --dial2:#26314b; --dialLine:#38445f; --dialTick:#8e98b0; --dialTxt:#eef1f7; --dialDim:#a4adc2; --rose:rgba(238,241,247,.09);
+  --shadow:rgba(0,0,0,.45); --bar:rgba(21,29,48,.96);
+  --sky1:#050a15; --sky2:#0e182c; --sky3:#1b243b;
+}
+:root[data-theme="red"]{--sky1:#0b0202;--sky2:#160505;--sky3:#220808}
+:root[data-theme="red"] .sky,:root[data-theme="red"] .moonw,:root[data-theme="red"] .moonbig,:root[data-theme="red"] .lrose,:root[data-theme="red"] .mosq,:root[data-theme="red"] .sunwarn::after{filter:grayscale(1) sepia(1) hue-rotate(-50deg) saturate(4) brightness(.6)}
+body{background:var(--bg)}
+html{background:var(--bg)}
+.head{position:relative;z-index:1;padding-bottom:4px}
+.sky{position:absolute;z-index:-1;pointer-events:none;overflow:hidden;
+  top:calc(-1*env(safe-area-inset-top));left:calc(-1*max(16px,env(safe-area-inset-left)));right:calc(-1*max(16px,env(safe-area-inset-right)));bottom:-20px;
+  background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 52%,var(--sky3) 68%,#141b2e 76%,color-mix(in srgb,var(--sky3) 55%,var(--bg)) 90%,var(--bg) 100%)}
+.stars{position:absolute;inset:0 0 40% 0;opacity:.85;background-image:
+  radial-gradient(1.2px 1.2px at 8% 22%,#fff 70%,transparent),radial-gradient(1px 1px at 18% 64%,#fff 70%,transparent),radial-gradient(1.4px 1.4px at 31% 30%,#fff 70%,transparent),
+  radial-gradient(1px 1px at 40% 12%,#fff 70%,transparent),radial-gradient(1px 1px at 47% 52%,#dfe7ff 70%,transparent),radial-gradient(1.3px 1.3px at 58% 26%,#fff 70%,transparent),
+  radial-gradient(1px 1px at 66% 70%,#fff 70%,transparent),radial-gradient(1px 1px at 72% 10%,#fff 70%,transparent),radial-gradient(1.2px 1.2px at 83% 42%,#fff 70%,transparent),
+  radial-gradient(1px 1px at 92% 18%,#fff 70%,transparent),radial-gradient(1px 1px at 96% 62%,#dfe7ff 70%,transparent),radial-gradient(1px 1px at 3% 80%,#fff 70%,transparent),
+  radial-gradient(.9px .9px at 25% 8%,#fff 70%,transparent),radial-gradient(.9px .9px at 53% 80%,#fff 70%,transparent),radial-gradient(.9px .9px at 78% 58%,#fff 70%,transparent)}
+.mtn{position:absolute;left:0;right:0;bottom:30%;height:44px;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 60%22 preserveAspectRatio=%22none%22%3E%3Cpath fill=%22%232b3552%22 d=%22M0 38 L30 28 L55 34 L85 18 L115 30 L140 24 L170 34 L205 14 L240 30 L270 22 L300 32 L335 16 L370 28 L400 22 V60 H0Z%22/%3E%3Cpath fill=%22%230e1527%22 d=%22M0 46 L40 36 L70 42 L105 30 L140 42 L180 34 L215 44 L250 32 L290 42 L320 36 L360 44 L400 34 V60 H0Z%22/%3E%3C/svg%3E") bottom/100% 100% no-repeat}
+.top,.chips{--fg:#f4f6fb;--dim:#b4bccf;--line:rgba(255,255,255,.2);--good:#55d89d;--ok:#ffb45f;--bad:#ff8574;color:var(--fg)}
+.top{display:flex;align-items:center;gap:10px;padding:6px 0 2px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.bmark{width:42px;height:42px;flex:none;border-radius:50%;border:2.5px solid var(--arrow);color:var(--arrow);display:grid;place-items:center;box-shadow:0 0 18px rgba(245,132,31,.35)}
+.bmark svg{width:21px;height:21px;transform:translate(-1px,1px)}
+.btxt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.logo.hl{height:30px;margin:0;background:#fff;-webkit-mask-position:right center;mask-position:right center}
+[dir=ltr] .logo.hl{-webkit-mask-position:left center;mask-position:left center}
+.ptitle{margin:0;font-size:13.5px;font-weight:500;color:var(--dim);white-space:nowrap}
+.moonw{margin:-4px auto -6px 0;margin-inline-start:auto;margin-inline-end:0}
+.moonw svg{width:66px;height:66px;filter:drop-shadow(0 0 14px rgba(255,236,190,.35))}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:6px}
+.chips .chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:6px 10px;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);overflow:hidden}
+.chips .chip b{font-size:12.5px;overflow:hidden;text-overflow:ellipsis}.chips .chip .acc{color:var(--dim)}
+.subrow{margin-top:8px;color:#f4f6fb}
+.hpill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.88);color:#1d2433;border-radius:10px;padding:4px 10px;font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+:root[data-theme="dark"] .hpill,:root[data-theme="red"] .hpill{background:rgba(255,255,255,.1);color:var(--fg);border:1px solid rgba(255,255,255,.16)}
+.subrow .sub{margin-inline-start:auto;color:rgba(244,246,251,.85)}
+.hshort{display:inline}
+/* sunset banner */
+.sunwarn{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;text-align:start;white-space:normal;padding:8px 10px!important;border-radius:16px;
+  background:linear-gradient(90deg,#fde6bd,#fcefd6);border:1px solid #f6d6a3;color:#2a2116;box-shadow:0 6px 18px rgba(220,140,40,.14)}
+.sunwarn::after{content:'';position:absolute;inset-inline-end:0;top:0;bottom:0;width:44%;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 160 80%22%3E%3Cdefs%3E%3ClinearGradient id=%22s%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffe3a3%22/%3E%3Cstop offset=%221%22 stop-color=%22%23ffab4a%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%220%22%3E%3Cstop offset=%220%22 stop-color=%22%23ffd9a0%22 stop-opacity=%220%22/%3E%3Cstop offset=%221%22 stop-color=%22%23ffc98a%22 stop-opacity=%22.7%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22160%22 height=%2280%22 fill=%22url(%23g)%22/%3E%3Ccircle cx=%2262%22 cy=%2256%22 r=%2220%22 fill=%22url(%23s)%22/%3E%3Cpath fill=%22%23f8a55a%22 d=%22M0 64 C30 54 60 58 90 62 S140 54 160 58 V80 H0Z%22/%3E%3Cpath fill=%22%23ec8a3e%22 d=%22M0 72 C40 64 80 70 110 68 S150 66 160 70 V80 H0Z%22/%3E%3C/svg%3E") right bottom/cover no-repeat;pointer-events:none}
+[dir=rtl] .sunwarn::after{transform:scaleX(-1)}
+.sunwarn::after{-webkit-mask-image:linear-gradient(90deg,transparent,#000 55%);mask-image:linear-gradient(90deg,transparent,#000 55%)}
+.sunwarn .swi{width:38px;height:38px;flex:none;border-radius:12px;background:#ffd88f;display:grid;place-items:center;font-size:20px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.04)}
+.sunwarn .swt{position:relative;z-index:1;min-width:0}
+.sunwarn .swt b{display:block;font-size:15.5px;font-weight:800}
+.sunwarn .swt small{display:block;font-size:12.5px;color:#7b6550;font-variant-numeric:tabular-nums}
+:root[data-theme="dark"] .sunwarn{background:linear-gradient(90deg,#3a2a1a,#2a2016);border-color:#5a3f22;color:#ffe2b8}
+:root[data-theme="dark"] .sunwarn .swt small{color:#d0aa7e}
+:root[data-theme="red"] .sunwarn{background:var(--okBg);border-color:var(--okLine);color:var(--ok)}
+:root[data-theme="red"] .sunwarn .swt small{color:var(--dim)}
+/* merged place + season card */
+.mcard{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;box-shadow:0 8px 22px var(--shadow);cursor:pointer;text-align:start}
+.mcard:active{transform:scale(.99)}
+.mtop{display:flex;gap:8px;align-items:stretch}
+.mcard .info{flex:1;min-width:0;background:none;border:0;border-radius:0;padding:0;gap:6px}
+.mcard .info .r{padding:0}
+.mcard .srow{padding:0;gap:10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.mrange{display:flex;align-items:center;gap:6px;color:var(--dim);font-size:12px;font-variant-numeric:tabular-nums}
+.mrange svg{flex:none;opacity:.8}
+.mseason{position:relative;flex:none;width:31%;min-width:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-inline-start:6px}
+.mosq{position:absolute;inset-inline-start:-6px;top:-4px;width:58px;height:48px;opacity:.9;pointer-events:none}
+.mseason .tl{position:relative;font-size:11px}
+.mseason #msName{position:relative;font-size:19px;font-weight:800;line-height:1.2}
+.mseason .mleft{font-family:var(--num);font-size:26px;font-weight:800;color:var(--arrow);line-height:1.05}
+.mseason #msLeftLbl{font-size:11px}
+.mcard .bar{height:6px;background:var(--panel2);border:0}
+.mcard .schip{background:var(--panel2);border-color:transparent;padding:6px 8px}
+.mcard .snext{border-top:0;background:var(--panel2);border-radius:11px;padding:6px 10px;justify-content:center}
+:root[data-theme="dark"] .mosq{opacity:.25}
+/* location card */
+.loc{position:relative;overflow:hidden;background:var(--dial);background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 100%22 preserveAspectRatio=%22none%22%3E%3Cpath fill=%22%23ffffff%22 fill-opacity=%22.045%22 d=%22M0 60 L50 40 L90 52 L140 26 L190 48 L230 36 L280 54 L330 30 L400 50 V100 H0Z%22/%3E%3Cpath fill=%22%23ffffff%22 fill-opacity=%22.04%22 d=%22M0 78 L60 62 L110 72 L170 56 L230 70 L290 60 L350 72 L400 64 V100 H0Z%22/%3E%3C/svg%3E"),linear-gradient(160deg,var(--dial2),var(--dial));background-size:100% 100%,auto;background-repeat:no-repeat;border-radius:20px;padding:9px 12px 10px}
+.lrow{display:flex;align-items:center;gap:6px;width:100%}
+.lcol{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.lrose{flex:none;width:68px;height:68px}
+.lrose svg{width:100%;height:100%}
+#locRose{transition:transform .25s ease-out}
+.loc .mini{border-top:1px solid var(--dialLine)}
+/* start button */
+.big{position:relative;overflow:hidden;background:linear-gradient(90deg,#f08b2c,#feae47);border:0;color:#fff;font-weight:800;font-size:17px;text-shadow:0 1px 2px rgba(120,50,0,.25);box-shadow:0 10px 22px rgba(240,139,44,.3)}
+[dir=rtl] .big{background:linear-gradient(270deg,#f08b2c,#feae47)}
+.big::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 60%22 preserveAspectRatio=%22none%22%3E%3Cpath fill=%22%23b9480a%22 fill-opacity=%22.28%22 d=%22M0 60 V44 L40 34 L75 42 L120 24 L160 40 L200 30 L240 42 L270 34 L300 40 V60Z%22/%3E%3Cpath fill=%22%238f3405%22 fill-opacity=%22.25%22 d=%22M0 60 V52 L50 44 L100 52 L150 42 L210 52 L260 46 L300 52 V60Z%22/%3E%3C/svg%3E") bottom/100% 100% no-repeat;pointer-events:none}
+.big>*{position:relative}
+.big .chev{position:absolute;inset-inline-end:16px;top:50%;width:10px;height:10px;border-top:2.5px solid #fff;border-inline-end:2.5px solid #fff;transform:translateY(-50%) rotate(45deg)}
+[dir=rtl] .big .chev{transform:translateY(-50%) rotate(-135deg) scaleY(-1)}
+:root[data-theme="red"] .big{background:var(--arrow);color:var(--onArrow);text-shadow:none}
+/* tools */
+.tool{background:var(--panel);border-color:var(--line);box-shadow:0 6px 16px var(--shadow);padding:8px 2px;font-weight:500}
+.tool .ti{font-size:22px}
+.tool.sos{background:linear-gradient(180deg,#fff1ef,#ffe6e2);border-color:#f7cfc8}
+:root[data-theme="dark"] .tool.sos,:root[data-theme="red"] .tool.sos{background:var(--badBg);border-color:var(--badLine)}
+/* tab bar */
+.tabbar{border-top:0;border-radius:22px 22px 0 0;box-shadow:0 -6px 24px var(--shadow),0 120px 0 var(--panel)}
+.tabbar button.on::after{content:'';display:block;width:32px;height:3px;border-radius:3px;background:var(--arrow);margin-top:1px}
+.tabbar button:not(.on)::after{content:'';display:block;height:3px;margin-top:1px}
+
+/* 6.0 fit: one normal iPhone screen, no scrolling */
+main{position:relative;z-index:2}
+.top{padding:2px 0 0}
+.bmark{width:36px;height:36px;border-width:2.2px}.bmark svg{width:18px;height:18px}
+.logo.hl{height:26px}
+.ptitle{font-size:12.5px}
+.moonw{margin-top:-2px;margin-bottom:-4px}.moonw svg{width:56px;height:56px}
+.chips{margin-top:4px}.chips .chip{padding:5px 9px}
+.subrow{margin-top:6px}.hpill{padding:3px 9px;font-size:12px}
+.here{gap:7px}
+.sunwarn{padding:6px 10px!important}.sunwarn .swi{width:32px;height:32px;font-size:17px;border-radius:10px}.sunwarn .swt b{font-size:14.5px}.sunwarn .swt small{font-size:12px}
+.mcard{padding:9px 11px;gap:7px}
+.mcard .schip{padding:5px 7px}.mcard .schip small{white-space:nowrap;font-size:10.5px}.mcard .schip b{font-size:12.5px}
+.mcard .snext{padding:5px 8px;font-size:12px}
+.mosq{inset-inline-start:auto;inset-inline-end:-8px;top:auto;bottom:-6px;width:64px;height:54px;opacity:.75}
+.mseason .mleft{font-size:24px}.mseason #msName{font-size:18px}
+.loc{padding:7px 12px 9px;gap:3px}.loc .lbl{font-size:12px}
+.lrose{width:60px;height:60px}.lcol{gap:5px}
+button.big{color:#fff;padding:11px}
+.tool{padding:7px 2px}.tool .ti{font-size:20px}
 </style>
 </head>
 <body>
@@ -337,7 +468,15 @@ dialog .row{margin-top:16px}
   <button class="primary" id="go" data-t="start"></button>
 </div>
 
+<header class="head">
+<div class="sky" aria-hidden="true"><i class="stars"></i><i class="mtn"></i></div>
 <div class="top">
+  <div class="brand">
+    <span class="bmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M19.5 4.5 4.5 10.6l6.6 2.3 2.3 6.6z"/></svg></span>
+    <div class="btxt"><i class="logo hl" role="img" aria-label="سهم"></i><span class="ptitle" id="ptitle"></span></div>
+  </div>
+  <button class="moonw" id="moonBtn" type="button" aria-label="moon"><svg viewBox="0 0 40 40" id="moonSvg"></svg></button>
+</div>
   <div class="chips">
   <div class="chip">
     <div class="bars" id="bars"><i></i><i></i><i></i><i></i></div>
@@ -350,25 +489,23 @@ dialog .row{margin-top:16px}
     <span class="acc" id="cacc"></span>
   </div>
   </div>
-  <button class="moonw" id="moonBtn" type="button" aria-label="moon"><svg viewBox="0 0 40 40" id="moonSvg"></svg><span id="hijriShort">--</span></button>
-</div>
-<div class="subrow"><div class="sub" id="fixInfo"></div><span class="ptitle" id="ptitle"></span></div>
+  <div class="subrow"><span class="hpill"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span id="hijriShort"></span></span><div class="sub" id="fixInfo"></div></div>
+</header>
 
 <main>
   <!-- Home + Qibla share this stage -->
   <section class="page stage" id="stage">
     <div class="here" id="here">
       <div class="sunwarn" id="sunWarn" hidden></div>
+      <div class="mcard" id="seasonCard" role="button" tabindex="0">
+      <div class="mtop">
       <div class="info">
         <div class="r place"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="placeName">--</span><b class="wxb" id="wxRow" hidden><span id="wxTxt"></span></b></div>
         <div class="srow"><span>🌅 <span class="tl" data-t="sunrise"></span> <b id="sunR">--</b></span><span>🌇 <span class="tl" data-t="sunset"></span> <b id="sunS">--</b></span><span id="windTxt" hidden></span></div>
+        <div class="mrange"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span id="msRange"></span></div>
       </div>
-      <button class="season" id="seasonCard" type="button">
-        <div class="shead">
-          <span class="sem" id="msEmoji">🍂</span>
-          <div class="sname"><div class="tl" data-t="msNow"></div><b id="msName">--</b><div class="tl" id="msRange"></div></div>
-          <div class="sleft"><b id="msLeft">--</b><span id="msLeftLbl"></span></div>
-        </div>
+      <div class="mseason"><svg class="mosq" viewBox="0 0 80 64" aria-hidden="true"><defs><linearGradient id="mqg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4cfb3"/><stop offset="1" stop-color="#efe2d0" stop-opacity=".15"/></linearGradient></defs><g fill="url(#mqg)"><path d="M10 64V24l3-7 3 7v40zM64 64V24l3-7 3 7v40z"/><path d="M12.3 16h1.4v-5h-1.4zM66.3 16h1.4v-5h-1.4z"/><path d="M20 64V44h40v20z"/><path d="M22.5 44c0-10 7.5-16.5 17.5-20.5C50 27.5 57.5 34 57.5 44z"/><path d="M39.3 23.5v-6h1.4v6z"/><circle cx="40" cy="16" r="1.7"/><path d="M8.5 26h9v2h-9zM62.5 26h9v2h-9z"/></g><path d="M35 64V55a5 5 0 0 1 10 0v9z" fill="#fff" fill-opacity=".35"/></svg><span id="msEmoji" hidden></span><div class="tl" data-t="msNow"></div><b id="msName">--</b><b class="mleft" id="msLeft">--</b><span class="tl" id="msLeftLbl"></span></div>
+      </div>
         <div class="bar"><i id="msBar"></i></div>
         <div class="schips">
           <div class="schip"><span id="fsEmoji">🍂</span><div><div class="tl" data-t="faslNow"></div><b id="fsName">--</b><small id="fsLeft"></small></div></div>
@@ -376,18 +513,22 @@ dialog .row{margin-top:16px}
           <div class="schip"><span>🌡️</span><div><div class="tl" data-t="tempLbl"></div><b id="tlTemp">--</b><small id="tlAvg"></small></div></div>
         </div>
         <div class="snext" id="msNext"></div>
-      </button>
+      </div>
       <div class="loc">
         <div class="lbl"><span class="pulse"></span><span data-t="yourLoc"></span></div>
         <div class="coords" id="coords">--</div>
+        <div class="lrow"><div class="lcol">
         <div class="mini">
           <div><span data-t="accuracy"></span><b id="hAcc">--</b></div>
           <div><span data-t="altitude"></span><b id="hAlt">--</b></div>
           <div><span data-t="speed"></span><b id="hSpd">--</b></div>
         </div>
         <button class="pill" id="copyHere"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span data-t="copyCoords"></span></button>
+        </div>
+        <div class="lrose" aria-hidden="true"><svg viewBox="0 0 80 80" id="locRose"><circle cx="40" cy="40" r="27" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/><g stroke="rgba(255,255,255,.35)" stroke-width="1.2"><path d="M40 9v6M40 65v6M9 40h6M65 40h6"/></g><g fill="rgba(255,255,255,.7)" font-size="8.5" font-weight="700" text-anchor="middle" font-family="-apple-system,system-ui,sans-serif"><text x="40" y="7">N</text><text x="76.5" y="43">E</text><text x="40" y="79.5">S</text><text x="3.5" y="43">W</text></g><path d="M40 19 46 40H34z" fill="#f5841f"/><path d="M40 61 34 40h12z" fill="#e9edf5"/><circle cx="40" cy="40" r="3.2" fill="#1e2839" stroke="#e9edf5" stroke-width="1.4"/></svg></div>
+        </div>
       </div>
-      <button class="primary big" id="setStart" data-t="setStart"></button>
+      <button class="primary big" id="setStart"><span data-t="setStart"></span><i class="chev"></i></button>
       <div class="startrow" id="startBox" hidden>
         <button class="primary big" id="goStart"><span data-t="goStart"></span> <span id="startDist"></span></button>
         <button class="sq" id="resetStart" aria-label="remove"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
@@ -462,7 +603,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 5.0</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 6.0</span></div>
     </div>
   </section>
 </main>
@@ -541,7 +682,7 @@ dialog .row{margin-top:16px}
   <div class="sosmeta" id="sosMeta"></div>
   <button class="danger big" id="sosShare" data-t="sosShare"></button>
   <div class="row"><button id="sosCopy" data-t="copyCoords"></button></div>
-  <div class="calls"><a href="tel:911" class="call">📞 911</a><a href="tel:997" class="call">🚑 997</a><a href="tel:998" class="call">🚒 998</a></div>
+  <div class="calls"><span class="call">📞 911</span><span class="call">🚑 997</span><span class="call">🚒 998</span></div>
   <div class="sh" data-t="sosNote"></div>
   <div class="row"><button id="sosClose" data-t="close"></button></div>
 </dialog>
@@ -573,7 +714,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 5.0</div>
+  <div class="vpill">Ver 6.0</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -610,7 +751,7 @@ let arrived=false; // arrival flag
 /* ---------- words (Arabic / English) ---------- */
 const L={
 ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فقط. يعتمد على GPS والبوصلة، بدون خرائط وبدون إنترنت.',start:'ابدأ',
- tabSet:'الإعدادات',tabQibla:'القبلة',tabFav:'مواقعي المفضلة',tabHome:'الرئيسية',
+ tabSet:'الإعدادات',heroTag:'موقعك .. اتجاهك',tabQibla:'القبلة',tabFav:'مواقعي المفضلة',tabHome:'الرئيسية',
  gWait:'بانتظار GPS…',gStop:'GPS متوقف',gEx:'GPS ممتاز',gGood:'GPS جيد',gMid:'GPS متوسط',gWeak:'GPS ضعيف',gPerm:'لا يوجد إذن للموقع',gNone:'لا توجد إشارة GPS',
  live:'تحديث مباشر',ago:n=>'آخر تحديث قبل '+n+' ث',cOff:'البوصلة مقفلة',cOn:'البوصلة تعمل',cCal:'بوصلة تحتاج معايرة',cEx:'بوصلة ممتازة',cGood:'بوصلة جيدة',cMid:'بوصلة متوسطة',cWeak:'بوصلة ضعيفة',
  yourLoc:'موقعك الحالي',copyCoords:'نسخ الإحداثيات',accuracy:'الدقة',altitude:'الارتفاع',speed:'السرعة',
@@ -658,7 +799,7 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  mdLit:'الإضاءة',mdRise:'طلوع القمر',mdSet:'غروب القمر',mdNote:'الطور والإضاءة وأوقات القمر محسوبة في الجوال بدون إنترنت، والأوقات تقريبية بدقائق.',
  prNext:n=>'باقي على '+n,pr_fajr:'الفجر',pr_sunrise:'الشروق',pr_dhuhr:'الظهر',pr_asr:'العصر',pr_maghrib:'المغرب',pr_isha:'العشاء',
  prayNote:'أوقات الصلاة بطريقة أم القرى، محسوبة من موقعك بدون إنترنت.',
- sunWarn:m=>'🌇 باقي '+m+' د على الغروب',sunStart:d=>'الانطلاق '+d,sunNav:m=>'🌇 الغروب بعد '+m+' د',
+ sunWarn:m=>'باقي '+m+' د على الغروب',sunStart:d=>'الانطلاق '+d,sunNav:m=>'🌇 الغروب بعد '+m+' د',
  eta:t=>'⏱️ توصل بعد '+t,faslNow:'الفصل',taliNow:'الطالع',tempLbl:'الحرارة',avgT:c=>'المتوسط '+c+'°',dayLeft:'يوم باقي',daysLeft:n=>'باقي '+n+' '+(n===1?'يوم':n===2?'يومين':n<=10?'أيام':'يوم'),
  lastDay:'آخر يوم',range:(a,b,d,L)=>a+' – '+b+' · اليوم '+d+' من '+L,
  next:(e,n,d,dt)=>'⏭️ يدخل '+e+' <b>'+n+'</b> '+(d===1?'بكرة':'بعد '+d+' '+(d===2?'يومين':d<=10?'أيام':'يوم'))+' · '+dt,soon:'قرّب',
@@ -667,7 +808,7 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  yrSrc:'المواسم والطوالع ومعدلات الحرارة من «دليل الطوالع والنجوم» للأستاذ الدكتور عبدالله المسند. كل التواريخ محفوظة في التطبيق وتشتغل بدون إنترنت.',
  months:['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر']},
 en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow. GPS and compass only, no maps, no internet.',start:'Start',
- tabSet:'Settings',tabQibla:'Qibla',tabFav:'Favorites',tabHome:'Home',
+ tabSet:'Settings',heroTag:'Your spot. Your way.',tabQibla:'Qibla',tabFav:'Favorites',tabHome:'Home',
  gWait:'Waiting for GPS…',gStop:'GPS stopped',gEx:'GPS excellent',gGood:'GPS good',gMid:'GPS fair',gWeak:'GPS weak',gPerm:'No location permission',gNone:'No GPS signal',
  live:'Live',ago:n=>'Updated '+n+' s ago',cOff:'Compass off',cOn:'Compass on',cCal:'Calibrate compass',cEx:'Compass excellent',cGood:'Compass good',cMid:'Compass fair',cWeak:'Compass weak',
  yourLoc:'Your location',copyCoords:'Copy coordinates',accuracy:'Accuracy',altitude:'Altitude',speed:'Speed',
@@ -715,7 +856,7 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  mdLit:'Illuminated',mdRise:'Moonrise',mdSet:'Moonset',mdNote:'Phase, light and moon times are worked out on the phone with no internet; times are approximate to a few minutes.',
  prNext:n=>n+' in',pr_fajr:'Fajr',pr_sunrise:'Sunrise',pr_dhuhr:'Dhuhr',pr_asr:'Asr',pr_maghrib:'Maghrib',pr_isha:'Isha',
  prayNote:'Umm al-Qura prayer times, worked out from your location with no internet.',
- sunWarn:m=>'🌇 '+m+' min to sunset',sunStart:d=>'start '+d+' away',sunNav:m=>'🌇 sunset in '+m+' min',
+ sunWarn:m=>m+' min to sunset',sunStart:d=>'start '+d+' away',sunNav:m=>'🌇 sunset in '+m+' min',
  eta:t=>'⏱️ arrive in '+t,faslNow:'Quarter',taliNow:'Star (Tali‘)',tempLbl:'Temperature',avgT:c=>'avg '+c+'°',dayLeft:'days left',daysLeft:n=>n+' day'+(n===1?'':'s')+' left',
  lastDay:'Last day',range:(a,b,d,L)=>a+' – '+b+' · day '+d+' of '+L,
  next:(e,n,d,dt)=>'⏭️ '+e+' <b>'+n+'</b> starts '+(d===1?'tomorrow':'in '+d+' days')+' · '+dt,soon:'Soon',
@@ -865,6 +1006,7 @@ function onOrient(e){let h=null;
   if(h==null)return;compassOK=true;
   const so=(screen.orientation&&screen.orientation.angle)||window.orientation||0;
   heading=(h+so+360)%360;
+  const lr=document.getElementById('locRose');if(lr)lr.style.transform='rotate('+(-heading)+'deg)';
   if(cfg.eco==='on'){const n=Date.now();if(n-(onOrient.t||0)<250)return;onOrient.t=n}
   render()}
 
@@ -1047,7 +1189,7 @@ function fillYear(){const now=new Date(),L=$('yrList');L.innerHTML='';
     row.querySelector('.e').textContent=fasl(p.start)[2];row.querySelector('.n span').textContent=nm(r);
     row.querySelector('small').textContent=sub;row.querySelector('.dd').textContent=fmtD(p.start)+' – '+fmtD(last);
     L.appendChild(row);if(i===cur)setTimeout(()=>row.scrollIntoView({block:'center'}),50)})}
-$('seasonCard').onclick=()=>{fillYear();$('dlgSeasons').showModal()};
+$('seasonCard').onclick=()=>{fillYear();$('dlgSeasons').showModal()};$('seasonCard').onkeydown=e=>{if(e.key==='Enter')$('seasonCard').click()};
 $$('#yrSeg button').forEach(b=>b.onclick=()=>{yrTab=b.dataset.y;fillYear()});
 $('yrClose').onclick=()=>$('dlgSeasons').close();
 
@@ -1203,12 +1345,13 @@ function moonPath(phase,r){ // phase 0 new → 0.5 full → 1 new; lit side on t
   const c=Math.cos(2*Math.PI*phase),rx=Math.abs(c)*r,wax=phase<0.5,top='20 '+(20-r),bot='20 '+(20+r);
   if(wax)return 'M'+top+' A'+r+' '+r+' 0 0 1 '+bot+' A'+rx+' '+r+' 0 0 '+(c>0?0:1)+' '+top+'Z';
   return 'M'+top+' A'+r+' '+r+' 0 0 0 '+bot+' A'+rx+' '+r+' 0 0 '+(c>0?1:0)+' '+top+'Z'}
-function moonSVG(phase){return '<defs><radialGradient id="mg" cx="40%" cy="38%"><stop offset="0" stop-color="#fffbe9"/><stop offset="1" stop-color="#e9dcb8"/></radialGradient></defs>'+
-  '<circle cx="20" cy="20" r="17" fill="#3b3a44" stroke="rgba(0,0,0,.25)"/><path d="'+moonPath(phase,17)+'" fill="url(#mg)"/>'}
+function moonSVG(phase){const id='mm'+(moonSVG.n=(moonSVG.n||0)+1);
+  return '<defs><mask id="'+id+'"><rect width="40" height="40" fill="#fff"/><path d="'+moonPath(phase,17.4)+'" fill="#000"/></mask></defs>'+
+  '<image href="moon.png" x="2.6" y="2.6" width="34.8" height="34.8"/><circle cx="20" cy="20" r="17.6" fill="#0a0f1e" fill-opacity=".86" mask="url(#'+id+')"/>'}
 const PHASES=[['محاق','New moon'],['هلال','Waxing crescent'],['تربيع أول','First quarter'],['أحدب متزايد','Waxing gibbous'],['بدر','Full moon'],['أحدب متناقص','Waning gibbous'],['تربيع ثاني','Last quarter'],['هلال متناقص','Waning crescent']];
 const phaseName=p=>{const i=Math.floor((p*8+0.5)%8);return PHASES[i][cfg.lang==='en'?1:0]};
 function moonTick(){const now=new Date(),il=AST.illum(now),hj=hijri(now,cfg.lang);
-  $('moonSvg').innerHTML=moonSVG(il.phase);$('hijriShort').textContent=hj?hj.day+' '+hj.month:'';
+  $('moonSvg').innerHTML=moonSVG(il.phase);$('hijriShort').textContent=hj?hj.day+' '+hj.month+' ('+hj.m+') '+hj.year:'';
   moonTick.hj=hj;moonTick.il=il}
 $('moonBtn').onclick=()=>{moonTick();const il=moonTick.il,hj=moonTick.hj,now=new Date();
   $('moonBig').innerHTML=moonSVG(il.phase);$('mdPhase').textContent=phaseName(il.phase);
@@ -1241,12 +1384,13 @@ function etaOf(key,d){if(key!==etaKey){etaKey=key;etaH=[]}
 /* ---------- sunset reminder ---------- */
 function sunLeft(){if(!pos)return null;const st=sunTimes(new Date(),pos.lat,pos.lon);if(!st)return null;const m=(st.set-Date.now())/6e4;return m>0&&m<=60?Math.ceil(m):null}
 function paintSunWarn(){const m=sunLeft(),el=$('sunWarn');if(m==null){el.hidden=true;return}
-  let tx=T('sunWarn')(m);if(startPt&&pos){const f=fmtDist(distance(pos,startPt));tx+=' · '+T('sunStart')(f.v+' '+f.u)}
-  el.textContent=tx;el.hidden=false}
+  let sub='';if(startPt&&pos){const f=fmtDist(distance(pos,startPt));sub=T('sunStart')(f.v+' '+f.u)}
+  el.innerHTML='<span class="swi">🌙</span><div class="swt"><b></b>'+(sub?'<small></small>':'')+'</div>';
+  el.querySelector('b').textContent=T('sunWarn')(m);if(sub)el.querySelector('small').textContent=sub;el.hidden=false}
 setInterval(()=>{moonTick();paintSos();if($('dlgTrack').open)paintTrack()},5000);
 
 /* ---------- tabs ---------- */
-function setTitle(){$('ptitle').textContent=tab==='home'?'':T({set:'tabSet',qibla:'tabQibla',fav:'tabFav'}[tab])}
+function setTitle(){$('ptitle').textContent=tab==='home'?T('heroTag'):T({set:'tabSet',qibla:'tabQibla',fav:'tabFav'}[tab])}
 function go(name){tab=name;smooth=null;smoothB=null;arrived=false;
   $$('#tabbar button').forEach(b=>b.classList.toggle('on',b.dataset.tab===name));
   $('stage').hidden=!(name==='home'||name==='qibla');$('pFav').hidden=name!=='fav';$('pSet').hidden=name!=='set';
