@@ -11,7 +11,7 @@
 <script>/* pick the saved theme before the first paint, so the edges never flash another colour */
 try{var t=(JSON.parse(localStorage.getItem('sahm.set')||'{}').theme)||'light';if(['light','dark','red'].indexOf(t)<0)t='light';document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=6.2">
+<link rel="apple-touch-icon" href="icon-180.png?v=6.4">
 <style>
 /* UI font: IBM Plex Sans Arabic (SIL Open Font License, see OFL-IBM-Plex.txt), bundled so it works offline */
 @font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(plex-ar-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}
@@ -356,7 +356,7 @@ html{background:var(--bg)}
   background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 52%,var(--sky3) 68%,#141b2e 76%,color-mix(in srgb,var(--sky3) 55%,var(--bg)) 90%,var(--bg) 100%)}
 .stars{position:absolute;inset:0 0 40% 0;opacity:.85;background-image:
   radial-gradient(1.2px 1.2px at 8% 22%,#fff 70%,transparent),radial-gradient(1px 1px at 18% 64%,#fff 70%,transparent),radial-gradient(1.4px 1.4px at 31% 30%,#fff 70%,transparent),
-  radial-gradient(1px 1px at 40% 12%,#fff 70%,transparent),radial-gradient(1px 1px at 47% 52%,#dfe7ff 70%,transparent),radial-gradient(1.3px 1.3px at 58% 26%,#fff 70%,transparent),
+  radial-gradient(1px 1px at 40% 12%,#fff 70%,transparent),radial-gradient(1px 1px at 47% 52%,#dfe7ff 70%,transparent),radial-gradient(1.3px 1.3px at 52% 8%,#fff 70%,transparent),
   radial-gradient(1px 1px at 66% 70%,#fff 70%,transparent),radial-gradient(1px 1px at 72% 10%,#fff 70%,transparent),radial-gradient(1.2px 1.2px at 83% 42%,#fff 70%,transparent),
   radial-gradient(1px 1px at 92% 18%,#fff 70%,transparent),radial-gradient(1px 1px at 96% 62%,#dfe7ff 70%,transparent),radial-gradient(1px 1px at 3% 80%,#fff 70%,transparent),
   radial-gradient(.9px .9px at 25% 8%,#fff 70%,transparent),radial-gradient(.9px .9px at 53% 80%,#fff 70%,transparent),radial-gradient(.9px .9px at 78% 58%,#fff 70%,transparent)}
@@ -464,15 +464,29 @@ button.big{color:#fff;padding:11px}
    The app screen sits on the night sky up top; the start / install screens are one flat colour. */
 html{background:var(--bg)}
 /* iOS tints the status-bar strip from the body's background colour, so in the app that colour is the night sky;
-   the page itself is painted as an image on top, and its bottom strip (tab-bar height less its rounded corners) takes the tab-bar colour so the strip
-   iOS leaves under the tab bar matches it. */
-html.app{background:var(--panel)}
-html.app body{background-color:var(--sky1);background-image:linear-gradient(180deg,var(--bg) 0,var(--bg) calc(100% - var(--tbh,84px) + 22px),var(--panel) calc(100% - var(--tbh,84px) + 22px))}
+   the page itself is painted as an image on top, and the tab bar uses the same sky colour. */
+html.app{background:var(--sky1)}
+html.app body{background-color:var(--sky1);background-image:linear-gradient(var(--bg),var(--bg))}
+/* iOS paints the strip under the tab bar in that same sky colour, so the tab bar wears it too:
+   night sky on top, night sky at the bottom. */
+.tabbar{background:var(--sky1);box-shadow:0 -6px 24px var(--shadow),0 120px 0 var(--sky1);--dim:#9ba4ba;color:#9ba4ba}
+.tabbar button{color:#9ba4ba}
+.tabbar button.on{color:var(--arrow)}
 /* iOS 26 Home Screen apps can report a viewport that is short by the status-bar height,
-   leaving a strip under the tab bar; --vgap (set from JS) stretches the page into it. */
-body{height:calc(100% + var(--vgap,0px))}
-.tabbar{bottom:calc(-1*var(--vgap,0px))}
-#start,#install{bottom:calc(-1*var(--vgap,0px))}
+   leaving a strip under the tab bar; it takes the body colour, which the tab bar now shares. */
+
+/* 6.3 polish */
+.info .place{font-weight:500}
+.info .place span{white-space:normal;overflow:visible;line-height:1.35}
+.mcard .srow{border-bottom:0;padding-bottom:0}
+.wrow{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;font-size:12.5px;color:var(--fg)}
+.wrow:not(:has(> :not([hidden]))){display:none}
+.wrow .wxb{margin:0;font-weight:500}.wrow b{font-family:var(--num);font-weight:600}
+.mrange{border-top:1px solid var(--line);padding-top:6px}
+.mosq{opacity:.45}
+:root[data-theme="dark"] .mosq{opacity:.18}
+.qibla .dial{width:min(62vw,27vh)}
+.qibla .dist{font-size:clamp(44px,13vw,64px)}
 </style>
 </head>
 <body>
@@ -516,8 +530,9 @@ body{height:calc(100% + var(--vgap,0px))}
       <div class="mcard" id="seasonCard" role="button" tabindex="0">
       <div class="mtop">
       <div class="info">
-        <div class="r place"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="placeName">--</span><b class="wxb" id="wxRow" hidden><span id="wxTxt"></span></b></div>
-        <div class="srow"><span>🌅 <span class="tl" data-t="sunrise"></span> <b id="sunR">--</b></span><span>🌇 <span class="tl" data-t="sunset"></span> <b id="sunS">--</b></span><span id="windTxt" hidden></span></div>
+        <div class="r place"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="placeName">--</span></div>
+        <div class="srow"><span>🌅 <span class="tl" data-t="sunrise"></span> <b id="sunR">--</b></span><span>🌇 <span class="tl" data-t="sunset"></span> <b id="sunS">--</b></span></div>
+        <div class="wrow"><span class="wxb" id="wxRow" hidden><span id="wxTxt"></span></span><span id="windTxt" hidden></span></div>
         <div class="mrange"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span id="msRange"></span></div>
       </div>
       <div class="mseason"><svg class="mosq" viewBox="0 0 80 64" aria-hidden="true"><defs><linearGradient id="mqg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4cfb3"/><stop offset="1" stop-color="#efe2d0" stop-opacity=".15"/></linearGradient></defs><g fill="url(#mqg)"><path d="M10 64V24l3-7 3 7v40zM64 64V24l3-7 3 7v40z"/><path d="M12.3 16h1.4v-5h-1.4zM66.3 16h1.4v-5h-1.4z"/><path d="M20 64V44h40v20z"/><path d="M22.5 44c0-10 7.5-16.5 17.5-20.5C50 27.5 57.5 34 57.5 44z"/><path d="M39.3 23.5v-6h1.4v6z"/><circle cx="40" cy="16" r="1.7"/><path d="M8.5 26h9v2h-9zM62.5 26h9v2h-9z"/></g><path d="M35 64V55a5 5 0 0 1 10 0v9z" fill="#fff" fill-opacity=".35"/></svg><span id="msEmoji" hidden></span><div class="tl" data-t="msNow"></div><b id="msName">--</b><b class="mleft" id="msLeft">--</b><span class="tl" id="msLeftLbl"></span></div>
@@ -619,7 +634,7 @@ body{height:calc(100% + var(--vgap,0px))}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 6.2</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 6.4</span></div>
     </div>
   </section>
 </main>
@@ -730,7 +745,7 @@ body{height:calc(100% + var(--vgap,0px))}
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 6.2</div>
+  <div class="vpill">Ver 6.4</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -1535,8 +1550,7 @@ $('aClose').onclick=()=>$('dlgAbout').close();
 let wl=null;
 async function wakeOn(){try{if(cfg.eco==='on'){if(wl){await wl.release();wl=null}return}if(!wl||wl.released)wl=await navigator.wakeLock.request('screen')}catch(e){}}
 function edgeColor(){const app=document.documentElement.classList.contains('app'),c=getComputedStyle(app?document.body:document.documentElement).backgroundColor,m=document.querySelector('meta[name=theme-color]');if(m&&c)m.content=c}
-function fixGap(){let g=0;if(isApp){const full=innerWidth<innerHeight?Math.max(screen.width,screen.height):Math.min(screen.width,screen.height);g=full-innerHeight;if(!(g>0&&g<120))g=0}
-  document.documentElement.style.setProperty('--vgap',g+'px');
+function fixGap(){
   const tb=document.querySelector('.tabbar');if(tb&&tb.offsetHeight)document.documentElement.style.setProperty('--tbh',tb.offsetHeight+'px')}
 async function start(){
   $('start').hidden=true;document.documentElement.classList.add('app');fixGap();edgeColor();
