@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
@@ -7,9 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="سهم">
-<meta name="theme-color" content="#17110d">
+<meta name="theme-color" content="#f2ece5">
+<script>/* pick the saved theme before the first paint, so the edges never flash another colour */
+try{var t=(JSON.parse(localStorage.getItem('sahm.set')||'{}').theme)||'light';if(['light','dark','red'].indexOf(t)<0)t='light';document.documentElement.dataset.theme=t}catch(e){}</script>
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=6.0">
+<link rel="apple-touch-icon" href="icon-180.png?v=6.1">
 <style>
 /* UI font: IBM Plex Sans Arabic (SIL Open Font License, see OFL-IBM-Plex.txt), bundled so it works offline */
 @font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(plex-ar-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}
@@ -439,7 +441,7 @@ html{background:var(--bg)}
 
 /* 6.0 fit: one normal iPhone screen, no scrolling */
 main{position:relative;z-index:2}
-.top{padding:2px 0 0}
+.top{padding:8px 0 0}
 .bmark{width:36px;height:36px;border-width:2.2px}.bmark svg{width:18px;height:18px}
 .logo.hl{height:26px}
 .ptitle{font-size:12.5px}
@@ -457,6 +459,16 @@ main{position:relative;z-index:2}
 .lrose{width:60px;height:60px}.lcol{gap:5px}
 button.big{color:#fff;padding:11px}
 .tool{padding:7px 2px}.tool .ti{font-size:20px}
+
+/* 6.1: one colour behind the status bar and the home bar.
+   The app screen sits on the night sky up top; the start / install screens are one flat colour. */
+html{background:var(--bg)}
+html.app{background:var(--sky1)}
+/* iOS 26 Home Screen apps can report a viewport that is short by the status-bar height,
+   leaving a strip under the tab bar; --vgap (set from JS) stretches the page into it. */
+body{height:calc(100% + var(--vgap,0px))}
+.tabbar{bottom:calc(-1*var(--vgap,0px))}
+#start,#install{bottom:calc(-1*var(--vgap,0px))}
 </style>
 </head>
 <body>
@@ -603,7 +615,7 @@ button.big{color:#fff;padding:11px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 6.0</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 6.1</span></div>
     </div>
   </section>
 </main>
@@ -714,7 +726,7 @@ button.big{color:#fff;padding:11px}
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 6.0</div>
+  <div class="vpill">Ver 6.1</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -871,8 +883,8 @@ try{Object.assign(cfg,JSON.parse(localStorage.getItem('sahm.set')||'{}'))}catch(
 delete cfg.sound;delete cfg.undefined;if(!['near','new'].includes(cfg.sort))cfg.sort='near';
 function saveCfg(){try{localStorage.setItem('sahm.set',JSON.stringify(cfg))}catch(e){}}
 const T=k=>(L[cfg.lang]||L.ar)[k];
-function applyTheme(){const th=['light','dark','red'].includes(cfg.theme)?cfg.theme:'dark';document.documentElement.dataset.theme=th;
-  document.querySelector('meta[name=theme-color]').content={light:'#f1e4d1',dark:'#17110d',red:'#0b0202'}[th];
+function applyTheme(){const th=['light','dark','red'].includes(cfg.theme)?cfg.theme:'dark';document.documentElement.dataset.theme=th;edgeColor();
+  edgeColor();
   document.documentElement.classList.toggle('eco',cfg.eco==='on')}
 function applyLang(){const en=cfg.lang==='en';document.documentElement.lang=en?'en':'ar';document.documentElement.dir=en?'ltr':'rtl';
   $$('[data-t]').forEach(el=>{const v=T(el.dataset.t);if(typeof v==='string')el.innerHTML=v});
@@ -1518,8 +1530,11 @@ $('aClose').onclick=()=>$('dlgAbout').close();
 /* ---------- start (iOS needs a tap to grant compass) ---------- */
 let wl=null;
 async function wakeOn(){try{if(cfg.eco==='on'){if(wl){await wl.release();wl=null}return}if(!wl||wl.released)wl=await navigator.wakeLock.request('screen')}catch(e){}}
+function edgeColor(){const c=getComputedStyle(document.documentElement).backgroundColor,m=document.querySelector('meta[name=theme-color]');if(m&&c)m.content=c}
+function fixGap(){let g=0;if(isApp){const full=innerWidth<innerHeight?Math.max(screen.width,screen.height):Math.min(screen.width,screen.height);g=full-innerHeight;if(!(g>0&&g<120))g=0}
+  document.documentElement.style.setProperty('--vgap',g+'px')}
 async function start(){
-  $('start').hidden=true;
+  $('start').hidden=true;document.documentElement.classList.add('app');edgeColor();
   if(window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission==='function'){
     try{const r=await DeviceOrientationEvent.requestPermission();if(r==='granted')addEventListener('deviceorientation',onOrient)}catch(e){}
   }else{addEventListener('deviceorientationabsolute',onOrient);addEventListener('deviceorientation',onOrient)}
@@ -1566,7 +1581,7 @@ function showInstall(){
 $('instNow').onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$('instNow').hidden=true};
 $('go').onclick=()=>{if(!isApp&&!devBypass){showInstall();return}start()};
 
-load();applyTheme();applyLang();paintStart();seasonTick();moonTick();paintTrack();
+load();fixGap();addEventListener('resize',fixGap);applyTheme();applyLang();paintStart();seasonTick();moonTick();paintTrack();
 const hh=decodeURIComponent(location.hash.slice(1));const hc=hh&&parseCoord(hh);
 if(hc){let p=places.find(x=>Math.abs(x.lat-hc.lat)<1e-6&&Math.abs(x.lon-hc.lon)<1e-6);if(!p)p=addPlace(T('fromLink'),hc);cur=p.id;save()}
 go('home');
