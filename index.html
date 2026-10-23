@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="سهم">
 <meta name="theme-color" content="#17110d">
 <link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-180.png?v=4.0">
+<link rel="apple-touch-icon" href="icon-180.png?v=5.0">
 <style>
 /* UI font: IBM Plex Sans Arabic (SIL Open Font License, see OFL-IBM-Plex.txt), bundled so it works offline */
 @font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(plex-ar-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1}
@@ -61,7 +61,46 @@ svg{display:block}
 .ltr{direction:ltr;unicode-bidi:isolate}
 
 /* top status */
-.top{display:flex;align-items:center;gap:8px;padding:12px 0 4px;flex-wrap:wrap}
+.top{display:flex;align-items:center;gap:8px;padding:10px 0 2px}
+.chips{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
+.chips .chip{padding:5px 10px}
+.moonw{margin-inline-start:auto;flex:none;display:flex;flex-direction:column;align-items:center;gap:2px;background:transparent;border:0;padding:0 2px;color:var(--fg)}
+.moonw svg{width:38px;height:38px;filter:drop-shadow(0 2px 6px var(--shadow))}
+.moonw span{font-size:11.5px;font-weight:700;white-space:nowrap;color:var(--dim)}
+.moon-dlg{text-align:center}.moonbig{width:120px;height:120px;margin:4px auto 6px;display:block;filter:drop-shadow(0 6px 18px var(--shadow))}
+.moon-dlg h3{margin:4px 0 2px}.mdh{color:var(--dim);margin-bottom:12px}
+.sunwarn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:8px!important;padding-bottom:8px!important;background:var(--okBg);border:1px solid var(--okLine);color:var(--ok);border-radius:14px;padding:8px 12px;font-size:13.5px;font-weight:600;text-align:center}
+.tools{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.tool{flex-direction:column;gap:3px;padding:9px 2px;font-size:11.5px;border-radius:14px;position:relative}
+.tool .ti{font-size:20px;line-height:1}
+.tool.sos{border-color:var(--badLine);color:var(--bad);background:var(--badBg)}
+.rec{position:absolute;top:6px;inset-inline-end:8px;width:8px;height:8px;border-radius:50%;background:var(--bad);animation:pulse 1.4s infinite}
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats button{padding:6px 10px;border-radius:999px;font-size:13px;background:var(--bg)}
+.cats button.on{background:var(--arrow);border-color:var(--arrow);color:var(--onArrow);font-weight:700}
+.catf{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}.catf::-webkit-scrollbar{display:none}
+.catf:empty{display:none}
+.catf button{flex:none;padding:6px 12px;border-radius:999px;font-size:13px}
+.catf button.on{background:var(--arrow);border-color:var(--arrow);color:var(--onArrow);font-weight:700}
+.pathc{width:100%;aspect-ratio:1.25;background:var(--bg);border:1px solid var(--line);border-radius:16px;display:block}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:12px 0 6px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.stats>div{text-align:center;padding:8px 4px;display:flex;flex-direction:column;gap:2px}
+.stats>div+div{border-inline-start:1px solid var(--line)}
+.stats span{color:var(--dim);font-size:11.5px}.stats b{font-family:var(--num);font-size:17px;direction:ltr}
+.sos-dlg{text-align:center}
+.sosbig{font-family:var(--num);font-size:clamp(26px,8.5vw,36px);font-weight:800;direction:ltr;line-height:1.25;user-select:text;-webkit-user-select:text;margin:6px 0}
+.sosdms{font-family:var(--num);direction:ltr;color:var(--dim);font-size:15px}
+.sosmeta{color:var(--dim);font-size:13px;margin:8px 0 14px}
+.calls{display:flex;gap:8px;margin:12px 0 8px}
+.call{flex:1;text-decoration:none;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 6px;font-weight:700;font-family:var(--num)}
+.pray{width:100%;max-width:440px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.pnext{display:flex;align-items:center;justify-content:space-between;font-weight:700}
+.pnext b{font-family:var(--num);color:var(--arrow);font-size:18px}
+.pgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.pgrid div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px 2px;text-align:center;font-size:11.5px;color:var(--dim)}
+.pgrid b{display:block;font-family:var(--num);color:var(--fg);font-size:13px;margin-top:2px}
+.pgrid .now{border-color:var(--arrow);background:var(--okBg)}.pgrid .now b{color:var(--arrow)}
+.qibla .dial{width:min(66vw,32vh)}
 .chip{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 10px;white-space:nowrap}
 .bars{display:flex;gap:2px;align-items:flex-end;height:14px}
 .bars i{width:4px;border-radius:2px;background:var(--line);transition:background .3s}
@@ -107,10 +146,10 @@ main{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:calc(
 .arrived .face{stroke:var(--good)}
 @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
 .navhead{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:6px}
-.dist{font-family:var(--num);font-size:clamp(44px,13vw,68px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.02em}
+.dist{font-family:var(--num);font-size:clamp(56px,17vw,86px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.02em}
 .dist{transition:font-size .3s}
-.dist.near{font-size:clamp(70px,22vw,110px);color:var(--arrow)}
-.altd{color:var(--dim);font-size:13.5px;text-align:center}
+.dist.near{font-size:clamp(76px,24vw,118px);color:var(--arrow)}
+.altd{color:var(--dim);font-size:14px;text-align:center;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .altd b{color:var(--fg);font-family:var(--num)}
 .dist small{font-family:var(--ui);font-size:.36em;font-weight:600;color:var(--dim);margin-inline-start:6px;letter-spacing:0}
 .meta{color:var(--dim);font-size:14px;text-align:center;min-height:20px}
@@ -299,6 +338,7 @@ dialog .row{margin-top:16px}
 </div>
 
 <div class="top">
+  <div class="chips">
   <div class="chip">
     <div class="bars" id="bars"><i></i><i></i><i></i><i></i></div>
     <b id="gpsLabel"></b>
@@ -309,6 +349,8 @@ dialog .row{margin-top:16px}
     <b id="cLabel"></b>
     <span class="acc" id="cacc"></span>
   </div>
+  </div>
+  <button class="moonw" id="moonBtn" type="button" aria-label="moon"><svg viewBox="0 0 40 40" id="moonSvg"></svg><span id="hijriShort">--</span></button>
 </div>
 <div class="subrow"><div class="sub" id="fixInfo"></div><span class="ptitle" id="ptitle"></span></div>
 
@@ -316,6 +358,7 @@ dialog .row{margin-top:16px}
   <!-- Home + Qibla share this stage -->
   <section class="page stage" id="stage">
     <div class="here" id="here">
+      <div class="sunwarn" id="sunWarn" hidden></div>
       <div class="info">
         <div class="r place"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg><span id="placeName">--</span><b class="wxb" id="wxRow" hidden><span id="wxTxt"></span></b></div>
         <div class="srow"><span>🌅 <span class="tl" data-t="sunrise"></span> <b id="sunR">--</b></span><span>🌇 <span class="tl" data-t="sunset"></span> <b id="sunS">--</b></span><span id="windTxt" hidden></span></div>
@@ -349,9 +392,12 @@ dialog .row{margin-top:16px}
         <button class="primary big" id="goStart"><span data-t="goStart"></span> <span id="startDist"></span></button>
         <button class="sq" id="resetStart" aria-label="remove"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
-      <div class="row">
-        <button class="saveHere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span data-t="saveHere"></span></button>
-        <button class="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-t="addCoord"></span></button>
+      <div class="tools">
+        <button class="tool saveHere"><span class="ti">📍</span><span data-t="tSave"></span></button>
+        <button class="tool addCoord"><span class="ti">➕</span><span data-t="tAdd"></span></button>
+        <button class="tool" id="toolTrack"><span class="ti">🧭</span><span data-t="tTrack"></span><i class="rec" id="recDot" hidden></i></button>
+        <button class="tool" id="toolArea"><span class="ti">📐</span><span data-t="tArea"></span></button>
+        <button class="tool sos" id="toolSos"><span class="ti">🆘</span><span data-t="tSos"></span></button>
       </div>
     </div>
 
@@ -364,6 +410,11 @@ dialog .row{margin-top:16px}
     <div class="dist" id="dist" hidden>--</div>
     <div class="meta" id="meta" hidden></div>
     <div class="altd" id="altd" hidden></div>
+    <div class="pray" id="prayCard" hidden>
+      <div class="pnext"><span id="pNextName">--</span><b id="pNextIn">--</b></div>
+      <div class="pgrid" id="pGrid"></div>
+      <div class="sh" data-t="prayNote"></div>
+    </div>
     <div class="warn" id="warn"></div>
     <button class="danger" id="cancel" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg><span data-t="cancelNav"></span></button>
   </section>
@@ -375,6 +426,7 @@ dialog .row{margin-top:16px}
       <button class="addCoord"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span data-t="addCoord"></span></button>
     </div>
     <div class="row"><button id="backup" data-t="backup"></button><button id="restore" data-t="restore"></button></div>
+    <div class="catf" id="catFilter"></div>
     <div class="seg" id="sortSeg"><button data-s="near" data-t="sortNear"></button><button data-s="new" data-t="sortNew"></button></div>
     <div class="list" id="list"></div>
   </section>
@@ -410,7 +462,7 @@ dialog .row{margin-top:16px}
     <div class="group">
       <button class="link" id="share"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span data-t="share"></span><i class="chev"></i></button>
       <button class="link" id="aboutBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span data-t="about"></span><i class="chev"></i></button>
-      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 4.0</span></div>
+      <div class="link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 12a8 8 0 1 1-2.3-5.7"/><path d="M20 4v4h-4"/></svg><span data-t="version"></span><span class="v">Ver 5.0</span></div>
     </div>
   </section>
 </main>
@@ -431,6 +483,8 @@ dialog .row{margin-top:16px}
   <div class="avgbox" id="fAvg" hidden></div>
   <div class="sub ltr" id="fPrev" style="text-align:left;margin-top:6px;color:var(--good)"></div>
   <div class="sub" data-t="accepts"></div>
+  <label data-t="catLbl"></label>
+  <div class="cats" id="fCats"></div>
   <label data-t="dateTime"></label>
   <div class="auto"><b id="fAt" style="font-weight:500">--</b><span data-t="auto"></span></div>
   <div class="warn" id="fErr" style="margin-top:8px"></div>
@@ -444,6 +498,7 @@ dialog .row{margin-top:16px}
   <div class="k" data-t="coordsK"></div><div class="v" id="pCoords"></div>
   <div class="k" data-t="dateTime"></div><div class="v" id="pAt"></div>
   <div class="k" data-t="altitude"></div><div class="v" id="pAlt"></div>
+  <div class="k" data-t="catLbl"></div><div class="cats" id="pCats"></div>
   <div class="grid2">
     <button class="primary" id="pGo" data-t="go"></button>
     <button id="pShare" data-t="sharePlace"></button>
@@ -459,6 +514,45 @@ dialog .row{margin-top:16px}
   <div class="yrlist" id="yrList"></div>
   <div class="sh" data-t="yrSrc" style="margin-top:10px"></div>
   <div class="row"><button id="yrClose" data-t="close"></button></div>
+</dialog>
+
+<dialog id="dlgTrack" class="tool-dlg">
+  <h3 data-t="trTitle"></h3>
+  <canvas id="trCanvas" class="pathc"></canvas>
+  <div class="stats"><div><span data-t="stDist"></span><b id="trDist">0</b></div><div><span data-t="stTime"></span><b id="trTime">0:00</b></div><div><span data-t="stPts"></span><b id="trPts">0</b></div></div>
+  <div class="sh" id="trHint"></div>
+  <div class="row"><button class="primary" id="trToggle"></button><button id="trBack" data-t="trBack"></button></div>
+  <div class="row" style="margin-top:8px"><button class="danger" id="trClear" data-t="trClear"></button><button id="trClose" data-t="close"></button></div>
+</dialog>
+
+<dialog id="dlgArea" class="tool-dlg">
+  <h3 data-t="arTitle"></h3>
+  <canvas id="arCanvas" class="pathc"></canvas>
+  <div class="stats"><div><span data-t="stArea"></span><b id="arArea">0</b></div><div><span data-t="stPeri"></span><b id="arPeri">0</b></div><div><span data-t="stPts"></span><b id="arPts">0</b></div></div>
+  <div class="sh" data-t="arHint"></div>
+  <div class="row"><button class="primary" id="arToggle"></button><button id="arCorner" data-t="arCorner"></button></div>
+  <div class="row" style="margin-top:8px"><button class="danger" id="arClear" data-t="trClear"></button><button id="arClose" data-t="close"></button></div>
+</dialog>
+
+<dialog id="dlgSos" class="sos-dlg">
+  <h3 data-t="sosTitle"></h3>
+  <div class="sosbig" id="sosCoords">--</div>
+  <div class="sosdms" id="sosDms"></div>
+  <div class="sosmeta" id="sosMeta"></div>
+  <button class="danger big" id="sosShare" data-t="sosShare"></button>
+  <div class="row"><button id="sosCopy" data-t="copyCoords"></button></div>
+  <div class="calls"><a href="tel:911" class="call">📞 911</a><a href="tel:997" class="call">🚑 997</a><a href="tel:998" class="call">🚒 998</a></div>
+  <div class="sh" data-t="sosNote"></div>
+  <div class="row"><button id="sosClose" data-t="close"></button></div>
+</dialog>
+
+<dialog id="dlgMoon" class="moon-dlg">
+  <svg viewBox="0 0 40 40" id="moonBig" class="moonbig"></svg>
+  <h3 id="mdPhase">--</h3>
+  <div class="mdh" id="mdHijri"></div>
+  <div class="stats"><div><span data-t="mdLit"></span><b id="mdLit">--</b></div><div><span data-t="mdRise"></span><b id="mdRise">--</b></div><div><span data-t="mdSet"></span><b id="mdSet">--</b></div></div>
+  <div class="sh" data-t="mdNote"></div>
+  <div class="row"><button id="mdClose" data-t="close"></button></div>
 </dialog>
 
 <dialog id="dlgRestore">
@@ -479,7 +573,7 @@ dialog .row{margin-top:16px}
     <div class="by" data-t="by"></div>
     <b data-t="author" dir="ltr" style="user-select:text;-webkit-user-select:text"></b>
   </div>
-  <div class="vpill">Ver 4.0</div>
+  <div class="vpill">Ver 5.0</div>
   <div class="row"><button id="aClose" data-t="close"></button></div>
 </dialog>
 
@@ -550,7 +644,22 @@ ar:{appName:'سهم',startText:'يوجهك لأي إحداثيات بسهم فق
  paste:'📋 لصق',pasteFail:'اضغط مطولاً على الخانة واختر لصق',
  red:'أحمر',redHint:'الأحمر للّيل: ما يعمي عيونك في الظلام ويريّح البطارية.',ecoLbl:'توفير البطارية',on:'تشغيل',off:'إيقاف',
  ecoHint:'يسمح للشاشة تنطفي، ويخفف تحديث البوصلة، ويوقف الحركات. الـGPS يبقى بدقته الكاملة.',
- msNow:'الموسم الحالي',faslNow:'الفصل',taliNow:'الطالع',tempLbl:'الحرارة',avgT:c=>'المتوسط '+c+'°',dayLeft:'يوم باقي',daysLeft:n=>'باقي '+n+' '+(n===1?'يوم':n===2?'يومين':n<=10?'أيام':'يوم'),
+ msNow:'الموسم الحالي',
+ tSave:'احفظ موقعي',tAdd:'إحداثيات',tTrack:'المسار',tArea:'المساحة',tSos:'طوارئ',catLbl:'التصنيف',catAll:'الكل',
+ trTitle:'🧭 مسار الرجوع',trStart:'▶︎ سجّل مساري',trResume:'▶︎ كمّل التسجيل',trStop:'⏸ أوقف',trBack:'↩️ رجّعني بنفس الطريق',trClear:'🗑 امسح',
+ trEmpty:'ابدأ التسجيل وامشِ، ويظهر مسارك هنا',trHintOn:'يسجّل نقطة كل 10 م من قراءة الـGPS مباشرة. خلّ التطبيق مفتوح والشاشة شغالة.',
+ trHintOff:'سجّل وأنت رايح، وبعدين «رجّعني بنفس الطريق» يوجهك نقطة نقطة للبداية.',trailName:'المسار',
+ stDist:'المسافة',stTime:'الوقت',stPts:'النقاط',stArea:'المساحة',stPeri:'المحيط',hr:'س',min:'د',m2:'م²',ha:'هكتار',
+ arTitle:'📐 قياس المساحة',arStart:'▶︎ ابدأ وامشِ حولها',arCorner:'📍 أضف ركن',arEmpty:'امشِ حول المكان، أو قف عند كل ركن واضغط «أضف ركن»',
+ arHint:'للدقة: قف عند كل ركن واضغط «أضف ركن» (يحسب متوسط آخر القراءات). المساحة تقريبية حسب دقة الـGPS.',cornerAdded:'تمت إضافة الركن',
+ sosTitle:'🆘 الطوارئ',sosShare:'📤 أرسل موقعي',sosMeta:(a,al,t,age)=>'دقة ±'+a+' م · ارتفاع '+al+' م · آخر قراءة '+t+' (قبل '+age+' ث)',
+ sosMsg:(c,a,t)=>'🆘 أحتاج مساعدة. موقعي:\n'+c+'\nدقة ±'+a+' م · الساعة '+t+'\nhttps://maps.google.com/?q='+c.replace(' ',''),
+ sosNote:'«أرسل موقعي» يفتح المشاركة: اختر الرسائل عشان توصل SMS حتى بدون إنترنت.',
+ mdLit:'الإضاءة',mdRise:'طلوع القمر',mdSet:'غروب القمر',mdNote:'الطور والإضاءة وأوقات القمر محسوبة في الجوال بدون إنترنت، والأوقات تقريبية بدقائق.',
+ prNext:n=>'باقي على '+n,pr_fajr:'الفجر',pr_sunrise:'الشروق',pr_dhuhr:'الظهر',pr_asr:'العصر',pr_maghrib:'المغرب',pr_isha:'العشاء',
+ prayNote:'أوقات الصلاة بطريقة أم القرى، محسوبة من موقعك بدون إنترنت.',
+ sunWarn:m=>'🌇 باقي '+m+' د على الغروب',sunStart:d=>'الانطلاق '+d,sunNav:m=>'🌇 الغروب بعد '+m+' د',
+ eta:t=>'⏱️ توصل بعد '+t,faslNow:'الفصل',taliNow:'الطالع',tempLbl:'الحرارة',avgT:c=>'المتوسط '+c+'°',dayLeft:'يوم باقي',daysLeft:n=>'باقي '+n+' '+(n===1?'يوم':n===2?'يومين':n<=10?'أيام':'يوم'),
  lastDay:'آخر يوم',range:(a,b,d,L)=>a+' – '+b+' · اليوم '+d+' من '+L,
  next:(e,n,d,dt)=>'⏭️ يدخل '+e+' <b>'+n+'</b> '+(d===1?'بكرة':'بعد '+d+' '+(d===2?'يومين':d<=10?'أيام':'يوم'))+' · '+dt,soon:'قرّب',
  temp:(n,a,b,c)=>'🌡️ معدل الحرارة في '+n+': <b><bdi dir="ltr">'+a+'° – '+b+'°</bdi></b> (المتوسط '+c+'°)',
@@ -592,7 +701,22 @@ en:{appName:'Sahm',startText:'Guides you to any coordinates with a single arrow.
  paste:'📋 Paste',pasteFail:'Long-press the field and choose Paste',
  red:'Red',redHint:'Red is for night: it keeps your eyes used to the dark and is easy on the battery.',ecoLbl:'Battery saver',on:'On',off:'Off',
  ecoHint:'Lets the screen turn off, updates the compass less often and stops animations. GPS keeps its full accuracy.',
- msNow:'Current season',faslNow:'Quarter',taliNow:'Star (Tali‘)',tempLbl:'Temperature',avgT:c=>'avg '+c+'°',dayLeft:'days left',daysLeft:n=>n+' day'+(n===1?'':'s')+' left',
+ msNow:'Current season',
+ tSave:'Save spot',tAdd:'Coords',tTrack:'Trail',tArea:'Area',tSos:'SOS',catLbl:'Category',catAll:'All',
+ trTitle:'🧭 Trail back',trStart:'▶︎ Record my trail',trResume:'▶︎ Keep recording',trStop:'⏸ Pause',trBack:'↩️ Take me back the same way',trClear:'🗑 Clear',
+ trEmpty:'Start recording and walk; your trail appears here',trHintOn:'Records a point every 10 m straight from the GPS. Keep the app open with the screen on.',
+ trHintOff:'Record on the way out, then “Take me back” guides you point by point to the start.',trailName:'Trail',
+ stDist:'Distance',stTime:'Time',stPts:'Points',stArea:'Area',stPeri:'Perimeter',hr:'h',min:'min',m2:'m²',ha:'ha',
+ arTitle:'📐 Measure area',arStart:'▶︎ Start and walk around',arCorner:'📍 Add corner',arEmpty:'Walk around the place, or stand at each corner and tap “Add corner”',
+ arHint:'For accuracy: stand at each corner and tap “Add corner” (it averages the latest readings). The area is as accurate as the GPS.',cornerAdded:'Corner added',
+ sosTitle:'🆘 Emergency',sosShare:'📤 Send my location',sosMeta:(a,al,t,age)=>'±'+a+' m · altitude '+al+' m · last reading '+t+' ('+age+' s ago)',
+ sosMsg:(c,a,t)=>'🆘 I need help. My location:\n'+c+'\n±'+a+' m · at '+t+'\nhttps://maps.google.com/?q='+c.replace(' ',''),
+ sosNote:'“Send my location” opens sharing: choose Messages so it goes as SMS even without internet.',
+ mdLit:'Illuminated',mdRise:'Moonrise',mdSet:'Moonset',mdNote:'Phase, light and moon times are worked out on the phone with no internet; times are approximate to a few minutes.',
+ prNext:n=>n+' in',pr_fajr:'Fajr',pr_sunrise:'Sunrise',pr_dhuhr:'Dhuhr',pr_asr:'Asr',pr_maghrib:'Maghrib',pr_isha:'Isha',
+ prayNote:'Umm al-Qura prayer times, worked out from your location with no internet.',
+ sunWarn:m=>'🌇 '+m+' min to sunset',sunStart:d=>'start '+d+' away',sunNav:m=>'🌇 sunset in '+m+' min',
+ eta:t=>'⏱️ arrive in '+t,faslNow:'Quarter',taliNow:'Star (Tali‘)',tempLbl:'Temperature',avgT:c=>'avg '+c+'°',dayLeft:'days left',daysLeft:n=>n+' day'+(n===1?'':'s')+' left',
  lastDay:'Last day',range:(a,b,d,L)=>a+' – '+b+' · day '+d+' of '+L,
  next:(e,n,d,dt)=>'⏭️ '+e+' <b>'+n+'</b> starts '+(d===1?'tomorrow':'in '+d+' days')+' · '+dt,soon:'Soon',
  temp:(n,a,b,c)=>'🌡️ Typical temperature in '+n+': <b><bdi dir="ltr">'+a+'° – '+b+'°</bdi></b> (avg '+c+'°)',
@@ -698,6 +822,7 @@ function onPos(p){
   const c=p.coords, now=p.timestamp||Date.now();gpsErr=null;
   pos={lat:c.latitude,lon:c.longitude,acc:c.accuracy,alt:c.altitude,speed:c.speed,course:c.heading,t:now};
   recent.push(pos);while(recent.length&&now-recent[0].t>10000)recent.shift();
+  trackFix(pos);areaFix(pos);
   if(avgBuf&&c.accuracy<=40){avgBuf.push(pos);showAvg()}
   render();
 }
@@ -746,7 +871,10 @@ function onOrient(e){let h=null;
 /* ---------- render ---------- */
 const turn=(c,t)=>c==null?t:c+((t-c+540)%360)-180; // shortest way round
 function target(){if(tab==='qibla')return{name:T('kaaba'),lat:KAABA.lat,lon:KAABA.lon,qibla:true};
-  if(tab==='home'){if(cur==='__start'&&startPt)return Object.assign({name:T('startName')},startPt);return places.find(p=>p.id===cur)||null}return null}
+  if(tab==='home'){if(cur==='__start'&&startPt)return Object.assign({name:T('startName')},startPt);
+    if(cur==='__trail'&&trk.pts.length){trailIdx=Math.min(trailIdx,trk.pts.length-1);const q=trk.pts[trailIdx];
+      return{name:T('trailName')+' · '+(trailIdx+1)+'/'+trk.pts.length,lat:q.lat,lon:q.lon,alt:q.alt,trail:true}}
+    return places.find(p=>p.id===cur)||null}return null}
 function render(){
   const age=pos?(Date.now()-pos.t)/1000:null, stale=age!=null&&age>10;
   const q=gpsQuality(pos&&pos.acc,stale);
@@ -765,7 +893,8 @@ function render(){
   if(tab==='fav'){favTick();return}
   if(tab!=='home'&&tab!=='qibla')return;
 
-  const t=target(), nav=!!t;
+  let t=target();if(t&&t.trail&&pos){trailStep();t=target()}
+  const nav=!!t;$('prayCard').hidden=!(t&&t.qibla);if(t&&t.qibla)paintPray();
   $('here').hidden=nav;['dial','dist','meta','navhead'].forEach(id=>$(id).hidden=!nav);if(!nav)$('altd').hidden=true;$('cancel').hidden=!(nav&&!t.qibla);
   $('stage').classList.toggle('qibla',!!(t&&t.qibla));
   if(!nav){
@@ -776,7 +905,7 @@ function render(){
     $('hAlt').textContent=pos.alt!=null?Math.round(pos.alt)+' m':'--';
     $('hSpd').textContent=pos.speed!=null&&pos.speed>=0?(pos.speed*3.6).toFixed(1)+' km/h':'--';
     if(startPt){const f=fmtDist(distance(pos,startPt));$('startDist').textContent='· '+f.v+' '+f.u}
-    infoTick();
+    infoTick();paintSunWarn();
     return;
   }
   $('navhead').textContent=t.qibla?T('qiblaHead'):T('navTo');
@@ -786,9 +915,12 @@ function render(){
   $('dist').innerHTML=f.v+'<small>'+f.u+'</small>';
   $('meta').replaceChildren(name,' · '+dirName(b)+' '+Math.round(b)+'°');
   $('dist').classList.toggle('near',!t.qibla&&d<50);
+  const line=[];
+  if(!t.qibla){const e=etaOf(cur+'|'+(t.trail?'trail':''),t.trail?d+pathLen(trk.pts.slice(0,trailIdx+1)):d);if(e!=null)line.push('<span>'+T('eta')(fmtDur(e))+'</span>')}
   if(!t.qibla&&t.alt!=null&&pos.alt!=null){const df=Math.round(t.alt-pos.alt);
-    $('altd').innerHTML=(Math.abs(df)<3?T('altSame'):df>0?T('altUp')(df):T('altDown')(-df))+'<span class="dimtxt">'+T('altNote')+'</span>';$('altd').hidden=false}
-  else $('altd').hidden=true;
+    line.push('<span>'+(Math.abs(df)<3?T('altSame'):df>0?T('altUp')(df):T('altDown')(-df))+'</span>')}
+  const sl=sunLeft();if(sl!=null&&!t.qibla)line.push('<span>'+T('sunNav')(sl)+'</span>');
+  $('altd').innerHTML=line.join('');$('altd').hidden=!line.length;
   let h=heading,warn='';
   if(!compassOK){if(pos.course!=null&&!isNaN(pos.course)&&pos.speed>1){h=pos.course;warn=T('wMove')}else{h=0;warn=T('wNorth')}}
   if(bad)warn=T('wComp');
@@ -807,7 +939,7 @@ setInterval(render,1000);
 
 /* ---------- sunrise / sunset (computed on the phone, no internet) ---------- */
 function sunTimes(date,lat,lon){ // NOAA formula; returns Date objects or null (polar day/night)
-  const J=Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/864e5+2440587.5, n=Math.round(J-2451545+0.0008-lon/360);
+  const J=Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())/864e5+2440587.5, n=Math.round(J+0.5-2451545+0.0008-lon/360); // this day's solar noon
   const Js=n-lon/360, M=(357.5291+0.98560028*Js)%360, C=1.9148*Math.sin(rad(M))+0.02*Math.sin(rad(2*M))+0.0003*Math.sin(rad(3*M));
   const Lm=(M+C+180+102.9372)%360, Jt=2451545+Js+0.0053*Math.sin(rad(M))-0.0069*Math.sin(rad(2*Lm));
   const dec=Math.asin(Math.sin(rad(Lm))*Math.sin(rad(23.44)));
@@ -919,6 +1051,200 @@ $('seasonCard').onclick=()=>{fillYear();$('dlgSeasons').showModal()};
 $$('#yrSeg button').forEach(b=>b.onclick=()=>{yrTab=b.dataset.y;fillYear()});
 $('yrClose').onclick=()=>$('dlgSeasons').close();
 
+/* ---------- prayer times, Hijri date and the moon — all computed on the phone ----------
+   Prayer times: Umm al-Qura method — Fajr at 18.5° below the horizon, Asr when a shadow equals its object
+   plus the noon shadow (standard), Maghrib at sunset, Isha 90 min after Maghrib (120 min in Ramadan).
+   Moon: positions and rise/set after the published SunCalc formulas (V. Agafonkin, BSD-2). */
+const AST=(()=>{const PI=Math.PI,R=PI/180,sin=Math.sin,cos=Math.cos,tan=Math.tan,asin=Math.asin,acos=Math.acos,atan=Math.atan2;
+  const dayMs=864e5,J1970=2440588,J2000=2451545,E=R*23.4397;
+  const toDays=d=>d.valueOf()/dayMs-0.5+J1970-J2000;
+  const ra=(l,b)=>atan(sin(l)*cos(E)-tan(b)*sin(E),cos(l)), dec=(l,b)=>asin(sin(b)*cos(E)+cos(b)*sin(E)*sin(l));
+  const alt=(H,phi,d)=>asin(sin(phi)*sin(d)+cos(phi)*cos(d)*cos(H));
+  const sid=(d,lw)=>R*(280.16+360.9856235*d)-lw;
+  const refr=h=>{if(h<0)h=0;return 0.0002967/tan(h+0.00312536/(h+0.08901179))};
+  function sunC(d){const M=R*(357.5291+0.98560028*d),C=R*(1.9148*sin(M)+0.02*sin(2*M)+0.0003*sin(3*M)),L=M+C+R*102.9372+PI;return{dec:dec(L,0),ra:ra(L,0)}}
+  function moonC(d){const L=R*(218.316+13.176396*d),M=R*(134.963+13.064993*d),F=R*(93.272+13.229350*d),l=L+R*6.289*sin(M),b=R*5.128*sin(F);
+    return{ra:ra(l,b),dec:dec(l,b),dist:385001-20905*cos(M)}}
+  function moonAlt(date,lat,lon){const lw=R*-lon,phi=R*lat,d=toDays(date),c=moonC(d),H=sid(d,lw)-c.ra;let h=alt(H,phi,c.dec);return h+refr(h)}
+  function illum(date){const d=toDays(date),s=sunC(d),m=moonC(d),sd=149598000;
+    const phi=acos(sin(s.dec)*sin(m.dec)+cos(s.dec)*cos(m.dec)*cos(s.ra-m.ra)),inc=atan(sd*sin(phi),m.dist-sd*cos(phi));
+    const ang=atan(cos(s.dec)*sin(s.ra-m.ra),sin(s.dec)*cos(m.dec)-cos(s.dec)*sin(m.dec)*cos(s.ra-m.ra));
+    return{fraction:(1+cos(inc))/2,phase:0.5+0.5*inc*(ang<0?-1:1)/PI}}
+  // moon rise / set during the local calendar day of `date`
+  function moonTimes(date,lat,lon){const t=new Date(date);t.setHours(0,0,0,0);const later=h=>new Date(t.valueOf()+h*36e5),hc=0.133*R;
+    let h0=moonAlt(t,lat,lon)-hc,rise,set,ye;
+    for(let i=1;i<=24;i+=2){const h1=moonAlt(later(i),lat,lon)-hc,h2=moonAlt(later(i+1),lat,lon)-hc;
+      const a=(h0+h2)/2-h1,b=(h2-h0)/2,xe=-b/(2*a);ye=(a*xe+b)*xe+h1;const D=b*b-4*a*h1;let roots=0,x1=0,x2=0;
+      if(D>=0){const dx=Math.sqrt(D)/(Math.abs(a)*2);x1=xe-dx;x2=xe+dx;if(Math.abs(x1)<=1)roots++;if(Math.abs(x2)<=1)roots++;if(x1<-1)x1=x2}
+      if(roots===1){if(h0<0)rise=i+x1;else set=i+x1}else if(roots===2){rise=i+(ye<0?x2:x1);set=i+(ye<0?x1:x2)}
+      if(rise&&set)break;h0=h2}
+    return{rise:rise?later(rise):null,set:set?later(set):null}}
+  // ---- prayer times ----
+  const fixA=a=>a-360*Math.floor(a/360), fixH=h=>h-24*Math.floor(h/24);
+  function sunPos(jd){const D=jd-2451545,g=R*fixA(357.529+0.98560028*D),q=fixA(280.459+0.98564736*D),L=R*fixA(q+1.915*sin(g)+0.020*sin(2*g)),e=R*(23.439-0.00000036*D);
+    const RA=atan(cos(e)*sin(L),cos(L))/R/15;return{decl:asin(sin(e)*sin(L)),eqt:q/15-fixH(RA)}}
+  function prayers(date,lat,lon,ramadan){
+    const Y=date.getFullYear(),Mo=date.getMonth(),Dd=date.getDate(),jd0=Date.UTC(Y,Mo,Dd)/dayMs+2440587.5-lon/(15*24),phi=R*lat;
+    const mid=t=>fixH(12-sunPos(jd0+t/24).eqt);
+    const ang=(a,t,ccw)=>{const p=sunPos(jd0+t/24),z=mid(t),v=acos((-sin(R*a)-sin(p.decl)*sin(phi))/(cos(p.decl)*cos(phi)))/R/15;return z+(ccw?-v:v)};
+    const asr=t=>{const p=sunPos(jd0+t/24),a=-Math.atan(1/(1+tan(Math.abs(phi-p.decl))))/R;return ang(a,t)};
+    let tm={fajr:5,sunrise:6,dhuhr:12,asr:13,maghrib:18};
+    for(let k=0;k<2;k++)tm={fajr:ang(18.5,tm.fajr,true),sunrise:ang(0.833,tm.sunrise,true),dhuhr:mid(tm.dhuhr),asr:asr(tm.asr),maghrib:ang(0.833,tm.maghrib)};
+    tm.isha=tm.maghrib+(ramadan?2:1.5);
+    const base=Date.UTC(Y,Mo,Dd)-lon/15*36e5, out={};   // hours above are local mean solar time at the longitude
+    for(const k in tm){if(!isFinite(tm[k]))return null;const ms=Date.UTC(Y,Mo,Dd)+(tm[k]-lon/15)*36e5;out[k]=new Date(Math.round(ms/6e4)*6e4)}
+    return out}
+  return{illum,moonTimes,prayers}})();
+// Hijri date (Umm al-Qura) from the phone's own calendar
+function hijri(date,lang){const loc=lang==='en'?'en-u-ca-islamic-umalqura-nu-latn':'ar-SA-u-ca-islamic-umalqura-nu-latn';
+  try{const f=new Intl.DateTimeFormat(loc,{day:'numeric',month:'long',year:'numeric'});const p=f.formatToParts(date),g=t=>(p.find(x=>x.type===t)||{}).value;
+    const mNum=+new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn',{month:'numeric'}).format(date);
+    return{day:g('day'),month:g('month'),year:(g('year')||'').replace(/\D/g,''),m:mNum}}catch(e){return null}}
+
+/* ---------- place categories ---------- */
+const CATS=[['pin','📍','عام','General'],['home','🏠','بيت','Home'],['car','🚙','سيارة','Car'],['camp','⛺','مخيم','Camp'],
+  ['well','💧','بئر','Well'],['tree','🌳','شجرة','Tree'],['mount','⛰️','جبل','Mountain'],['fuel','⛽','محطة','Station']];
+const catOf=id=>CATS.find(c=>c[0]===id)||CATS[0];
+const catName=c=>cfg.lang==='en'?c[3]:c[2];
+function buildCats(el,sel,onPick){el.innerHTML='';CATS.forEach(c=>{const b=document.createElement('button');b.type='button';
+  b.textContent=c[1]+' '+catName(c);b.classList.toggle('on',c[0]===sel);b.onclick=()=>{el.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');onPick(c[0])};el.appendChild(b)})}
+let catFilt='all';
+function fillCatFilter(){const used=[...new Set(places.map(p=>p.cat||'pin'))],el=$('catFilter');el.innerHTML='';
+  if(used.length<2){catFilt='all';return}
+  const mk=(id,txt)=>{const b=document.createElement('button');b.textContent=txt;b.classList.toggle('on',catFilt===id);b.onclick=()=>{catFilt=id;fillList()};el.appendChild(b)};
+  mk('all',T('catAll'));CATS.filter(c=>used.includes(c[0])).forEach(c=>mk(c[0],c[1]+' '+catName(c)));
+  if(catFilt!=='all'&&!used.includes(catFilt))catFilt='all'}
+
+/* ---------- drawing a path on a blank canvas (north up, no map) ---------- */
+function drawPath(cv,pts,o){const dpr=window.devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;if(!w)return;
+  cv.width=w*dpr;cv.height=h*dpr;const g=cv.getContext('2d');g.scale(dpr,dpr);g.clearRect(0,0,w,h);
+  const css=getComputedStyle(document.documentElement),col=k=>css.getPropertyValue(k).trim();
+  const all=pts.concat(o.cur?[o.cur]:[]);
+  g.fillStyle=col('--dim');g.font='12px '+css.getPropertyValue('--ui');g.textAlign='center';
+  if(!all.length){g.fillText(o.empty||'',w/2,h/2);return}
+  const lat0=all[0].lat,lon0=all[0].lon,k=Math.cos(rad(lat0));
+  const P=p=>({x:(p.lon-lon0)*111320*k,y:(p.lat-lat0)*110540});
+  const xy=all.map(P);let x0=Math.min(...xy.map(p=>p.x)),x1=Math.max(...xy.map(p=>p.x)),y0=Math.min(...xy.map(p=>p.y)),y1=Math.max(...xy.map(p=>p.y));
+  const span=Math.max(x1-x0,y1-y0,30),pad=26,sc=Math.min((w-2*pad)/span,(h-2*pad)/span),cx=(x0+x1)/2,cy=(y0+y1)/2;
+  const S=p=>{const q=P(p);return[w/2+(q.x-cx)*sc,h/2-(q.y-cy)*sc]};
+  // scale bar
+  const nice=[5,10,20,50,100,200,500,1000,2000,5000,10000,20000].find(v=>v*sc>=w*0.18)||20000;
+  g.strokeStyle=col('--dim');g.lineWidth=2;g.beginPath();g.moveTo(14,h-14);g.lineTo(14+nice*sc,h-14);g.stroke();
+  g.textAlign='left';g.fillText(nice>=1000?(nice/1000)+' '+T('km'):nice+' '+T('m'),14,h-20);
+  g.textAlign='right';g.fillStyle=col('--arrow');g.font='700 13px '+css.getPropertyValue('--num');g.fillText('N ↑',w-12,20);
+  if(pts.length){g.strokeStyle=col('--arrow');g.lineWidth=3.5;g.lineJoin='round';g.lineCap='round';g.beginPath();
+    pts.forEach((p,i)=>{const [x,y]=S(p);i?g.lineTo(x,y):g.moveTo(x,y)});if(o.closed&&pts.length>2)g.closePath();g.stroke();
+    if(o.closed&&pts.length>2){g.fillStyle=col('--okBg');g.fill()}
+    const [sx,sy]=S(pts[0]);g.fillStyle=col('--good');g.beginPath();g.arc(sx,sy,6,0,7);g.fill()}
+  if(o.cur){const [x,y]=S(o.cur);g.fillStyle=col('--dial');g.beginPath();g.arc(x,y,7,0,7);g.fill();g.strokeStyle=col('--panel');g.lineWidth=2.5;g.stroke()}
+  if(o.mark!=null&&pts[o.mark]){const [x,y]=S(pts[o.mark]);g.strokeStyle=col('--bad');g.lineWidth=2.5;g.beginPath();g.arc(x,y,9,0,7);g.stroke()}}
+const fmtDur=ms=>{const m=Math.floor(ms/6e4),h=Math.floor(m/60);return h?h+':'+pad(m%60)+' '+T('hr'):m+' '+T('min')};
+function pathLen(pts,closed){let L=0;for(let i=1;i<pts.length;i++)L+=distance(pts[i-1],pts[i]);if(closed&&pts.length>2)L+=distance(pts[pts.length-1],pts[0]);return L}
+
+/* ---------- breadcrumb trail: a raw GPS point every 10 m (no smoothing), and walking it back ---------- */
+let trk={on:false,pts:[],t0:0,t1:0};try{Object.assign(trk,JSON.parse(localStorage.getItem('sahm.track')||'{}'))}catch(e){}
+let trailIdx=0;
+function saveTrk(){try{localStorage.setItem('sahm.track',JSON.stringify(trk))}catch(e){}}
+function trackFix(p){if(!trk.on||p.acc>25)return;const last=trk.pts[trk.pts.length-1];
+  if(!last||distance(last,p)>=10){trk.pts.push({lat:p.lat,lon:p.lon,alt:p.alt!=null?Math.round(p.alt):null,t:p.t});trk.t1=p.t;
+    if(trk.pts.length>8000)trk.pts.shift();saveTrk();if($('dlgTrack').open)paintTrack()}}
+function paintTrack(){$('recDot').hidden=!trk.on;
+  if(!$('dlgTrack').open)return;
+  drawPath($('trCanvas'),trk.pts,{cur:pos,empty:T('trEmpty'),mark:cur==='__trail'?trailIdx:null});
+  const L=pathLen(trk.pts),f=fmtDist(L);$('trDist').textContent=f.v+' '+f.u;
+  $('trTime').textContent=trk.t0?fmtDur((trk.on?Date.now():trk.t1||trk.t0)-trk.t0):'--';$('trPts').textContent=trk.pts.length;
+  $('trToggle').textContent=trk.on?T('trStop'):T(trk.pts.length?'trResume':'trStart');
+  $('trBack').disabled=trk.pts.length<2;$('trHint').textContent=T(trk.on?'trHintOn':'trHintOff')}
+$('toolTrack').onclick=()=>{$('dlgTrack').showModal();paintTrack()};
+$('trClose').onclick=()=>$('dlgTrack').close();
+$('trToggle').onclick=()=>{trk.on=!trk.on;if(trk.on&&!trk.pts.length)trk.t0=Date.now();if(trk.on&&pos)trackFix(pos);saveTrk();paintTrack();wakeOn()};
+$('trClear').onclick=()=>{const b=$('trClear');if(!b.classList.contains('sure')){b.classList.add('sure');b.textContent=T('sure');setTimeout(()=>{b.classList.remove('sure');b.textContent=T('trClear')},3000);return}
+  trk={on:false,pts:[],t0:0,t1:0};saveTrk();if(cur==='__trail'){cur=null;save()}b.classList.remove('sure');b.textContent=T('trClear');paintTrack()};
+// walk it back: start at the recorded point nearest to you and count down to the first one
+$('trBack').onclick=()=>{if(trk.pts.length<2)return;let best=trk.pts.length-1;
+  if(pos){let bd=1e12;trk.pts.forEach((p,i)=>{const d=distance(pos,p);if(d<bd){bd=d;best=i}})}
+  trailIdx=best;$('dlgTrack').close();navigateTo('__trail')};
+function trailStep(){if(!pos)return;const thr=Math.max(10,cfg.arrive);
+  while(trailIdx>0&&distance(pos,trk.pts[trailIdx])<=thr)trailIdx--}
+
+/* ---------- area: walk around it (a raw point every 3 m), or stand at each corner and tap ---------- */
+let area={on:false,pts:[]};
+function areaFix(p){if(!area.on||p.acc>15)return;const last=area.pts[area.pts.length-1];
+  if(!last||distance(last,p)>=3){area.pts.push({lat:p.lat,lon:p.lon});if($('dlgArea').open)paintArea()}}
+function polyArea(pts){if(pts.length<3)return 0;const lat0=pts[0].lat,k=Math.cos(rad(lat0));
+  const q=pts.map(p=>[(p.lon-pts[0].lon)*111320*k,(p.lat-lat0)*110540]);let A=0;
+  for(let i=0;i<q.length;i++){const [x1,y1]=q[i],[x2,y2]=q[(i+1)%q.length];A+=x1*y2-x2*y1}return Math.abs(A)/2}
+function paintArea(){if(!$('dlgArea').open)return;drawPath($('arCanvas'),area.pts,{cur:pos,closed:true,empty:T('arEmpty')});
+  const A=polyArea(area.pts),P=pathLen(area.pts,true),f=fmtDist(P);
+  $('arArea').textContent=A>=1e4?(A/1e4).toFixed(2)+' '+T('ha'):Math.round(A).toLocaleString('en')+' '+T('m2');
+  $('arPeri').textContent=f.v+' '+f.u;$('arPts').textContent=area.pts.length;
+  $('arToggle').textContent=area.on?T('trStop'):T(area.pts.length?'trResume':'arStart')}
+$('toolArea').onclick=()=>{$('dlgArea').showModal();paintArea()};
+$('arClose').onclick=()=>$('dlgArea').close();
+$('arToggle').onclick=()=>{area.on=!area.on;if(area.on&&pos)areaFix(pos);paintArea()};
+$('arCorner').onclick=()=>{const b=recent.filter(f=>f.acc<=20);if(!b.length){toast(T('waitGps'));return}const a=avgFix(b);area.pts.push({lat:a.lat,lon:a.lon});paintArea();toast(T('cornerAdded'))};
+$('arClear').onclick=()=>{area={on:false,pts:[]};paintArea()};
+
+/* ---------- SOS ---------- */
+function sosText(){return T('sosMsg')(pos.lat.toFixed(6)+', '+pos.lon.toFixed(6),Math.round(pos.acc),hm(new Date(pos.t)))}
+function paintSos(){if(!$('dlgSos').open)return;
+  if(!pos){$('sosCoords').textContent='--';$('sosDms').textContent='';$('sosMeta').textContent=T('waitGps');return}
+  $('sosCoords').innerHTML=pos.lat.toFixed(6)+'<br>'+pos.lon.toFixed(6);$('sosDms').textContent=dms(pos.lat,'N','S')+'  '+dms(pos.lon,'E','W');
+  const age=Math.round((Date.now()-pos.t)/1000);
+  $('sosMeta').textContent=T('sosMeta')(Math.round(pos.acc),pos.alt!=null?Math.round(pos.alt):'--',hm(new Date(pos.t)),age)}
+$('toolSos').onclick=()=>{$('dlgSos').showModal();paintSos()};
+$('sosClose').onclick=()=>$('dlgSos').close();
+$('sosCopy').onclick=()=>{if(pos)copy(pos.lat.toFixed(6)+', '+pos.lon.toFixed(6))};
+$('sosShare').onclick=async()=>{if(!pos){toast(T('waitGps'));return}const text=sosText();
+  if(navigator.share){try{await navigator.share({text});return}catch(e){if(e.name==='AbortError')return}}copy(text)};
+
+/* ---------- the moon (drawn to its real phase) + Hijri date ---------- */
+function moonPath(phase,r){ // phase 0 new → 0.5 full → 1 new; lit side on the right while waxing
+  const c=Math.cos(2*Math.PI*phase),rx=Math.abs(c)*r,wax=phase<0.5,top='20 '+(20-r),bot='20 '+(20+r);
+  if(wax)return 'M'+top+' A'+r+' '+r+' 0 0 1 '+bot+' A'+rx+' '+r+' 0 0 '+(c>0?0:1)+' '+top+'Z';
+  return 'M'+top+' A'+r+' '+r+' 0 0 0 '+bot+' A'+rx+' '+r+' 0 0 '+(c>0?1:0)+' '+top+'Z'}
+function moonSVG(phase){return '<defs><radialGradient id="mg" cx="40%" cy="38%"><stop offset="0" stop-color="#fffbe9"/><stop offset="1" stop-color="#e9dcb8"/></radialGradient></defs>'+
+  '<circle cx="20" cy="20" r="17" fill="#3b3a44" stroke="rgba(0,0,0,.25)"/><path d="'+moonPath(phase,17)+'" fill="url(#mg)"/>'}
+const PHASES=[['محاق','New moon'],['هلال','Waxing crescent'],['تربيع أول','First quarter'],['أحدب متزايد','Waxing gibbous'],['بدر','Full moon'],['أحدب متناقص','Waning gibbous'],['تربيع ثاني','Last quarter'],['هلال متناقص','Waning crescent']];
+const phaseName=p=>{const i=Math.floor((p*8+0.5)%8);return PHASES[i][cfg.lang==='en'?1:0]};
+function moonTick(){const now=new Date(),il=AST.illum(now),hj=hijri(now,cfg.lang);
+  $('moonSvg').innerHTML=moonSVG(il.phase);$('hijriShort').textContent=hj?hj.day+' '+hj.month:'';
+  moonTick.hj=hj;moonTick.il=il}
+$('moonBtn').onclick=()=>{moonTick();const il=moonTick.il,hj=moonTick.hj,now=new Date();
+  $('moonBig').innerHTML=moonSVG(il.phase);$('mdPhase').textContent=phaseName(il.phase);
+  $('mdHijri').textContent=hj?hj.day+' '+hj.month+' '+hj.year+(cfg.lang==='en'?' AH':' هـ'):'';
+  $('mdLit').textContent=Math.round(il.fraction*100)+'%';
+  if(pos){const mt=AST.moonTimes(now,pos.lat,pos.lon);$('mdRise').textContent=mt.rise?hm(mt.rise):'--';$('mdSet').textContent=mt.set?hm(mt.set):'--'}
+  else{$('mdRise').textContent='--';$('mdSet').textContent='--'}
+  $('dlgMoon').showModal()};
+$('mdClose').onclick=()=>$('dlgMoon').close();
+
+/* ---------- prayer times (Umm al-Qura) on the Qibla page ---------- */
+const PR=['fajr','sunrise','dhuhr','asr','maghrib','isha'];
+function prayToday(d){if(!pos)return null;const hj=hijri(d,'en');return AST.prayers(d,pos.lat,pos.lon,hj&&hj.m===9)}
+function paintPray(){if(!pos){$('pNextName').textContent=T('waitGps');$('pNextIn').textContent='';$('pGrid').innerHTML='';return}
+  const now=new Date(),key=now.toDateString()+pos.lat.toFixed(2)+pos.lon.toFixed(2);
+  if(paintPray.key!==key){paintPray.key=key;paintPray.t=prayToday(now);const tm=new Date(now);tm.setDate(tm.getDate()+1);paintPray.tom=prayToday(tm)}
+  const t=paintPray.t;if(!t)return;
+  let nx=PR.find(k=>k!=='sunrise'&&t[k]>now),when=nx?t[nx]:paintPray.tom&&paintPray.tom.fajr;if(!nx)nx='fajr';
+  const left=Math.max(0,when-now),h=Math.floor(left/36e5),m=Math.floor(left%36e5/6e4),s=Math.floor(left%6e4/1e3);
+  $('pNextName').textContent=T('prNext')(T('pr_'+nx));$('pNextIn').textContent=(h?h+':'+pad(m):m)+':'+pad(s);
+  $('pGrid').innerHTML=PR.map(k=>'<div class="'+(k===nx&&t[k]>now?'now':'')+'">'+T('pr_'+k)+'<b>'+hm(t[k]).replace(/ (ص|م|AM|PM)$/,'')+'</b></div>').join('')}
+
+/* ---------- time to arrive, from how fast the distance is actually shrinking ---------- */
+let etaH=[],etaKey='';
+function etaOf(key,d){if(key!==etaKey){etaKey=key;etaH=[]}
+  if(pos&&(!etaH.length||etaH[etaH.length-1].t!==pos.t)){etaH.push({t:pos.t,d});while(etaH.length&&pos.t-etaH[0].t>90e3)etaH.shift()}
+  const old=etaH.find(x=>pos.t-x.t>=15e3);if(!old)return null;const v=(old.d-d)/((pos.t-old.t)/1000);
+  return v>0.3?d/v*1000:null}
+
+/* ---------- sunset reminder ---------- */
+function sunLeft(){if(!pos)return null;const st=sunTimes(new Date(),pos.lat,pos.lon);if(!st)return null;const m=(st.set-Date.now())/6e4;return m>0&&m<=60?Math.ceil(m):null}
+function paintSunWarn(){const m=sunLeft(),el=$('sunWarn');if(m==null){el.hidden=true;return}
+  let tx=T('sunWarn')(m);if(startPt&&pos){const f=fmtDist(distance(pos,startPt));tx+=' · '+T('sunStart')(f.v+' '+f.u)}
+  el.textContent=tx;el.hidden=false}
+setInterval(()=>{moonTick();paintSos();if($('dlgTrack').open)paintTrack()},5000);
+
 /* ---------- tabs ---------- */
 function setTitle(){$('ptitle').textContent=tab==='home'?'':T({set:'tabSet',qibla:'tabQibla',fav:'tabFav'}[tab])}
 function go(name){tab=name;smooth=null;smoothB=null;arrived=false;
@@ -937,18 +1263,18 @@ function stamp(d=new Date()){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+
 function showAt(at){const m=at&&at.match(/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/);if(!m)return '';
   let h=+m[4];const ap=h<12?T('am'):T('pm');h=h%12||12;return m[3]+'/'+m[2]+'/'+m[1]+' · '+h+':'+m[5]+' '+ap}
 function navigateTo(id){cur=id||null;save();go('home')}
-function addPlace(name,c,at,alt){const p={id:Date.now().toString(36),name:name||T('place'),lat:c.lat,lon:c.lon,at:at===undefined?stamp():at};if(alt!=null)p.alt=alt;places.push(p);save();return p}
+function addPlace(name,c,at,alt,cat){const p={id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),name:name||T('place'),lat:c.lat,lon:c.lon,at:at===undefined?stamp():at};if(alt!=null)p.alt=alt;if(cat&&cat!=='pin')p.cat=cat;places.push(p);save();return p}
 function preview(){const c=parseCoord($('fCoord').value);$('fErr').textContent='';$('fPrev').textContent=c?'✓ '+c.lat.toFixed(6)+', '+c.lon.toFixed(6):''}
 $('fCoord').oninput=()=>{preview();nameFromMsg($('fCoord').value)};
 function nameFromMsg(v){const m=v&&v.match(/📍\s*(.+?)(?=\s*[\r\n]|\s*-?\d{1,3}\.\d{3}|$)/);if(m&&!$('fName').value.trim())$('fName').value=m[1].trim()}
 $('fPaste').onclick=async()=>{try{const v=await navigator.clipboard.readText();if(!v)throw 0;$('fCoord').value=v.trim();if(avgBuf){avgBuf.edited=true;$('fAvg').hidden=true}preview();nameFromMsg(v)}catch(e){toast(T('pasteFail'));$('fCoord').focus()}};
-function openAdd(prefill,fix){avgBuf=fix?[fix]:null;$('fAvg').hidden=true;$('fName').value='';$('fCoord').value=prefill||'';preview();if(fix)showAvg();openAdd.at=stamp();$('fAt').textContent=showAt(openAdd.at);$('dlgAdd').showModal()}
+function openAdd(prefill,fix){avgBuf=fix?[fix]:null;$('fAvg').hidden=true;$('fName').value='';$('fCoord').value=prefill||'';preview();if(fix)showAvg();openAdd.at=stamp();$('fAt').textContent=showAt(openAdd.at);openAdd.cat='pin';buildCats($('fCats'),'pin',c=>openAdd.cat=c);$('dlgAdd').showModal()}
 $$('.addCoord').forEach(b=>b.onclick=()=>openAdd(''));
 $$('.saveHere').forEach(b=>b.onclick=()=>{if(!pos){toast(T('waitGps'));return}openAdd('',pos)});
 $('fOk').onclick=()=>{const v=$('fCoord').value,c=parseCoord(v);
   if(!c){$('fErr').textContent=/goo\.gl|maps\.app/i.test(v)?T('errShort'):T('errBad');return}
   const alt=avgBuf&&!avgBuf.edited&&avgBuf.length?avgFix(avgBuf.slice(-30)).alt:null;
-  addPlace($('fName').value.trim(),c,openAdd.at,alt);$('dlgAdd').close();
+  addPlace($('fName').value.trim(),c,openAdd.at,alt,openAdd.cat);$('dlgAdd').close();
   if(tab==='fav')fillList();else go('fav')};
 $('fCancel').onclick=()=>$('dlgAdd').close();
 $('dlgAdd').addEventListener('close',()=>{avgBuf=null});
@@ -962,10 +1288,11 @@ function sortedPlaces(){const a=places.slice();
 function ndText(p){if(!pos)return '';const f=fmtDist(distance(pos,p));return f.v+' '+f.u+' · '+dirName(bearing(pos,p))}
 function fillList(){const Ls=$('list');Ls.innerHTML='';fillList.t=Date.now();
   $$('#sortSeg button').forEach(b=>b.classList.toggle('on',b.dataset.s===cfg.sort));
+  fillCatFilter();
   if(!places.length){Ls.innerHTML='<div class="empty">'+T('empty')+'</div>';return}
-  sortedPlaces().forEach(p=>{const it=document.createElement('div');it.className='item';it.dataset.id=p.id;
+  sortedPlaces().filter(p=>catFilt==='all'||(p.cat||'pin')===catFilt).forEach(p=>{const it=document.createElement('div');it.className='item';it.dataset.id=p.id;
     it.innerHTML='<div class="txt"><b></b><small></small><div class="at"></div><div class="nd"></div></div><div class="acts"><button class="primary" data-a="go"></button><button class="more" data-a="more">⋯</button></div>';
-    it.querySelector('b').textContent=p.name;it.querySelector('small').textContent=fmtLL(p.lat,p.lon);it.querySelector('.at').textContent=showAt(p.at);
+    it.querySelector('b').textContent=catOf(p.cat)[1]+' '+p.name;it.querySelector('small').textContent=fmtLL(p.lat,p.lon);it.querySelector('.at').textContent=showAt(p.at);
     it.querySelector('.nd').textContent=ndText(p);
     const bGo=it.querySelector('[data-a=go]');bGo.textContent=T('go');bGo.onclick=()=>navigateTo(p.id);
     it.querySelector('[data-a=more]').onclick=()=>openPlace(p);
@@ -977,9 +1304,9 @@ function favTick(){$$('#list .item').forEach(it=>{const p=places.find(x=>x.id===
 $$('#sortSeg button').forEach(b=>b.onclick=()=>{cfg.sort=b.dataset.s;saveCfg();fillList()});
 let curP=null;
 function openPlace(p){curP=p;$('pName').value=p.name;$('pCoords').textContent=fmtLL(p.lat,p.lon);$('pAt').textContent=showAt(p.at)||'--';
-  $('pAlt').textContent=p.alt!=null?p.alt+' m':'--';const d=$('pDel');d.classList.remove('sure');d.textContent=T('del');$('dlgPlace').showModal()}
+  $('pAlt').textContent=p.alt!=null?p.alt+' m':'--';openPlace.cat=p.cat||'pin';buildCats($('pCats'),openPlace.cat,c=>openPlace.cat=c);const d=$('pDel');d.classList.remove('sure');d.textContent=T('del');$('dlgPlace').showModal()}
 $('pClose').onclick=()=>$('dlgPlace').close();
-$('pSave').onclick=()=>{const n=$('pName').value.trim();if(n&&curP){curP.name=n;save();toast(T('renamed'))}$('dlgPlace').close();fillList()};
+$('pSave').onclick=()=>{const n=$('pName').value.trim();if(curP){if(n)curP.name=n;if(openPlace.cat==='pin')delete curP.cat;else curP.cat=openPlace.cat;save();toast(T('renamed'))}$('dlgPlace').close();fillList()};
 $('pGo').onclick=()=>{$('dlgPlace').close();navigateTo(curP.id)};
 $('pCopy').onclick=()=>copy(fmtLL(curP.lat,curP.lon));
 $('pShare').onclick=()=>sharePlace(curP);
@@ -1004,7 +1331,7 @@ $('resetStart').onclick=()=>{const b=$('resetStart');if(!b.classList.contains('s
   b.classList.remove('sure');clearStart();toast(T('startCleared'))};
 
 /* ---------- backup / restore: plain text, one place per line ---------- */
-function backupText(){return T('backupTitle')+'\n'+places.map(p=>p.name+': '+p.lat.toFixed(6)+', '+p.lon.toFixed(6)+(p.at?' | '+p.at:'')+(p.alt!=null?' | '+p.alt+'m':'')).join('\n')}
+function backupText(){return T('backupTitle')+'\n'+places.map(p=>p.name+': '+p.lat.toFixed(6)+', '+p.lon.toFixed(6)+(p.at?' | '+p.at:'')+(p.alt!=null?' | '+p.alt+'m':'')+(p.cat?' | '+catOf(p.cat)[1]:'')).join('\n')}
 $('backup').onclick=async()=>{
   if(!places.length){toast(T('noPlaces'));return}
   const text=backupText();
@@ -1017,6 +1344,7 @@ $('rOk').onclick=()=>{
   $('rText').value.split(/\r?\n/).forEach((line,i)=>{
     line=line.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/٫/g,'.').replace(/،/g,',').trim();
     // "name: lat, lon" (old backups) or "name: lat, lon | YYYY-MM-DD HH:MM" (1.7+)
+    let cat=null;const cm=line.match(/\s*\|\s*(\S+)\s*$/);if(cm){const c0=CATS.find(c=>c[1]===cm[1]||c[1].replace('\ufe0f','')===cm[1].replace('\ufe0f',''));if(c0){cat=c0[0];line=line.slice(0,cm.index)}}
     let alt=null;const am=line.match(/\s*\|\s*(-?\d+)\s*m\s*$/i);if(am){alt=+am[1];line=line.slice(0,am.index)}
     let at='';const dm=line.match(/\s*\|\s*(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\s*$/);
     if(dm){at=dm[1];line=line.slice(0,dm.index)}
@@ -1024,7 +1352,7 @@ $('rOk').onclick=()=>{
     const c=okLL(m[1],m[2]);if(!c)return;
     const name=line.slice(0,m.index).replace(/[\s:|\-–—]+$/,'').trim()||T('place');
     if(places.some(p=>Math.abs(p.lat-c.lat)<1e-6&&Math.abs(p.lon-c.lon)<1e-6)){skipped++;return}
-    const np={id:Date.now().toString(36)+i,name,lat:c.lat,lon:c.lon,at};if(alt!=null)np.alt=alt;places.push(np);added++;
+    const np={id:Date.now().toString(36)+i,name,lat:c.lat,lon:c.lon,at};if(alt!=null)np.alt=alt;if(cat&&cat!=='pin')np.cat=cat;places.push(np);added++;
   });
   if(!added&&!skipped){$('rErr').textContent=T('restoreErr');return}
   save();fillList();$('dlgRestore').close();toast(T('restored')(added,skipped))};
@@ -1034,7 +1362,7 @@ function paintSet(){$$('.seg[data-k]').forEach(s=>{const k=s.dataset.k;s.querySe
 $$('.seg[data-k] button').forEach(b=>b.onclick=()=>{
   const k=b.parentNode.dataset.k,v=b.dataset.v;cfg[k]=k==='arrive'?+v:v;saveCfg();
   if(k==='theme'||k==='eco')applyTheme();
-  if(k==='lang'){applyLang();infoTick(true);seasonTick()}
+  if(k==='lang'){applyLang();infoTick(true);seasonTick();moonTick();paintPray.key=''}
   if(k==='eco')wakeOn();
   paintSet();render()});
 $('share').onclick=async()=>{const url=location.href.split('#')[0];
@@ -1094,7 +1422,7 @@ function showInstall(){
 $('instNow').onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$('instNow').hidden=true};
 $('go').onclick=()=>{if(!isApp&&!devBypass){showInstall();return}start()};
 
-load();applyTheme();applyLang();paintStart();seasonTick();
+load();applyTheme();applyLang();paintStart();seasonTick();moonTick();paintTrack();
 const hh=decodeURIComponent(location.hash.slice(1));const hc=hh&&parseCoord(hh);
 if(hc){let p=places.find(x=>Math.abs(x.lat-hc.lat)<1e-6&&Math.abs(x.lon-hc.lon)<1e-6);if(!p)p=addPlace(T('fromLink'),hc);cur=p.id;save()}
 go('home');
